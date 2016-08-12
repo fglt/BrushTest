@@ -45,6 +45,8 @@
     UITouch* touch = [touches anyObject];
     CGPoint p = [touch locationInView:self];
     [_drawingLayer updateStrokeWithPoint:p];
+    [_drawingLayer update];
+    self.image = [_drawingLayer imageFromeContext];
 }
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

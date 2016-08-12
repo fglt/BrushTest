@@ -24,7 +24,7 @@ static CGFloat const  DeltaWidth = 0.05;
 -(instancetype)init
 {
     self = [super init];
-    _items = [NSMutableArray array];
+    _points = [NSMutableArray array];
     return self;
 }
 
@@ -41,9 +41,9 @@ static CGFloat const  DeltaWidth = 0.05;
     CGPoint fromPoint;
     switch (_brush.brushType) {
         case BrushTypeChineseBrush:
-            [_items[0] getValue:&fromPoint];
-            for(int i=1; i<_items.count; i++){
-                [_items[i] getValue:&toPoint];
+            [_points[0] getValue:&fromPoint];
+            for(int i=1; i<_points.count; i++){
+                [_points[i] getValue:&toPoint];
                 [self updateChineseBrushInContext:context FromPoint:fromPoint toPoint:toPoint];
                 fromPoint = toPoint;
             }
@@ -60,8 +60,12 @@ static CGFloat const  DeltaWidth = 0.05;
     CGPoint fromPoint;
     switch (_brush.brushType) {
         case BrushTypeChineseBrush:
-            [[_items lastObject] getValue:&toPoint];
-            [[_items objectAtIndex:_items.count-2] getValue:&fromPoint];
+            [[_points lastObject] getValue:&toPoint];
+            if(_points.count == 1){
+                fromPoint = toPoint;
+            }else{
+                [[_points objectAtIndex:_points.count-2] getValue:&fromPoint];
+            }
             [self updateChineseBrushInContext:context FromPoint:fromPoint toPoint:toPoint];
             break;
             
@@ -71,10 +75,11 @@ static CGFloat const  DeltaWidth = 0.05;
     
 }
 
--(void) addPoint:(CGPoint)point
+-(void) addPoint:(CGPoint)point inContext:(CGContextRef)context
 {
     NSValue* pointValue = [NSValue valueWithCGPoint:point];
-    [_items addObject:pointValue];
+    [_points addObject:pointValue];
+    [self updateInContext:context];
 }
 
 -(void) updateChineseBrushInContext:(CGContextRef)context FromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
@@ -82,29 +87,29 @@ static CGFloat const  DeltaWidth = 0.05;
     int len  = (int)(sqrt( pow(fromPoint.x-toPoint.x,2) + pow(fromPoint.y-toPoint.y,2)) );
     
     len = MIN(len, MaxLength);
-    if(len == 0) return;
+    if(len == 0){
+        UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:fromPoint radius:_brush.radius/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
+        [[self curColor] set];
+        [bpath fill];
+        return;
+    }
     
     CGFloat aimWidth = MinLength * MaxWidth/len ;
     NSArray* points = [self ArrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
     CGPoint lastPoint =fromPoint;
-    
+    CGPoint curPoint;
     for(int i = 0; i<points.count; i++){
-        
-        CGPoint point = CGPointFromString(points[i]);
-        UIBezierPath* bpath = [self newBezierPathWithStartPoint:lastPoint endPoint:point];
-        Path* path = [[Path alloc]init];
-        path.color = [self curColor];
-        path.path = bpath;
-        
-        [path.color set];
-        [path.path stroke];
+        [points[i] getValue:&curPoint];
+        UIBezierPath* bpath = [self newBezierPathWithStartPoint:lastPoint endPoint:curPoint];
+        [[self curColor] set];
+        [bpath stroke];
         if( _brush.radius > aimWidth) {
             _brush.radius -= DeltaWidth;
         }else{
             _brush.radius += DeltaWidth;
         }
         _brush.radius = MAX(MIN(_brush.radius, MaxWidth), MinWidth);
-        lastPoint = point;
+        lastPoint = curPoint;
     }
 }
 
@@ -123,17 +128,16 @@ static CGFloat const  DeltaWidth = 0.05;
     return bpath;
 }
 
--(NSArray*) ArrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint WithCount:(int)count
+-(NSMutableArray*) ArrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint WithCount:(int)count
 {
     NSMutableArray *array = [NSMutableArray array];
     CGFloat delx = (toPoint.x -fromPoint.x)/count;
     CGFloat dely = (toPoint.y -fromPoint.y)/count;
     CGPoint  prePoint = fromPoint;
     for(int i= 0; i< count; i++){
-        CGFloat px = prePoint.x + delx;
-        CGFloat py = prePoint.y + dely;
-        prePoint = CGPointMake(px, py);
-        [array addObject:NSStringFromCGPoint(prePoint)];
+        prePoint.x += delx;
+        prePoint.y += dely;
+        [array addObject:[NSValue valueWithCGPoint:prePoint]];
     }
     
     return array;

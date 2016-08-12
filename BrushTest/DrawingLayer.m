@@ -12,6 +12,7 @@
 @interface DrawingLayer()
 @property (nonatomic, strong) NSMutableArray* strokes;
 @property (nonatomic, strong) Stroke* currenStroke;
+@property (nonatomic) CGContextRef context;
 @end
 
 @implementation DrawingLayer
@@ -21,6 +22,7 @@
     _contextSize = size;
     _strokes = [NSMutableArray array];
     UIGraphicsBeginImageContext(_contextSize);
+    _context = UIGraphicsGetCurrentContext();
     return self;
 }
 
@@ -29,12 +31,14 @@
     [_strokes removeAllObjects];
     UIGraphicsEndImageContext();
     UIGraphicsBeginImageContext(self.contextSize);
+    _context = UIGraphicsGetCurrentContext();
 }
 -(void) removeLastStroke
 {
     [_strokes removeLastObject];
     UIGraphicsEndImageContext();
     UIGraphicsBeginImageContext(self.contextSize);
+    _context = UIGraphicsGetCurrentContext();
     for(Stroke* stroke in _strokes){
         [stroke drawInContext:UIGraphicsGetCurrentContext()];
     }
@@ -63,6 +67,6 @@
 
 -(void) updateStrokeWithPoint:(CGPoint)toPoint;
 {
-    [_currenStroke addPoint:toPoint];
+    [_currenStroke addPoint:toPoint inContext:_context];
 }
 @end
