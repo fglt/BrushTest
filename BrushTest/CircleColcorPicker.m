@@ -13,25 +13,70 @@
 #define kIndicatorSize 24.0
 
 const double PI2 = 2*M_PI;
+@interface CircleColcorPicker()
+@property  (nonatomic) CGFloat indicatorDistanceToCenter;
+@end
 
 IB_DESIGNABLE
 @implementation CircleColcorPicker{
     InfColorIndicatorView* indicator;
-    CircleColorView *colorView;
+    UIImageView *colorView;
 }
 
 
+- (UIImage *)hueCircleImage
+{
+    UIImage *image;
+    CGRect rect = self.frame;
+    CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
+    
+    UIBezierPath *bpath;
+    
+    CGPoint point1;
+    CGPoint point2;
+    
+    //NSLog(@"%d", [bezierPoints count]);
+    float r = rect.size.width/2 -1;
+    for (int i = 0; i < 360 ; ++i)
+    {
+        UIColor *color = [UIColor colorWithHue:i/360.0 saturation:1 brightness:1 alpha:1];
+        //NSLog(@"%f: ", i/360.0f);
+        bpath = [UIBezierPath bezierPath];
+        point1 = CGPointMake(center.x + r*cos(i/180.0*M_PI), center.y - r*sin(i/180.0*M_PI));
+        point2 = CGPointMake(center.x + r*cos((i+1)/180.0*M_PI), center.y - r*sin((i+1)/180.0*M_PI));
+        
+        [bpath moveToPoint:self.center];
+        [bpath addLineToPoint:point1];
+        [bpath addLineToPoint:point2];
+        
+        [color set];
+        [bpath fill];
+        [bpath stroke];
+    }
+    
+    r = r - 40;
+    UIColor *fillColor = [UIColor whiteColor];
+    
+    bpath = [UIBezierPath bezierPathWithArcCenter:center radius:r startAngle:0 endAngle:M_PI *2 clockwise:YES];
+    [fillColor set];
+    [bpath fill];
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 - (void) layoutSubviews
 {
-    
     if(colorView == nil){
-        colorView = [[CircleColorView  alloc] initWithFrame:self.bounds];
-        colorView.backgroundColor = [UIColor clearColor];
+        colorView = [[UIImageView  alloc] initWithFrame:self.bounds];
+        colorView.image = [self hueCircleImage];
         colorView.userInteractionEnabled = NO ;
         [self addSubview:colorView];
     }
     if (indicator == nil) {
-        _value = CGPointMake(CGRectGetMidX(self.bounds) + colorView.middleRadius, CGRectGetMidY(self.bounds));
+        _value = CGPointMake(self.bounds.size.width - 16, CGRectGetMidY(self.bounds));
         
         indicator = [[InfColorIndicatorView alloc] initWithFrame: CGRectMake(_value.x, _value.y, kIndicatorSize, kIndicatorSize)];
         [self addSubview: indicator];
@@ -53,8 +98,8 @@ IB_DESIGNABLE
 {
     
     CGPoint pcenter = CGPointMake( CGRectGetMidY(self.bounds), CGRectGetMidY(self.bounds));
-    
-    CGFloat alpha = asin( (pcenter.y - _value.y)/colorView.middleRadius );
+    CGFloat indicatorDistanceToCenter = self.frame.size.width/2 -16;
+    CGFloat alpha = asin( (pcenter.y - _value.y)/indicatorDistanceToCenter );
     
     if(_value.x-pcenter.x >= 0 )
     {
@@ -86,8 +131,9 @@ IB_DESIGNABLE
     if(newHue != _hue)
     {
         _hue = newHue;
-        CGFloat  y =  CGRectGetMidY(self.bounds) - colorView.middleRadius * sin(_hue * PI2);
-        CGFloat x =  CGRectGetMidX(self.bounds) + colorView.middleRadius * cos(_hue * PI2);
+        CGFloat indicatorDistanceToCenter = self.frame.size.width/2 -16;
+        CGFloat  y =  CGRectGetMidY(self.bounds) - indicatorDistanceToCenter * sin(_hue * PI2);
+        CGFloat x =  CGRectGetMidX(self.bounds) + indicatorDistanceToCenter * cos(_hue * PI2);
         [self setValue:CGPointMake(x, y)];
         NSLog(@"center: %f,  %f", x, y);
     }
@@ -95,13 +141,14 @@ IB_DESIGNABLE
 
 - (void) trackIndicatorWithTouch: (UITouch*) touch
 {
+    CGFloat indicatorDistanceToCenter = self.frame.size.width/2 -16;
     CGPoint point = [touch locationInView: self];
     CGFloat sy = CGRectGetMidY(self.bounds);
     CGFloat sx = CGRectGetMidX(self.bounds);
     
     CGFloat dis = sqrt((sx-point.x)*(sx-point.x) + (sy-point.y)*(sy-point.y));
 
-    self.value =  CGPointMake(sx + (colorView.middleRadius / dis) * (point.x-sx), sy + (colorView.middleRadius / dis) * (point.y-sy));
+    self.value =  CGPointMake(sx + (indicatorDistanceToCenter / dis) * (point.x-sx), sy + (indicatorDistanceToCenter / dis) * (point.y-sy));
 
     NSLog(@"point: %f, y: %f", point.x, point.y);
 }
@@ -122,69 +169,6 @@ IB_DESIGNABLE
     [self trackIndicatorWithTouch: touch];
     
     return YES;
-}
-
-@end
-
-IB_DESIGNABLE
-@implementation CircleColorView
--(void) drawRect:(CGRect)rect
-{
-    UIBezierPath *bpath;
-    
-    CGPoint point1;
-    CGPoint point2;
-    
-    //NSLog(@"%d", [bezierPoints count]);
-    float r = _radius;
-    for (int i = 0; i < 360 ; ++i)
-    {
-        UIColor *color = [UIColor colorWithHue:i/360.0 saturation:1 brightness:1 alpha:1];
-        //NSLog(@"%f: ", i/360.0f);
-        bpath = [UIBezierPath bezierPath];
-        point1 = CGPointMake(self.center.x + r*cos(i/180.0*M_PI), self.center.y - r*sin(i/180.0*M_PI));
-        point2 = CGPointMake(self.center.x + r*cos((i+1)/180.0*M_PI), self.center.y - r*sin((i+1)/180.0*M_PI));
-        
-        [bpath moveToPoint:self.center];
-        [bpath addLineToPoint:point1];
-        [bpath addLineToPoint:point2];
-        
-        [color set];
-        [bpath fill];
-        [bpath stroke];
-        
-    }
-    
-    r = r - 30;
-    UIColor *fillColor = [UIColor colorWithRed:255 green:255 blue:255 alpha:1];
-    for (int i = 0; i < 360 ; ++i)
-    {
-        //NSLog(@"%f: ", i/360.0f);
-        bpath = [UIBezierPath bezierPath];
-        point1 = CGPointMake(self.center.x + r*cos(i/180.0*M_PI), self.center.y + r*sin(i/180.0*M_PI));
-        point2 = CGPointMake(self.center.x + r*cos((i+1)/180.0*M_PI), self.center.y + r*sin((i+1)/180.0*M_PI));
-        
-        [bpath moveToPoint:self.center];
-        [bpath addLineToPoint:point1];
-        [bpath addLineToPoint:point2];
-        
-        [fillColor set];
-        [bpath fill];
-        [bpath stroke];
-        
-    }
-    
-}
-
--(instancetype) initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if(self){
-        _radius =  MIN(frame.size.width-2, frame.size.height-2) / 2;
-        _middleRadius =  _radius - 15;
-    }
-    
-    return self;
 }
 
 @end

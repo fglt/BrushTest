@@ -18,6 +18,8 @@
 		176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31301D65EEB000B9A1D6 /* PaletteViewController.m */; };
 		176C31341D6606B700B9A1D6 /* BrushSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31331D6606B700B9A1D6 /* BrushSelectViewController.m */; };
 		176C313A1D660DBF00B9A1D6 /* BrushView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31391D660DBF00B9A1D6 /* BrushView.m */; };
+		176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */; };
+		176C31491D671E8100B9A1D6 /* LayerBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31481D671E8100B9A1D6 /* LayerBoard.m */; };
 		176D10EE1D5CDF3B00A0DD31 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D10ED1D5CDF3B00A0DD31 /* main.m */; };
 		176D10F11D5CDF3B00A0DD31 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D10F01D5CDF3B00A0DD31 /* AppDelegate.m */; };
 		176D10F41D5CDF3B00A0DD31 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D10F31D5CDF3B00A0DD31 /* MainViewController.m */; };
@@ -56,6 +58,10 @@
 		176C31331D6606B700B9A1D6 /* BrushSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushSelectViewController.m; sourceTree = "<group>"; };
 		176C31381D660DBF00B9A1D6 /* BrushView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushView.h; sourceTree = "<group>"; };
 		176C31391D660DBF00B9A1D6 /* BrushView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushView.m; sourceTree = "<group>"; };
+		176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Brush.h"; sourceTree = "<group>"; };
+		176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Brush.m"; sourceTree = "<group>"; };
+		176C31471D671E8100B9A1D6 /* LayerBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerBoard.h; sourceTree = "<group>"; };
+		176C31481D671E8100B9A1D6 /* LayerBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerBoard.m; sourceTree = "<group>"; };
 		176D10E91D5CDF3B00A0DD31 /* BrushTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrushTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		176D10ED1D5CDF3B00A0DD31 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		176D10EF1D5CDF3B00A0DD31 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -114,6 +120,8 @@
 				176C312D1D64B20A00B9A1D6 /* ColorPicker.m */,
 				176C31381D660DBF00B9A1D6 /* BrushView.h */,
 				176C31391D660DBF00B9A1D6 /* BrushView.m */,
+				176C31471D671E8100B9A1D6 /* LayerBoard.h */,
+				176C31481D671E8100B9A1D6 /* LayerBoard.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -137,6 +145,8 @@
 		176D10EB1D5CDF3B00A0DD31 /* BrushTest */ = {
 			isa = PBXGroup;
 			children = (
+				176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */,
+				176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */,
 				176D11031D5CDFFB00A0DD31 /* Brush.h */,
 				176D11041D5CDFFB00A0DD31 /* Brush.m */,
 				176C31321D6606B700B9A1D6 /* BrushSelectViewController.h */,
@@ -266,8 +276,10 @@
 				176D11101D5CDFFB00A0DD31 /* CanvasView.m in Sources */,
 				176D11121D5CDFFB00A0DD31 /* DrawingLayer.m in Sources */,
 				176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */,
+				176C31491D671E8100B9A1D6 /* LayerBoard.m in Sources */,
 				1754A2EA1D64A3FC00C18717 /* PaletteView.m in Sources */,
 				1754A2E21D649FE500C18717 /* constants.m in Sources */,
+				176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */,
 				1754A2E01D649FE500C18717 /* BarColorPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

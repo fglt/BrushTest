@@ -31,9 +31,15 @@
     [_drawingLayer clear];
     self.image = nil;
 }
-- (void)clickUndo
+- (void)undo
 {
-    [_drawingLayer removeLastStroke];
+    [_drawingLayer undo];
+    self.image = [_drawingLayer imageFromeContext];
+}
+
+- (void)redo
+{
+    [_drawingLayer redo];
     self.image = [_drawingLayer imageFromeContext];
 }
 

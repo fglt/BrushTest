@@ -10,8 +10,9 @@
 #import "Stroke.h"
 
 @interface DrawingLayer()
-@property (nonatomic, strong) NSMutableArray* strokes;
-@property (nonatomic, strong) Stroke* currenStroke;
+@property (nonatomic, strong) NSMutableArray *strokes;
+@property (nonatomic, strong) NSMutableArray *abandonedStrokes;
+@property (nonatomic, strong) Stroke* currentStroke;
 @property (nonatomic) CGContextRef context;
 
 @end
@@ -22,6 +23,7 @@
     self =  [super init];
     _contextSize = size;
     _strokes = [NSMutableArray array];
+    _abandonedStrokes = [NSMutableArray array];
     //UIGraphicsBeginImageContext(_contextSize);
     UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
     _context = UIGraphicsGetCurrentContext();
@@ -38,15 +40,28 @@
     //UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
     //_context = UIGraphicsGetCurrentContext();
 }
-- (void)removeLastStroke
+
+- (void)undo
 {
+    if(_strokes.count<= 0) return;
+    Stroke *stroke = [_strokes lastObject];
     [_strokes removeLastObject];
+    [_abandonedStrokes addObject:stroke];
     CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
     [[UIColor whiteColor] set];
     UIRectFill(rect);
     for(Stroke* stroke in _strokes){
         [stroke drawInContext:_context];
     }
+}
+
+-(void)redo
+{
+    if(_abandonedStrokes.count<=0) return;
+    Stroke *stroke = [_abandonedStrokes lastObject];
+    [_abandonedStrokes removeLastObject];
+    [_strokes addObject:stroke];
+    [stroke drawInContext:_context];
 }
 
 - (UIImage *)imageFromeContext
@@ -57,17 +72,17 @@
 
 - (void)newStrokeWithBrush:(Brush*)brush
 {
-    _currenStroke = [[Stroke alloc]initWithBrush:brush];
+    _currentStroke = [[Stroke alloc]initWithBrush:brush];
 }
 
 - (void)addStroke
 {
-    [_strokes addObject:_currenStroke];
-    _currenStroke = nil;
+    [_strokes addObject:_currentStroke];
+    _currentStroke = nil;
 }
 
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
-    [_currenStroke addPoint:toPoint inContext:_context];
+    [_currentStroke addPoint:toPoint inContext:_context];
 }
 @end

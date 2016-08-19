@@ -12,8 +12,3 @@
 @property (nonatomic) CGPoint value;
 @property (nonatomic) CGFloat hue ;
 @end
-
-@interface CircleColorView : UIView
-@property (nonatomic) CGFloat radius;
-@property (nonatomic) CGFloat middleRadius;
-@end

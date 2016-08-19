@@ -12,5 +12,6 @@
 @property (nonatomic, strong) Brush* currentBrush;
 
 - (void)clear;
-- (void)clickUndo;
+- (void)undo;
+- (void)redo;
 @end

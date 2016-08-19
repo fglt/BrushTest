@@ -33,7 +33,10 @@
     [self.canvasView clear];
 }
 - (IBAction)clickUndo:(UIButton *)sender {
-    [self.canvasView clickUndo];
+    [self.canvasView undo];
+}
+- (IBAction)clickRedo:(UIButton *)sender {
+    [self.canvasView redo];
 }
 
 - (void) start

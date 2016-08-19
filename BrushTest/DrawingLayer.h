@@ -12,11 +12,12 @@
 @interface DrawingLayer : NSObject
 @property (nonatomic) CGSize contextSize;
 
-- (void)removeLastStroke;
+- (void)undo;
 - (UIImage *)imageFromeContext;
 - (void)newStrokeWithBrush:(Brush*)brush;
 - (void)addStroke;
 - (instancetype)initWithSize:(CGSize)size;
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 - (void)clear;
+- (void)redo;
 @end

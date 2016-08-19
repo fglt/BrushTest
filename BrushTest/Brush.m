@@ -9,6 +9,7 @@
 #import "Brush.h"
 #import "UIColor+BFPaperColors.h"
 #import "InfHSBSupport.h"
+#import "UIbezierPath+brush.h"
 
 const double M_PI2 = M_PI *2;
 CGFloat const  MinWidth = 5;
@@ -142,7 +143,7 @@ CGFloat const  DeltaWidth = 0.05;
 -(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
 {
     self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
-    _curWidth = self.radius;
+    _curWidth =  MIN(MaxWidth,self.radius);
     
     return self;
 }

@@ -37,8 +37,6 @@ UIImage* createSaturationBrightnessSquareContentImageWithHue(float hue);
 	// Generates a 256x256 image with the specified constant hue where the
 	// Saturation and value vary in the X and Y axes respectively.
 
-UIImage* createSaturationBrightnessSquareContentImageWithHue2(float hue);
-
 //------------------------------------------------------------------------------
 
 typedef enum {
