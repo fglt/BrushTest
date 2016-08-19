@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class  Brush;
 @interface CanvasView : UIImageView
+@property (nonatomic, strong) Brush* currentBrush;
 
+- (void)clear;
+- (void)clickUndo;
 @end

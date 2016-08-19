@@ -34,6 +34,7 @@
     if (blur < 0.f || blur > 1.f) {
         blur = 0.5f;
     }
+    
     int boxSize = (int)(blur * 200);
     boxSize = boxSize - (boxSize % 2) + 1;
     
@@ -80,25 +81,25 @@
                                              outBuffer.rowBytes,
                                              colorSpace,
                                              info);
-    NSLog(@"  kCGBitmapAlphaInfoMask    = %s\n"
-          "  kCGBitmapFloatComponents   = %s\n"
-          "  kCGBitmapByteOrderMask     = %s\n"
-          "  kCGBitmapByteOrderDefault  = %s\n"
-          "  kCGBitmapByteOrder16Little = %s\n"
-          "  kCGBitmapByteOrder32Little = %s\n"
-          "  kCGBitmapByteOrder16Big    = %s\n"
-          "  kCGBitmapByteOrder32Big    = %s\n",
-          (info & kCGBitmapAlphaInfoMask)     ? "YES" : "NO",
-          (info & kCGBitmapFloatComponents)   ? "YES" : "NO",
-          (info & kCGBitmapByteOrderMask)     ? "YES" : "NO",
-          (info & kCGBitmapByteOrderDefault)  ? "YES" : "NO",
-          (info & kCGBitmapByteOrder16Little) ? "YES" : "NO",
-          (info & kCGBitmapByteOrder32Little) ? "YES" : "NO",
-          (info & kCGBitmapByteOrder16Big)    ? "YES" : "NO",
-          (info & kCGBitmapByteOrder32Big)    ? "YES" : "NO"   );
+//    NSLog(@"  kCGBitmapAlphaInfoMask    = %s\n"
+//          "  kCGBitmapFloatComponents   = %s\n"
+//          "  kCGBitmapByteOrderMask     = %s\n"
+//          "  kCGBitmapByteOrderDefault  = %s\n"
+//          "  kCGBitmapByteOrder16Little = %s\n"
+//          "  kCGBitmapByteOrder32Little = %s\n"
+//          "  kCGBitmapByteOrder16Big    = %s\n"
+//          "  kCGBitmapByteOrder32Big    = %s\n",
+//          (info & kCGBitmapAlphaInfoMask)     ? "YES" : "NO",
+//          (info & kCGBitmapFloatComponents)   ? "YES" : "NO",
+//          (info & kCGBitmapByteOrderMask)     ? "YES" : "NO",
+//          (info & kCGBitmapByteOrderDefault)  ? "YES" : "NO",
+//          (info & kCGBitmapByteOrder16Little) ? "YES" : "NO",
+//          (info & kCGBitmapByteOrder32Little) ? "YES" : "NO",
+//          (info & kCGBitmapByteOrder16Big)    ? "YES" : "NO",
+//          (info & kCGBitmapByteOrder32Big)    ? "YES" : "NO"   );
 
     CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
-    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
+    UIImage *returnImage = [UIImage imageWithCGImage:imageRef scale:image.scale orientation:UIImageOrientationUp];
     
     //clean up
     CGContextRelease(ctx);
@@ -107,6 +108,8 @@
     free(pixelBuffer);
     CFRelease(inBitmapData);
     CGImageRelease(imageRef);
+//    NSLog(@"1%@",NSStringFromCGSize( image.size));
+//    NSLog(@"2%@",NSStringFromCGSize( returnImage.size));
     
     return returnImage;
 }

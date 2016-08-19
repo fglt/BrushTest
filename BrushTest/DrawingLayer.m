@@ -13,59 +13,60 @@
 @property (nonatomic, strong) NSMutableArray* strokes;
 @property (nonatomic, strong) Stroke* currenStroke;
 @property (nonatomic) CGContextRef context;
+
 @end
 
 @implementation DrawingLayer
 
--(instancetype)initWithSize:(CGSize)size{
+- (instancetype)initWithSize:(CGSize)size{
     self =  [super init];
     _contextSize = size;
     _strokes = [NSMutableArray array];
-    UIGraphicsBeginImageContext(_contextSize);
+    //UIGraphicsBeginImageContext(_contextSize);
+    UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
     _context = UIGraphicsGetCurrentContext();
     return self;
 }
 
--(void) clear
+- (void)clear
 {
     [_strokes removeAllObjects];
-    UIGraphicsEndImageContext();
-    UIGraphicsBeginImageContext(self.contextSize);
-    _context = UIGraphicsGetCurrentContext();
+    CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
+    [[UIColor whiteColor] set];
+    UIRectFill(rect);
+    //UIGraphicsEndImageContext();
+    //UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
+    //_context = UIGraphicsGetCurrentContext();
 }
--(void) removeLastStroke
+- (void)removeLastStroke
 {
     [_strokes removeLastObject];
-    UIGraphicsEndImageContext();
-    UIGraphicsBeginImageContext(self.contextSize);
-    _context = UIGraphicsGetCurrentContext();
+    CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
+    [[UIColor whiteColor] set];
+    UIRectFill(rect);
     for(Stroke* stroke in _strokes){
-        [stroke drawInContext:UIGraphicsGetCurrentContext()];
+        [stroke drawInContext:_context];
     }
 }
 
--(UIImage *)imageFromeContext
+- (UIImage *)imageFromeContext
 {
     UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();
     return newImage;
 }
 
--(void)update{
-    
-    [_currenStroke updateInContext:UIGraphicsGetCurrentContext()];
-}
-
--(void) newStrokeWithBrush:(Brush*)brush
+- (void)newStrokeWithBrush:(Brush*)brush
 {
     _currenStroke = [[Stroke alloc]initWithBrush:brush];
 }
 
--(void) addStroke
+- (void)addStroke
 {
     [_strokes addObject:_currenStroke];
+    _currenStroke = nil;
 }
 
--(void) updateStrokeWithPoint:(CGPoint)toPoint;
+- (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
     [_currenStroke addPoint:toPoint inContext:_context];
 }

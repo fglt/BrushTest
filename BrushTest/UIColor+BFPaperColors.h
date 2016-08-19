@@ -111,6 +111,8 @@ alpha:1.0]
                                    endColor:(UIColor *)endColor;
 
 
+-(BOOL) isSameRGBToColor:(UIColor*) color;
+
 #pragma mark - Red
 + (UIColor *)paperColorRed50;
 + (UIColor *)paperColorRed100;

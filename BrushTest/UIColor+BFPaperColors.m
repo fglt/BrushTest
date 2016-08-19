@@ -476,4 +476,13 @@
 }
 
 
+-(BOOL) isSameRGBToColor:(UIColor*) color
+{
+    CGFloat r, g, b,a;
+    CGFloat r1, g1,b1, a1;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    [color getRed:&r1 green:&g1 blue:&b1 alpha:&a1];
+    return (r==r1) && (g==g1) && (b == b1);
+}
+
 @end

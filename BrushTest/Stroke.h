@@ -9,17 +9,11 @@
 #import <UIKit/UIKit.h>
 @class Brush;
 
-@interface Path : NSObject
-@property (nonatomic, strong) UIColor* color;
-@property (nonatomic, strong) UIBezierPath* path;
-@end
-
 @interface Stroke : NSObject
 @property (nonatomic, strong) Brush* brush;
-@property (nonatomic, strong) NSMutableArray *points;
+@property (nonatomic, strong) NSMutableArray* points;
 
--(instancetype)initWithBrush:(Brush*)brush;
--(void) addPoint:(CGPoint)point inContext:(CGContextRef)context;
--(void) updateInContext:(CGContextRef)context;
--(void) drawInContext:(CGContextRef)context;
+- (instancetype)initWithBrush:(Brush*)brush;
+- (void)addPoint:(CGPoint)point inContext:(CGContextRef)context;
+- (void)drawInContext:(CGContextRef)context;
 @end
