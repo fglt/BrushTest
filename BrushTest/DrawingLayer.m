@@ -34,7 +34,7 @@
 {
     [_strokes removeAllObjects];
     CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
-    [[UIColor whiteColor] set];
+    [[UIColor clearColor] set];
     UIRectFill(rect);
     //UIGraphicsEndImageContext();
     //UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
@@ -48,7 +48,7 @@
     [_strokes removeLastObject];
     [_abandonedStrokes addObject:stroke];
     CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
-    [[UIColor whiteColor] set];
+    [[UIColor clearColor] set];
     UIRectFill(rect);
     for(Stroke* stroke in _strokes){
         [stroke drawInContext:_context];

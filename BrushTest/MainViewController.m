@@ -42,7 +42,7 @@
 - (void) start
 {
     _color =  [UIColor redColor];
-    _brush = [Brush BrushWithColor:_color radius:26 type:BrushTypeCircle];
+    _brush = [Brush BrushWithColor:_color radius:13 type:BrushTypeCircle];
     _canvasView.currentBrush = _brush;
 }
 

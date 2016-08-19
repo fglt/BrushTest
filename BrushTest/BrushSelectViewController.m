@@ -22,11 +22,11 @@
 -(void)viewDidLoad
 {
     _brush = [_brushSelectViewControllerDelegate currentBrush];
-    _radiusSlider.value = (_brush.radius-1)/30 ;
+    _radiusSlider.value = (_brush.width-1)/30 ;
     _alphaSlider.value = CGColorGetAlpha( _brush.color.CGColor);
 }
 - (IBAction)radiusSliderChanged:(UISlider *)sender {
-    _brush.radius = sender.value*30 +1;
+    _brush.width = sender.value*30 +1;
 }
 - (IBAction)alphaSliderChanged:(UISlider *)sender {
     _brush.color = [_brush.color colorWithAlphaComponent:sender.value];

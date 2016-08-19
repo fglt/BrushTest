@@ -26,9 +26,11 @@ typedef enum {
 
 
 @interface Brush : NSObject<NSCopying>
-@property (nonatomic) CGFloat radius;
+@property (nonatomic) CGFloat width;
 @property (nonatomic, copy) UIColor* color;
 @property (nonatomic) BrushType brushType;
+@property (nonatomic) CGFloat MaxWidth;
+@property (nonatomic) CGFloat MinWidth;
 @property (nonatomic) UIImage* image;
 
 - (instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius;

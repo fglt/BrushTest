@@ -23,7 +23,7 @@ CGFloat const  DeltaWidth = 0.05;
 {
     self = [super init];
     _brushType = type;
-    _radius = radius;
+    _width = radius;
     _color = color;
     return self;
 }
@@ -31,7 +31,7 @@ CGFloat const  DeltaWidth = 0.05;
 - (instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
 {
     self = [super init];
-    _radius = radius;
+    _width = radius;
     _color = color;
     return self;
 }
@@ -63,7 +63,7 @@ CGFloat const  DeltaWidth = 0.05;
 {
     Brush* copy = [[Brush alloc] init];
     copy.brushType = self.brushType;
-    copy.radius = self.radius;
+    copy.width = self.width;
     copy.color = [self.color copy];
     return copy;
 }
@@ -73,16 +73,16 @@ CGFloat const  DeltaWidth = 0.05;
     UIImage* image;
     CGFloat deltax = fromPoint.x-toPoint.x;
     CGFloat deltay = fromPoint.y-toPoint.y;
-    CGSize insize = CGSizeMake(ABS(deltax) + self.radius, ABS(deltay) + self.radius);
-    CGSize size = CGSizeMake(insize.width + self.radius, insize.height + self.radius);
+    CGSize insize = CGSizeMake(ABS(deltax) + self.width, ABS(deltay) + self.width);
+    CGSize size = CGSizeMake(insize.width + self.width, insize.height + self.width);
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
 
     CGPoint newFromPoint;
     CGPoint newToPoint;
     
-    CGPoint leftTop = CGPointMake(self.radius, self.radius);
-    CGPoint leftDown = CGPointMake(self.radius,insize.height);
-    CGPoint rightTop = CGPointMake(insize.width, self.radius);
+    CGPoint leftTop = CGPointMake(self.width, self.width);
+    CGPoint leftDown = CGPointMake(self.width,insize.height);
+    CGPoint rightTop = CGPointMake(insize.width, self.width);
     CGPoint rightDown = CGPointMake(insize.width , insize.height );
     
     if( ( (int)deltax^(int)deltay) >= 0 ){
@@ -93,7 +93,7 @@ CGFloat const  DeltaWidth = 0.05;
         newToPoint = leftDown;
     }
 
-    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:newFromPoint endPoint:newToPoint width: _radius*2];
+    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:newFromPoint endPoint:newToPoint width: _width*2];
     [_color set];
     [bpath stroke];
     image = UIGraphicsGetImageFromCurrentImageContext();
@@ -104,7 +104,7 @@ CGFloat const  DeltaWidth = 0.05;
 
 - (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
-    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:fromPoint endPoint:toPoint width: _radius*2];
+    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:fromPoint endPoint:toPoint width: _width*2];
     [_color set];
     [bpath stroke];
     //NSLog(@"do default drawing");
@@ -135,6 +135,7 @@ CGFloat const  DeltaWidth = 0.05;
 - (void) clear{
     
 }
+
 @end
 
 #pragma mark - ChineseBrush
@@ -143,13 +144,13 @@ CGFloat const  DeltaWidth = 0.05;
 -(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
 {
     self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
-    _curWidth =  MIN(MaxWidth,self.radius);
+    _curWidth =  MIN(MaxWidth,self.width);
     
     return self;
 }
 
 - (UIColor*)curColor{
-    return [self.color colorWithAlphaComponent:0.1 + (_curWidth-MinWidth)/(MaxWidth -MinWidth)*0.3];
+    return [self.color colorWithAlphaComponent: 0.2 + (_curWidth- MinWidth)/(MaxWidth-MinWidth) * (CGColorGetAlpha(self.color.CGColor) -0.2)];
 }
 
 - (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
@@ -184,14 +185,14 @@ CGFloat const  DeltaWidth = 0.05;
 }
 
 - (void) clear{
-    _curWidth = self.radius;
+    _curWidth = self.width;
 }
 
 -(instancetype) copyWithZone:(NSZone *)zone
 {
     ChineseBrush* copy = [[ChineseBrush alloc] init];
     copy.brushType = self.brushType;
-    copy.radius = self.radius;
+    copy.width = self.width;
     copy.color = [self.color copy];
     copy.curWidth = self.curWidth;
     return copy;
@@ -209,15 +210,12 @@ CGFloat const  DeltaWidth = 0.05;
 
 -(UIImage*) imageFromBrush
 {
-    CGSize imageSize = CGSizeMake(self.radius * 2, self.radius * 2);
+    CGSize imageSize = CGSizeMake(self.width , self.width );
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextClip(context);
     
-//    CGRect rect = CGRectMake(0, 0, imageSize.width, imageSize.height);
-//    [[UIColor clearColor] set];
-//    UIRectFill(rect);
     [self.color set];
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -226,10 +224,12 @@ CGFloat const  DeltaWidth = 0.05;
 
 - (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
-    UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointZero radius:self.radius startAngle:0 endAngle:M_PI*2 clockwise:YES];
+    UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointZero radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
     CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
     [bpath applyTransform:translationTransform];
     
+    //UIColor * color = [self.color colorWithAlphaComponent:2*CGColorGetAlpha(self.color.CGColor)/self.radius];
+    //[color set];
     [self.color set];
     int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
     if(len == 0){
@@ -251,7 +251,7 @@ CGFloat const  DeltaWidth = 0.05;
 {
     CircleBrush* copy = [[CircleBrush alloc] init];
     copy.brushType = self.brushType;
-    copy.radius = self.radius;
+    copy.width = self.width;
     copy.color = [self.color copy];
     return copy;
 }
@@ -270,10 +270,11 @@ CGFloat const  DeltaWidth = 0.05;
 -(UIImage*)imageFromBrush
 {
 
-    CGSize imageSize = CGSizeMake(self.radius * 2, self.radius);
+    CGSize imageSize = CGSizeMake(self.width , self.width/2);
     UIGraphicsBeginImageContextWithOptions(imageSize, YES, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClip(context);
+
     [self.color set];
 
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
@@ -285,12 +286,6 @@ CGFloat const  DeltaWidth = 0.05;
 {
     CGFloat deltax = toPoint.x-fromPoint.x;
     CGFloat deltay = toPoint.y-fromPoint.y;
-    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
-    if(len == 0){
-        return;
-    }
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
-    
     CGFloat angle = 0;
     if(deltax != 0 ){
         angle = atan(deltay/deltax) - M_PI_2;
@@ -298,10 +293,16 @@ CGFloat const  DeltaWidth = 0.05;
     
     CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
     CGAffineTransform transform = CGAffineTransformRotate(translationTransform, angle);
-    CGRect rect = CGRectMake(- self.radius, self.radius/2, self.radius * 2, self.radius);
+    CGRect rect = CGRectMake(- self.width/2, self.width/4, self.width, self.width/2);
     UIBezierPath* bpath = [UIBezierPath bezierPathWithOvalInRect:rect];
-    
     [bpath applyTransform:transform];
+    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
+    if(len == 0){
+        [bpath fill];
+        return;
+    }
+    
+    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
     
     translationTransform = CGAffineTransformMakeTranslation(deltax/len, deltay/len);
     [self.color set];
@@ -318,7 +319,7 @@ CGFloat const  DeltaWidth = 0.05;
 {
     OvalBrush* copy = [[OvalBrush alloc] init];
     copy.brushType = self.brushType;
-    copy.radius = self.radius;
+    copy.width = self.width;
     copy.color = [self.color copy];
     copy.angle = self.angle;
 
@@ -338,98 +339,54 @@ CGFloat const  DeltaWidth = 0.05;
 
 - (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
-    UIImage *image = [self imageFrom2];
+    UIImage *image = [self gradientImageWithWidth:self.width];
+    CGFloat width = image.size.width;
     int len  = [self lengthFromPoint:fromPoint toPoint:toPoint]/2;
     if(len == 0){
-        CGRect rect = CGRectMake(fromPoint.x- self.radius, fromPoint.y - self.radius, self.radius*2,  self.radius*2);
+        CGRect rect = CGRectMake(fromPoint.x- width/2, fromPoint.y - width/2, width,  width);
         [image drawInRect:rect];
         return;
     }
-    image = [self imageFrom2];
     NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
     CGPoint curPoint;
     for(int i = 0; i<points.count-1; i++){
         [points[i] getValue:&curPoint];
-        CGRect rect = CGRectMake(curPoint.x- self.radius, curPoint.y - self.radius, self.radius*2,  self.radius*2);
+        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
         [image drawInRect:rect];
     }
 }
 
--(UIImage* )imageFrom{
+-(UIImage* )gradientImageWithWidth:(CGFloat)width{
     UIImage* image;
 
-    CGSize size = CGSizeMake(self.radius*2,self.radius*2);
+    CGSize size = CGSizeMake(width,width);
+    CGPoint center = CGPointMake(size.width/2, size.height/2);
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [self drawRadialGradient:(CGContextRef)context atPoint:CGPointMake(self.radius, self.radius)];
+    CGColorSpaceRef colorSpace=CGColorSpaceCreateDeviceRGB();
+    
+    CGFloat locations[2]={0,1.0};
+    CGFloat w, a;
+    [self.color getWhite:&w alpha:&a];
+    UIColor *startColor = [self.color colorWithAlphaComponent:MAX(width/510, a/20)];
+    UIColor *endColor = [self.color colorWithAlphaComponent:0.0];
+    CFArrayRef array =  CFArrayCreate(kCFAllocatorDefault, (const void*[]){startColor.CGColor, endColor.CGColor}, 2, nil);
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace,array,locations);
+    CGContextDrawRadialGradient(context, gradient, center,0, center, width/2, kCGGradientDrawsBeforeStartLocation);
+    
+    CGColorSpaceRelease(colorSpace);
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     return image;
 
 }
-
--(UIImage* )imageFrom2{
-    UIImage* image;
-    
-    CGSize size = CGSizeMake(self.radius*2,self.radius*2);
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [self drawRadialGradient2:(CGContextRef)context atPoint:CGPointMake(self.radius, self.radius)];
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
--(void)drawRadialGradient2:(CGContextRef)context atPoint:(CGPoint)point{
-    
-    CGColorSpaceRef colorSpace=CGColorSpaceCreateDeviceRGB();
-    
-    CGFloat locations[3]={0,0.5,1.0};
-    UIColor *startColor = [UIColor blackColor];
-    
-    startColor = [startColor colorWithAlphaComponent:0.2];
-    UIColor *centerColor = [startColor colorWithAlphaComponent:0.1];
-    UIColor *endColor = [startColor colorWithAlphaComponent:0.01];
-    CFArrayRef array =  CFArrayCreate(kCFAllocatorDefault, (const void*[]){startColor.CGColor, centerColor.CGColor,endColor.CGColor}, 3, nil);
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace,array,locations);
-    /*绘制径向渐变
-     options:绘制方式,kCGGradientDrawsBeforeStartLocation 开始位置之前就进行绘制，但是到结束位置之后不再绘制，
-     kCGGradientDrawsAfterEndLocation开始位置之前不进行绘制，但到结束点之后继续填充
-     */
-    CGContextDrawRadialGradient(context, gradient, point,0, point, self.radius, kCGGradientDrawsBeforeStartLocation);
-    
-    CGColorSpaceRelease(colorSpace);
-}
-
-
--(void)drawRadialGradient:(CGContextRef)context atPoint:(CGPoint)point{
-
-    CGColorSpaceRef colorSpace=CGColorSpaceCreateDeviceRGB();
-    
-    CGFloat locations[3]={0,0.5,1.0};
-    UIColor *startColor = [UIColor blackColor];
-     startColor = [startColor colorWithAlphaComponent: self.radius * 0.5/255];
-    UIColor *centerColor = [startColor colorWithAlphaComponent: self.radius * 0.5/255 ];
-    UIColor *endColor = [startColor colorWithAlphaComponent:0.0];
-    CFArrayRef array =  CFArrayCreate(kCFAllocatorDefault, (const void*[]){startColor.CGColor, centerColor.CGColor,endColor.CGColor}, 3, nil);
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace,array,locations);
-    /*绘制径向渐变
-     options:绘制方式,kCGGradientDrawsBeforeStartLocation 开始位置之前就进行绘制，但是到结束位置之后不再绘制，
-     kCGGradientDrawsAfterEndLocation开始位置之前不进行绘制，但到结束点之后继续填充
-     */
-    CGContextDrawRadialGradient(context, gradient, point,0, point, self.radius, kCGGradientDrawsBeforeStartLocation);
-
-    CGColorSpaceRelease(colorSpace);
-}
-
-
 
 -(instancetype) copyWithZone:(NSZone *)zone
 {
     GradientBrush* copy = [[GradientBrush alloc] init];
     copy.brushType = self.brushType;
-    copy.radius = self.radius;
+    copy.width = self.width;
     copy.color = [self.color copy];
 
     return copy;
