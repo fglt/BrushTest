@@ -281,7 +281,7 @@ UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv
 }
 
 //------------------------------------------------------------------------------
-UIImage* createSlideImage(int r, int g, int b, ColorRGB index,bool leftOrRight,int w, int h)
+UIImage* createSlideImage(UInt8* bgr, ColorRGB whichColor,int w, int h)
 {
     UInt8 data[w * h<<2];
     
@@ -301,36 +301,24 @@ UIImage* createSlideImage(int r, int g, int b, ColorRGB index,bool leftOrRight,i
     }
     
     UInt8 * dataPtr = data;
-    int start, end;
-    if(leftOrRight){
-        start = 0;
-        end= w-1;
-    }else{
-        start = 256-w;
-        end = 255;
-    }
-    for (int x = start; x <=end; ++x) {
-            if( index == R_COLOR){
-                
-                dataPtr[0] = b;
-                dataPtr[1] = g;
-                dataPtr[2] = x;
-            }else if(index ==G_COLOR)
-            {
-                dataPtr[0] = b;
-                dataPtr[1] = x;
-                dataPtr[2] = r;
-            }else if(index ==B_COLOR)
-            {
-                dataPtr[0] = x;
-                dataPtr[1] = g;
-                dataPtr[2] = r;
-            }
-            
-            dataPtr += 4;
-    }
+    
+    int start, end ;
 
-    dataPtr =data;
+    UInt8 tmpColor[4] = {bgr[0],bgr[1],bgr[2], 0};
+    for (int x = 0; x < w; ++x) {
+        memcpy(dataPtr, tmpColor, 4);
+        dataPtr += 4;
+    }
+    start = bgr[whichColor];
+    end = start + w;
+    dataPtr = data + whichColor;
+
+    for (int x = start; x <=end; ++x) {
+        *dataPtr = x;
+        dataPtr += 4;
+    }
+    
+    dataPtr = data;
     size_t rowBytes = (w<<2);
     for(int i=1; i<h; i++)
     {
@@ -338,13 +326,75 @@ UIImage* createSlideImage(int r, int g, int b, ColorRGB index,bool leftOrRight,i
         
         memcpy(dataPtr, data, rowBytes);
     }
-      // Return an image of the context's content:
+    // Return an image of the context's content:
     
     CGImageRef cgimage = CGBitmapContextCreateImage(context);
     UIImage *image = [UIImage imageWithCGImage:cgimage];
     CGContextRelease(context);
     CGImageRelease(cgimage);
     return image;
+}
+
+
+UIImage* sliderImage(CGFloat* bgr, ColorRGB whichColor, int h)
+{
+    int w =256;
+    UInt8 data[w * h<<2];
+    
+    // Set up the bitmap context for filling with color:
+    
+    CGContextRef context = createBGRxImageContext(w, h, data);
+    
+    if (context == nil)
+        return nil;
+    
+    // Draw into context here:
+    
+    UInt8* ptr = CGBitmapContextGetData(context);
+    if (ptr == nil) {
+        CGContextRelease(context);
+        return nil;
+    }
+    
+    UInt8 * dataPtr = data;
+
+    UInt8 tmpColor[4] = {bgr[0]*255,bgr[1]*255,bgr[2]*255, 0};
+    for (int x = 0; x < w; ++x) {
+        memcpy(dataPtr, tmpColor, 4);
+        dataPtr += 4;
+    }
+
+    dataPtr = data + whichColor;
+    
+    for (int x = 0; x <w; ++x) {
+        *dataPtr = x;
+        dataPtr += 4;
+    }
+    
+    dataPtr = data;
+    size_t rowBytes = (w<<2);
+    for(int i=1; i<h; i++)
+    {
+        dataPtr =dataPtr + rowBytes;
+        
+        memcpy(dataPtr, data, rowBytes);
+    }
+    // Return an image of the context's content:
+    
+    CGImageRef cgimage = CGBitmapContextCreateImage(context);
+    UIImage *image = [UIImage imageWithCGImage:cgimage];
+    CGContextRelease(context);
+    CGImageRelease(cgimage);
+    return image;
+}
+
+UIImage * imageFromImage(UIImage *image, CGRect rect)
+{
+    CGImageRef imageRef = image.CGImage;
+    CGImageRef imagePartRef = CGImageCreateWithImageInRect(imageRef,rect);
+    UIImage* cropImage = [UIImage imageWithCGImage:imagePartRef];
+    CGImageRelease(imagePartRef);
+    return cropImage;
 }
 
 void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)

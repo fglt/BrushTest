@@ -43,14 +43,18 @@
     self.color = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
     float r, g,b;
     HSVtoRGB(sender.hue*360, point.x, point.y, &r, &g, &b);
-    [self doSetText:r :g :b];
+    CGFloat bgr[] ={b, g, r};
+    [self doSetText:bgr];
+    //NSLog(@"touchCircleColorPicker");
 }
 - (IBAction)touchSquareColorPicker:(SquareColorPicker*)sender {
     CGPoint point = sender.point;
     self.color = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
     float r, g,b;
     HSVtoRGB(sender.hue*360, point.x, point.y, &r, &g, &b);
-    [self doSetText:r :g :b];
+    CGFloat bgr[] ={b, g, r};
+    [self doSetText:bgr];
+     //NSLog(@"touchSquareColorPicker");
 }
 - (IBAction)moveColorSlider:(id)sender {
     float r = _slider1.value;
@@ -62,36 +66,50 @@
     _squareColorPicker.hue = h;
     _squareColorPicker.point = CGPointMake(s, v);
     self.color = [UIColor colorWithRed:r green:g blue:b alpha:1];
+
+    //NSLog(@"moveColorSlider");
 }
 
--(void)doSetText:(float)rf :(float)gf :(float)bf
+-(void)doSetText:(CGFloat *)bgr
 {
-    _slider1.value = rf;
-    _slider2.value = gf;
-    _slider3.value = bf;
-    int r = (int) (rf* 255);
-    int g = (int) (gf* 255);
-    int b = (int) (bf* 255);
+    _slider1.value = bgr[2];
+    _slider2.value = bgr[1];
+    _slider3.value = bgr[0];
+
+    _label1.text = [[NSNumber numberWithInt:bgr[2]*255] stringValue];
+    _label2.text = [[NSNumber numberWithInt:bgr[1]*255] stringValue];
+    _label3.text = [[NSNumber numberWithInt:bgr[0]*255] stringValue];
     
-    _label1.text = [[NSNumber numberWithInt:r] stringValue];
-    _label2.text = [[NSNumber numberWithInt:g] stringValue];
-    _label3.text = [[NSNumber numberWithInt:b] stringValue];
+    [self sliderImageSet:bgr slider:_slider1 :2];
+    [self sliderImageSet:bgr slider:_slider2 :1];
+    [self sliderImageSet:bgr slider:_slider3 :0];
     
-    [self sliderBGset:r :g :b :r :_slider1 :0];
-    [self sliderBGset:r :g :b :g :_slider2 :1];
-    [self sliderBGset:r :g :b :b :_slider3 :2];
+//    if(_slider1.value != bgr[2]){
+//        _slider1.value = bgr[2];
+//        _label1.text = [[NSNumber numberWithInt:bgr[2]*255] stringValue];
+//        [self sliderImageSet:bgr slider:_slider1 :2];
+//    }
+//    if(_slider2.value != bgr[1]){
+//        _slider2.value = bgr[1];
+//        _label2.text = [[NSNumber numberWithInt:bgr[1]*255] stringValue];
+//        [self sliderImageSet:bgr slider:_slider2 :1];
+//    }
+//    if(_slider3.value != bgr[0]){
+//        _slider3.value = bgr[0];
+//        _label3.text = [[NSNumber numberWithInt:bgr[0]*255] stringValue];
+//        [self sliderImageSet:bgr slider:_slider3 :0];
+//    }
 }
 
--(void) sliderBGset:(int)r :(int)g :(int)b : (int) w  :(UISlider *)slider :(int) index
+-(void) sliderImageSet:(CGFloat *)bgr slider:(UISlider *)slider :(int) index
 {
-    
-    UIImage * lImg = createSlideImage(r,g,b, index,true,w,6);
-    UIImage * rImg = createSlideImage(r,g,b, index,false,256-w,6);
+    UIImage *image = sliderImage(bgr, index, 6);
+    UIImage *lImg = imageFromImage(image, CGRectMake(0, 0, bgr[index]*255, image.size.height));
+    UIImage *rImg = imageFromImage(image, CGRectMake(bgr[index]*255, 0, 256 - bgr[index]*255, image.size.height));
     
     [slider setMinimumTrackImage:lImg forState:UIControlStateNormal ];
     [slider setMaximumTrackImage:rImg forState:UIControlStateNormal ];
 }
-
 
 -(void) setColor:(UIColor *)color
 {

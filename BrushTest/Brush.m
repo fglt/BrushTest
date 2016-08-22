@@ -228,10 +228,10 @@ CGFloat const  DeltaWidth = 0.05;
     CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
     [bpath applyTransform:translationTransform];
     
-    //UIColor * color = [self.color colorWithAlphaComponent:2*CGColorGetAlpha(self.color.CGColor)/self.radius];
-    //[color set];
+//    UIColor * color = [self.color colorWithAlphaComponent:4*CGColorGetAlpha(self.color.CGColor)/self.width];
+//    [color set];
     [self.color set];
-    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
+    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint]/2;
     if(len == 0){
         [bpath fill];
         return;
@@ -245,6 +245,7 @@ CGFloat const  DeltaWidth = 0.05;
         [points[i] getValue:&curPoint];
         [bpath applyTransform:translationTransform];
     }
+    
 }
 
 -(instancetype) copyWithZone:(NSZone *)zone

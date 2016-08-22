@@ -1,12 +1,13 @@
 //
-//  BrushView.h
+//  LayerView.h
 //  BrushTest
 //
-//  Created by Coding on 8/18/16.
+//  Created by Coding on 8/21/16.
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface BrushView : UIView
+@interface LayerView : UIView
+
 @end

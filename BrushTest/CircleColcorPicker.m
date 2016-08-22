@@ -30,7 +30,7 @@ IB_DESIGNABLE
     CGRect rect = self.frame;
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
-    
+    CGContextRef context = UIGraphicsGetCurrentContext();
     UIBezierPath *bpath;
     
     CGPoint point1;
@@ -55,8 +55,10 @@ IB_DESIGNABLE
         [bpath stroke];
     }
     
+    
+    CGContextSetBlendMode(context, kCGBlendModeClear);
     r = r - 40;
-    UIColor *fillColor = [UIColor whiteColor];
+    UIColor *fillColor = [UIColor clearColor];
     
     bpath = [UIBezierPath bezierPathWithArcCenter:center radius:r startAngle:0 endAngle:M_PI *2 clockwise:YES];
     [fillColor set];
@@ -110,7 +112,7 @@ IB_DESIGNABLE
     }else
         alpha =  M_PI - alpha ;
     _hue = alpha/PI2 ;
-    NSLog(@"hue: %f", _hue );
+    //NSLog(@"hue: %f", _hue );
 }
 
 - (void) setValue: (CGPoint) newValue
@@ -135,7 +137,7 @@ IB_DESIGNABLE
         CGFloat  y =  CGRectGetMidY(self.bounds) - indicatorDistanceToCenter * sin(_hue * PI2);
         CGFloat x =  CGRectGetMidX(self.bounds) + indicatorDistanceToCenter * cos(_hue * PI2);
         [self setValue:CGPointMake(x, y)];
-        NSLog(@"center: %f,  %f", x, y);
+       // NSLog(@"center: %f,  %f", x, y);
     }
 }
 
@@ -150,7 +152,7 @@ IB_DESIGNABLE
 
     self.value =  CGPointMake(sx + (indicatorDistanceToCenter / dis) * (point.x-sx), sy + (indicatorDistanceToCenter / dis) * (point.y-sy));
 
-    NSLog(@"point: %f, y: %f", point.x, point.y);
+   // NSLog(@"point: %f, y: %f", point.x, point.y);
 }
 
 - (BOOL) beginTrackingWithTouch: (UITouch*) touch

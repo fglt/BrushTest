@@ -53,12 +53,15 @@ UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv
 //------------------------------------------------------------------------------
 
 typedef enum {
-    R_COLOR = 0,
+    B_COLOR = 0,
     G_COLOR = 1,
-    B_COLOR = 2,
+    R_COLOR = 2,
 } ColorRGB;
 
-UIImage* createSlideImage(int r, int g, int b, ColorRGB whichColor,bool leftOrRight,int w, int h);
+UIImage * createSlideImage(UInt8* bgr, ColorRGB whichColor,int w, int h);
+
+UIImage * sliderImage(CGFloat* bgr, ColorRGB whichColor, int h);
+UIImage * imageFromImage(UIImage *image, CGRect rect);
 
 void HSVFromUIColor(UIColor* color, float* h, float* s, float* v);
 

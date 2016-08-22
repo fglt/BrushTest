@@ -7,17 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class Brush;
+#import "Brush.h"
 
 @protocol BrushSelectViewControllerDelegate <NSObject>
 
-- (void)brushSelected:(Brush*) brush;
-- (UIColor*)brushColor;
-- (Brush *)currentBrush;
+- (void)brushTypeSelected:(BrushType) brushType;
+- (BrushType)currentBrushType;
 @end
 
 @interface BrushSelectViewController : UIViewController
-@property (nonatomic, strong) Brush* brush;
+@property (nonatomic) BrushType type;
 @property (nonatomic, weak) id<BrushSelectViewControllerDelegate> brushSelectViewControllerDelegate;
 @end
