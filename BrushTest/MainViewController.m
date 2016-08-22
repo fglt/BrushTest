@@ -8,7 +8,7 @@
 
 #import "MainViewController.h"
 #import "CanvasView.h"
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 #import "CircleColcorPicker.h"
 #import "SquareColorPicker.h"
 #import "PaletteViewController.h"

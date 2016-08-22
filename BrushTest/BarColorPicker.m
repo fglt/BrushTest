@@ -8,7 +8,7 @@
 
 #import "BarColorPicker.h"
 #import "constants.h"
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 #import "InfColorIndicatorView.h"
 
 IB_DESIGNABLE
@@ -20,7 +20,7 @@ IB_DESIGNABLE
 static UIImage* createContentImage()
 {
     float hsv[] = { 0.0f, 1.0f, 1.0f };
-    return createHSVBarContentImage(InfComponentIndexHue, hsv);
+    return createHSVBarContentImage(FGTColorHSVIndexHue, hsv);
 }
 
 //------------------------------------------------------------------------------

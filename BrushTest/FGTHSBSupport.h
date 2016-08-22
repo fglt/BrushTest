@@ -1,14 +1,10 @@
-//==============================================================================
 //
-//  InfHSBSupport.h
-//  InfColorPicker
+//  FGTHSBSupport.h
+//  BrushTest
 //
-//  Created by Troy Gaul on 7 Aug 2010.
+//  Created by Coding on 8/7/16.
+//  Copyright © 2016 Coding. All rights reserved.
 //
-//  Copyright (c) 2011-2013 InfinitApps LLC: http://infinitapps.com
-//	Some rights reserved: http://opensource.org/licenses/MIT
-//
-//==============================================================================
 
 #import <UIKit/UIKit.h>
 
@@ -19,16 +15,17 @@ float pin(float minValue, float value, float maxValue);
 //------------------------------------------------------------------------------
 
 	// These functions convert between an RGB value with components in the
-	// 0.0f..1.0f range to HSV where Hue is 0 .. 360 and Saturation and
+	// 0.0f..1.0f range to HSV where Hue, Saturation and
 	// Value (aka Brightness) are percentages expressed as 0.0f..1.0f.
 	//
 	// Note that HSB (B = Brightness) and HSV (V = Value) are interchangeable
 	// names that mean the same thing. I use V here as it is unambiguous
 	// relative to the B in RGB, which is Blue.
 
-void HSVtoRGB(float h, float s, float v, float* r, float* g, float* b);
 
-void RGBToHSV(float r, float g, float b, float* h, float* s, float* v,
+void HSVtoRGB(float*hsv, float* bgr);
+
+void RGBToHSV(float *bgr, float *hsv,
               BOOL preserveHS);
 
 //------------------------------------------------------------------------------
@@ -40,12 +37,12 @@ UIImage* createSaturationBrightnessSquareContentImageWithHue(float hue);
 //------------------------------------------------------------------------------
 
 typedef enum {
-	InfComponentIndexHue = 0,
-	InfComponentIndexSaturation = 1,
-	InfComponentIndexBrightness = 2,
-} InfComponentIndex;
+	FGTColorHSVIndexHue = 0,
+	FGTColorHSVIndexSaturation = 1,
+	FGTColorHSVIndexBrightness = 2,
+} FGTColorHSVIndex;
 
-UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv[3]);
+UIImage* createHSVBarContentImage(FGTColorHSVIndex barComponentIndex, float hsv[3]);
 	// Generates an image where the specified barComponentIndex (0=H, 1=S, 2=V)
 	// varies across the x-axis of the 256x1 pixel image and the other components
 	// remain at the constant value specified in the hsv array.
@@ -53,16 +50,16 @@ UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv
 //------------------------------------------------------------------------------
 
 typedef enum {
-    B_COLOR = 0,
-    G_COLOR = 1,
-    R_COLOR = 2,
-} ColorRGB;
+    FGTColorIndexBlue = 0,
+    FGTColorIndexGreen = 1,
+    FGTColorIndexRed = 2,
+} FGTColorIndex;
 
-UIImage * createSlideImage(UInt8* bgr, ColorRGB whichColor,int w, int h);
+UIImage * createSlideImage(UInt8* bgr, FGTColorIndex whichColor,int w, int h);
 
-UIImage * sliderImage(CGFloat* bgr, ColorRGB whichColor, int h);
+UIImage * sliderImage(float* bgr, FGTColorIndex whichColor, int h);
 UIImage * imageFromImage(UIImage *image, CGRect rect);
 
-void HSVFromUIColor(UIColor* color, float* h, float* s, float* v);
+void HSVFromUIColor(UIColor* color, float hsv[3]);
 
 

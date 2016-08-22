@@ -1,16 +1,12 @@
-//==============================================================================
 //
-//  InfHSBSupport.m
-//  InfColorPicker
+//  FGTHSBSupport.m
+//  BrushTest
 //
-//  Created by Troy Gaul on 7 Aug 2010.
+//  Created by Coding on 8/7/16.
+//  Copyright © 2016 Coding. All rights reserved.
 //
-//  Copyright (c) 2011-2013 InfinitApps LLC: http://infinitapps.com
-//	Some rights reserved: http://opensource.org/licenses/MIT
-//
-//==============================================================================
 
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 
 //------------------------------------------------------------------------------
 
@@ -28,127 +24,94 @@ float pin(float minValue, float value, float maxValue)
 #pragma mark	Floating point conversion
 //------------------------------------------------------------------------------
 
-static void hueToComponentFactors(float h, float* r, float* g, float* b)
+static void hueToComponentFactors(float h, float*bgr)
 {
-	float h_prime = h / 60.0f;
-	float x = 1.0f - fabsf(fmodf(h_prime, 2.0f) - 1.0f);
-	
-	if (h_prime < 1.0f) {
-		*r = 1;
-		*g = x;
-		*b = 0;
-	}
-	else if (h_prime < 2.0f) {
-		*r = x;
-		*g = 1;
-		*b = 0;
-	}
-	else if (h_prime < 3.0f) {
-		*r = 0;
-		*g = 1;
-		*b = x;
-	}
-	else if (h_prime < 4.0f) {
-		*r = 0;
-		*g = x;
-		*b = 1;
-	}
-	else if (h_prime < 5.0f) {
-		*r = x;
-		*g = 0;
-		*b = 1;
-	}
-	else {
-		*r = 1;
-		*g = 0;
-		*b = x;
-	}
+    float h_prime = h * 6;
+    int  i = h_prime;
+    float x = 1.0f - fabsf(fmodf(h_prime, 2.0f) - 1.0f);
+    float bgr0[] = {0,x,1,0,1,x,x,1,0,1,x,0,1,0,x,x,0,1};
+    memcpy(bgr, bgr0 + i*3, 12);
+}
+
+void HSVtoRGB(float*hsv, float* bgr)
+{
+    hueToComponentFactors(hsv[0], bgr);
     
+    float c = hsv[2] * hsv[1];
+    float m = hsv[2] - c;
+    
+    bgr[2] = bgr[2] * c + m;
+    bgr[1] = bgr[1] * c + m;
+    bgr[0] = bgr[0] * c + m;
 }
-
 //------------------------------------------------------------------------------
 
-void HSVtoRGB(float h, float s, float v, float* r, float* g, float* b)
+void RGBToHSV(float *bgr, float*hsv, BOOL preserveHS)
 {
-	hueToComponentFactors(h, r, g, b);
-	
-	float c = v * s;
-	float m = v - c;
-	
-	*r = *r * c + m;
-	*g = *g * c + m;
-	*b = *b * c + m;
+    float max = bgr[2];
+    
+    if (max <  bgr[1])
+        max =  bgr[1];
+    
+    if (max <  bgr[0])
+        max =  bgr[0];
+    
+    float min =  bgr[2];
+    
+    if (min >  bgr[1])
+        min =  bgr[1];
+    
+    if (min >  bgr[0])
+        min =  bgr[0];
+    
+    // Brightness (aka Value)
+    
+    hsv[2] = max;
+    
+    // Saturation
+    
+    float sat;
+    
+    if (max != 0.0f) {
+        sat = (max - min) / max;
+        hsv[1] = sat;
+    }
+    else {
+        sat = 0.0f;
+        
+        if (!preserveHS)
+            hsv[1] = 0.0f;             // Black, so sat is undefined, use 0
+    }
+    
+    // Hue
+    
+    float delta;
+    
+    if (sat == 0.0f) {
+        if (!preserveHS)
+            hsv[0] = 0.0f;           // No color, so hue is undefined, use 0
+    }
+    else {
+        delta = max - min;
+        
+        float hue;
+        
+        if (bgr[2] == max)
+            hue = (bgr[1] - bgr[0]) / delta;
+        else if (bgr[1] == max)
+            hue = 2 + (bgr[0] - bgr[2]) / delta;
+        else
+            hue = 4 + (bgr[2] - bgr[1]) / delta;
+        
+        hue /= 6.0f;
+        
+        if (hue < 0.0f)
+            hue += 1.0f;
+        
+        if (!preserveHS || fabsf(hue - hsv[0]) != 1.0f)
+            hsv[0] = hue;                               // 0.0 and 1.0 hues are actually both the same (red)
+    }
 }
-
-//------------------------------------------------------------------------------
-
-void RGBToHSV(float r, float g, float b, float* h, float* s, float* v, BOOL preserveHS)
-{
-	float max = r;
-	
-	if (max < g)
-		max = g;
-	
-	if (max < b)
-		max = b;
-	
-	float min = r;
-	
-	if (min > g)
-		min = g;
-	
-	if (min > b)
-		min = b;
-	
-	// Brightness (aka Value)
-	
-	*v = max;
-	
-	// Saturation
-	
-	float sat;
-	
-	if (max != 0.0f) {
-		sat = (max - min) / max;
-		*s = sat;
-	}
-	else {
-		sat = 0.0f;
-		
-		if (!preserveHS)
-			*s = 0.0f;                                      // Black, so sat is undefined, use 0
-	}
-	
-	// Hue
-	
-	float delta;
-	
-	if (sat == 0.0f) {
-		if (!preserveHS)
-			*h = 0.0f;                                      // No color, so hue is undefined, use 0
-	}
-	else {
-		delta = max - min;
-		
-		float hue;
-		
-		if (r == max)
-			hue = (g - b) / delta;
-		else if (g == max)
-			hue = 2 + (b - r) / delta;
-		else
-			hue = 4 + (r - g) / delta;
-		
-		hue /= 6.0f;
-		
-		if (hue < 0.0f)
-			hue += 1.0f;
-		
-		if (!preserveHS || fabsf(hue - *h) != 1.0f)
-			*h = hue;                               // 0.0 and 1.0 hues are actually both the same (red)
-	}
-}
-
 //------------------------------------------------------------------------------
 #pragma mark	Square/Bar image creation
 //------------------------------------------------------------------------------
@@ -193,12 +156,12 @@ UIImage* createSaturationBrightnessSquareContentImageWithHue(float hue)
 	UInt8* dataPtr = data;
 	size_t rowBytes = CGBitmapContextGetBytesPerRow(context);
 	
-	float r, g, b;
-	hueToComponentFactors(hue, &r, &g, &b);
+	float bgr[3];
+	hueToComponentFactors(hue, bgr);
 	
-	UInt8 r_s = (UInt8) ((1.0f - r) * 255);
-	UInt8 g_s = (UInt8) ((1.0f - g) * 255);
-	UInt8 b_s = (UInt8) ((1.0f - b) * 255);
+	UInt8 r_s = (UInt8) ((1.0f - bgr[2]) * 255);
+	UInt8 g_s = (UInt8) ((1.0f - bgr[1]) * 255);
+	UInt8 b_s = (UInt8) ((1.0f - bgr[0]) * 255);
 	
 	for (int s = 0; s < 256; ++s) {
 		register UInt8* ptr = dataPtr;
@@ -239,7 +202,7 @@ UIImage* createSaturationBrightnessSquareContentImageWithHue(float hue)
 //------------------------------------------------------------------------------
 
 
-UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv[3])
+UIImage* createHSVBarContentImage(FGTColorHSVIndex barComponentIndex, float hsv[3])
 {
 	UInt8 data[256 * 4];
 	
@@ -258,15 +221,16 @@ UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv
 		return nil;
 	}
 	
-	float r, g, b;
+	float bgr[3];
 	for (int x = 0; x < 256; ++x) {
 		hsv[barComponentIndex] = (float) x / 255.0f;
 		
-		HSVtoRGB(hsv[0] * 360.0f, hsv[1], hsv[2], &r, &g, &b);
+		HSVtoRGB(hsv, bgr);
 		
-		ptr[0] = (UInt8) (b * 255.0f);
-		ptr[1] = (UInt8) (g * 255.0f);
-		ptr[2] = (UInt8) (r * 255.0f);
+        memcpy(ptr, bgr, 3);
+		ptr[0] = (UInt8) (bgr[0] * 255.0f);
+		ptr[1] = (UInt8) (bgr[1] * 255.0f);
+		ptr[2] = (UInt8) (bgr[2] * 255.0f);
 		
 		ptr += 4;
 	}
@@ -280,63 +244,9 @@ UIImage* createHSVBarContentImage(InfComponentIndex barComponentIndex, float hsv
 	return image;
 }
 
-//------------------------------------------------------------------------------
-UIImage* createSlideImage(UInt8* bgr, ColorRGB whichColor,int w, int h)
-{
-    UInt8 data[w * h<<2];
-    
-    // Set up the bitmap context for filling with color:
-    
-    CGContextRef context = createBGRxImageContext(w, h, data);
-    
-    if (context == nil)
-        return nil;
-    
-    // Draw into context here:
-    
-    UInt8* ptr = CGBitmapContextGetData(context);
-    if (ptr == nil) {
-        CGContextRelease(context);
-        return nil;
-    }
-    
-    UInt8 * dataPtr = data;
-    
-    int start, end ;
-
-    UInt8 tmpColor[4] = {bgr[0],bgr[1],bgr[2], 0};
-    for (int x = 0; x < w; ++x) {
-        memcpy(dataPtr, tmpColor, 4);
-        dataPtr += 4;
-    }
-    start = bgr[whichColor];
-    end = start + w;
-    dataPtr = data + whichColor;
-
-    for (int x = start; x <=end; ++x) {
-        *dataPtr = x;
-        dataPtr += 4;
-    }
-    
-    dataPtr = data;
-    size_t rowBytes = (w<<2);
-    for(int i=1; i<h; i++)
-    {
-        dataPtr =dataPtr + rowBytes;
-        
-        memcpy(dataPtr, data, rowBytes);
-    }
-    // Return an image of the context's content:
-    
-    CGImageRef cgimage = CGBitmapContextCreateImage(context);
-    UIImage *image = [UIImage imageWithCGImage:cgimage];
-    CGContextRelease(context);
-    CGImageRelease(cgimage);
-    return image;
-}
 
 
-UIImage* sliderImage(CGFloat* bgr, ColorRGB whichColor, int h)
+UIImage* sliderImage(float* bgr, FGTColorIndex whichColor, int h)
 {
     int w =256;
     UInt8 data[w * h<<2];
@@ -360,14 +270,8 @@ UIImage* sliderImage(CGFloat* bgr, ColorRGB whichColor, int h)
 
     UInt8 tmpColor[4] = {bgr[0]*255,bgr[1]*255,bgr[2]*255, 0};
     for (int x = 0; x < w; ++x) {
+        tmpColor[whichColor] = x;
         memcpy(dataPtr, tmpColor, 4);
-        dataPtr += 4;
-    }
-
-    dataPtr = data + whichColor;
-    
-    for (int x = 0; x <w; ++x) {
-        *dataPtr = x;
         dataPtr += 4;
     }
     
@@ -397,24 +301,24 @@ UIImage * imageFromImage(UIImage *image, CGRect rect)
     return cropImage;
 }
 
-void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
+void HSVFromUIColor(UIColor* color, float hsv[3])
 {
     CGColorRef colorRef = [color CGColor];
     
     const CGFloat* components = CGColorGetComponents(colorRef);
     size_t numComponents = CGColorGetNumberOfComponents(colorRef);
     
-    CGFloat r, g, b;
+    float bgr[3];
     
     if (numComponents < 3) {
-        r = g = b = components[0];
+        bgr[0] = bgr[1] = bgr[2] = components[0];
     }
     else {
-        r = components[0];
-        g = components[1];
-        b = components[2];
+        bgr[2] = components[0];
+        bgr[1] = components[1];
+        bgr[0] = components[2];
     }
     
-    RGBToHSV(r, g, b, h, s, v, YES);
+    RGBToHSV(bgr, hsv, YES);
     //NSLog(@"%f: %f: %f",*h, *s,*v);
 }

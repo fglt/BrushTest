@@ -34,7 +34,7 @@
 		176D111B1D5CE02400A0DD31 /* Stroke.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D11161D5CE02400A0DD31 /* Stroke.m */; };
 		176D111C1D5CE02400A0DD31 /* UIColor+BFPaperColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D11181D5CE02400A0DD31 /* UIColor+BFPaperColors.m */; };
 		176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */; };
-		176D112F1D60CDB500A0DD31 /* InfHSBSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D112D1D60CDB500A0DD31 /* InfHSBSupport.m */; };
+		176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,8 +90,8 @@
 		176D11181D5CE02400A0DD31 /* UIColor+BFPaperColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+BFPaperColors.m"; sourceTree = "<group>"; };
 		176D11191D5CE02400A0DD31 /* UIImage+FEBoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FEBoxBlur.h"; sourceTree = "<group>"; };
 		176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FEBoxBlur.m"; sourceTree = "<group>"; };
-		176D112C1D60CDB500A0DD31 /* InfHSBSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfHSBSupport.h; sourceTree = "<group>"; };
-		176D112D1D60CDB500A0DD31 /* InfHSBSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfHSBSupport.m; sourceTree = "<group>"; };
+		176D112C1D60CDB500A0DD31 /* FGTHSBSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FGTHSBSupport.h; sourceTree = "<group>"; };
+		176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGTHSBSupport.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,8 +165,8 @@
 				1754A2D71D649FE500C18717 /* constants.m */,
 				176D11091D5CDFFB00A0DD31 /* DrawingLayer.h */,
 				176D110A1D5CDFFB00A0DD31 /* DrawingLayer.m */,
-				176D112C1D60CDB500A0DD31 /* InfHSBSupport.h */,
-				176D112D1D60CDB500A0DD31 /* InfHSBSupport.m */,
+				176D112C1D60CDB500A0DD31 /* FGTHSBSupport.h */,
+				176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */,
 				176D10F51D5CDF3B00A0DD31 /* Main.storyboard */,
 				176D10F21D5CDF3B00A0DD31 /* MainViewController.h */,
 				176D10F31D5CDF3B00A0DD31 /* MainViewController.m */,
@@ -275,7 +275,7 @@
 				176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */,
 				176C313A1D660DBF00B9A1D6 /* BrushView.m in Sources */,
 				176C31341D6606B700B9A1D6 /* BrushSelectViewController.m in Sources */,
-				176D112F1D60CDB500A0DD31 /* InfHSBSupport.m in Sources */,
+				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
 				176C312E1D64B20A00B9A1D6 /* ColorPicker.m in Sources */,
 				176C314F1D69AB5600B9A1D6 /* LayerView.m in Sources */,
 				1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */,

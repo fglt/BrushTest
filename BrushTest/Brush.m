@@ -8,7 +8,7 @@
 
 #import "Brush.h"
 #import "UIColor+BFPaperColors.h"
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 #import "UIbezierPath+brush.h"
 
 const double M_PI2 = M_PI *2;

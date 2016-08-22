@@ -9,7 +9,7 @@
 #import "PaletteViewController.h"
 #import "CircleColcorPicker.h"
 #import "SquareColorPicker.h"
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 #import "UIColor+BFPaperColors.h"
 
 @interface PaletteViewController()
@@ -30,47 +30,46 @@
 {
     _color = [ _delegate currentColor];
 
-    float h, s, v;
-    HSVFromUIColor(_color, &h, &s, &v);
-    _circleColorPicker.hue = h;
-    _squareColorPicker.hue = h;
-    _squareColorPicker.point = CGPointMake(s, v);
+    float hsv[3];
+    HSVFromUIColor(_color, hsv);
+    _circleColorPicker.hue = hsv[0];
+    _squareColorPicker.hue = hsv[0];
+    _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
 }
 
 - (IBAction)touchCircleColorPicker:(CircleColcorPicker*)sender {
     self.squareColorPicker.hue = sender.hue;
     CGPoint point = self.squareColorPicker.point;
     self.color = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
-    float r, g,b;
-    HSVtoRGB(sender.hue*360, point.x, point.y, &r, &g, &b);
-    CGFloat bgr[] ={b, g, r};
+    float bgr[3];
+    float hsv[3] = {sender.hue, point.x, point.y};
+    HSVtoRGB(hsv,bgr);
     [self doSetText:bgr];
     //NSLog(@"touchCircleColorPicker");
 }
 - (IBAction)touchSquareColorPicker:(SquareColorPicker*)sender {
     CGPoint point = sender.point;
     self.color = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
-    float r, g,b;
-    HSVtoRGB(sender.hue*360, point.x, point.y, &r, &g, &b);
-    CGFloat bgr[] ={b, g, r};
+    float bgr[3];
+    float hsv[3] = {sender.hue, point.x, point.y};
+    HSVtoRGB(hsv, bgr);
     [self doSetText:bgr];
      //NSLog(@"touchSquareColorPicker");
 }
 - (IBAction)moveColorSlider:(id)sender {
-    float r = _slider1.value;
-    float g = _slider2.value ;
-    float b = _slider3.value ;
-    float h, s,v;
-    RGBToHSV(r, g, b, &h, &s, &v, YES);
-    _circleColorPicker.hue = h;
-    _squareColorPicker.hue = h;
-    _squareColorPicker.point = CGPointMake(s, v);
-    self.color = [UIColor colorWithRed:r green:g blue:b alpha:1];
+    float bgr[3] = {_slider3.value,_slider2.value,_slider1.value};
+//    float hsv[3] ;
+    float hsv[3] = { self.circleColorPicker.hue, self.squareColorPicker.point.x, self.squareColorPicker.point.y};
+    RGBToHSV(bgr, hsv, YES);
+    _circleColorPicker.hue = hsv[0];
+    _squareColorPicker.hue = hsv[0];
+    _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
+    self.color = [UIColor colorWithRed:bgr[2] green:bgr[1] blue:bgr[0] alpha:1];
 
     //NSLog(@"moveColorSlider");
 }
 
--(void)doSetText:(CGFloat *)bgr
+-(void)doSetText:(float *)bgr
 {
     _slider1.value = bgr[2];
     _slider2.value = bgr[1];
@@ -101,7 +100,7 @@
 //    }
 }
 
--(void) sliderImageSet:(CGFloat *)bgr slider:(UISlider *)slider :(int) index
+-(void) sliderImageSet:(float *)bgr slider:(UISlider *)slider :(int) index
 {
     UIImage *image = sliderImage(bgr, index, 6);
     UIImage *lImg = imageFromImage(image, CGRectMake(0, 0, bgr[index]*255, image.size.height));

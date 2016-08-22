@@ -8,7 +8,7 @@
 
 #import "SquareColorPicker.h"
 #import "InfColorIndicatorView.h"
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 #import "constants.h"
 
 
@@ -37,7 +37,7 @@ IB_DESIGNABLE
     if (value != _hue || imgView.image == nil) {
         _hue = value;
        
-        UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue * 360);
+        UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue);
         imgView.image = img;
     }
     
@@ -80,7 +80,7 @@ IB_DESIGNABLE
     if (imgView == nil)
     {
         imgView = [[UIImageView alloc] initWithFrame: CGRectMake(self.bounds.origin.x+20, self.bounds.origin.y+20, self.bounds.size.width-40, self.bounds.size.height-40)];
-        UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue * 360);
+        UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue);
         imgView.image = img;
 
         [self addSubview: imgView];

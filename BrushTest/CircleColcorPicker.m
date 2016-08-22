@@ -8,7 +8,7 @@
 
 #import "CircleColcorPicker.h"
 #import "InfColorIndicatorView.h"
-#import "InfHSBSupport.h"
+#import "FGTHSBSupport.h"
 #define kContentInsetX 20
 #define kIndicatorSize 24.0
 
