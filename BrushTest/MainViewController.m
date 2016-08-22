@@ -22,12 +22,12 @@
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (weak, nonatomic) IBOutlet CanvasView *canvasView;
 @property (weak, nonatomic) IBOutlet BrushAlphaAndWidthView *brushAlphaAndWidthView;
-@property (nonatomic, strong) PaletteViewController* paletteViewController;
-@property (nonatomic, strong) BrushSelectViewController* brushViewController;
+@property (nonatomic, strong) PaletteViewController *paletteViewController;
+@property (nonatomic, strong) BrushSelectViewController *brushViewController;
 @end
 @interface MainViewController ()
-@property (nonatomic, copy) UIColor*color;
-@property (nonatomic, strong) Brush* brush;
+@property (nonatomic, copy) UIColor *color;
+@property (nonatomic, strong) Brush *brush;
 @property (nonatomic) CGFloat radius;
 @end
 @implementation MainViewController
@@ -152,7 +152,7 @@
     
 }
 
--(void) dispalyPaletteView
+- (void)dispalyPaletteView
 {
     CGRect frame = self.paletteViewBoard.frame;
     self.paletteViewBoard.center = CGPointMake(-frame.size.width/2,  self.paletteViewBoard.center.y);

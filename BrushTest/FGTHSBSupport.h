@@ -10,7 +10,7 @@
 
 //------------------------------------------------------------------------------
 
-float pin(float minValue, float value, float maxValue);
+CGFloat pin(CGFloat minValue, CGFloat value, CGFloat maxValue);
 
 //------------------------------------------------------------------------------
 
@@ -23,14 +23,14 @@ float pin(float minValue, float value, float maxValue);
 	// relative to the B in RGB, which is Blue.
 
 
-void HSVtoRGB(float*hsv, float* bgr);
+void HSVtoRGB(CGFloat*hsv, CGFloat* bgr);
 
-void RGBToHSV(float *bgr, float *hsv,
+void RGBToHSV(CGFloat *bgr, CGFloat *hsv,
               BOOL preserveHS);
 
 //------------------------------------------------------------------------------
 
-UIImage* createSaturationBrightnessSquareContentImageWithHue(float hue);
+UIImage* createSaturationBrightnessSquareContentImageWithHue(CGFloat hue);
 	// Generates a 256x256 image with the specified constant hue where the
 	// Saturation and value vary in the X and Y axes respectively.
 
@@ -42,24 +42,23 @@ typedef enum {
 	FGTColorHSVIndexBrightness = 2,
 } FGTColorHSVIndex;
 
-UIImage* createHSVBarContentImage(FGTColorHSVIndex barComponentIndex, float hsv[3]);
-	// Generates an image where the specified barComponentIndex (0=H, 1=S, 2=V)
-	// varies across the x-axis of the 256x1 pixel image and the other components
-	// remain at the constant value specified in the hsv array.
-
-//------------------------------------------------------------------------------
-
 typedef enum {
     FGTColorIndexBlue = 0,
     FGTColorIndexGreen = 1,
     FGTColorIndexRed = 2,
 } FGTColorIndex;
 
-UIImage * createSlideImage(UInt8* bgr, FGTColorIndex whichColor,int w, int h);
+UIImage* HSVBarContentImage(FGTColorHSVIndex colorHSVIndex, CGFloat hsv[3]);
+	// Generates an image where the specified barComponentIndex (0=H, 1=S, 2=V)
+	// varies across the x-axis of the 256x1 pixel image and the other components
+	// remain at the constant value specified in the hsv array.
 
-UIImage * sliderImage(float* bgr, FGTColorIndex whichColor, int h);
+//------------------------------------------------------------------------------
+
+
+UIImage * sliderImage(CGFloat* bgr, FGTColorIndex whichColor, int h);
 UIImage * imageFromImage(UIImage *image, CGRect rect);
 
-void HSVFromUIColor(UIColor* color, float hsv[3]);
+void HSVFromUIColor(UIColor* color, CGFloat hsv[3]);
 
 

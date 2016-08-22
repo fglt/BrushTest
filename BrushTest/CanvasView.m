@@ -29,18 +29,18 @@
 - (void)clear
 {
     [_drawingLayer clear];
-    self.image = nil;
+    self.layer.contents = nil;
 }
 - (void)undo
 {
     [_drawingLayer undo];
-    self.image = [_drawingLayer imageFromeContext];
+    self.layer.contents  = (id)[_drawingLayer imageFromeContext].CGImage;
 }
 
 - (void)redo
 {
     [_drawingLayer redo];
-    self.image = [_drawingLayer imageFromeContext];
+    self.layer.contents  = (id)[_drawingLayer imageFromeContext].CGImage;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -49,7 +49,7 @@
     UITouch* touch = [touches anyObject];
     CGPoint p = [touch locationInView:self];
     [_drawingLayer updateStrokeWithPoint:p];
-    self.image = [_drawingLayer imageFromeContext];
+    self.layer.contents  = (id)[_drawingLayer imageFromeContext].CGImage;
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -57,7 +57,7 @@
     UITouch* touch = [touches anyObject];
     CGPoint p = [touch locationInView:self];
     [_drawingLayer updateStrokeWithPoint:p];
-    self.image = [_drawingLayer imageFromeContext];
+     self.layer.contents  = (id)[_drawingLayer imageFromeContext].CGImage;
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

@@ -30,7 +30,7 @@
 {
     _color = [ _delegate currentColor];
 
-    float hsv[3];
+    CGFloat hsv[3];
     HSVFromUIColor(_color, hsv);
     _circleColorPicker.hue = hsv[0];
     _squareColorPicker.hue = hsv[0];
@@ -41,8 +41,8 @@
     self.squareColorPicker.hue = sender.hue;
     CGPoint point = self.squareColorPicker.point;
     self.color = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
-    float bgr[3];
-    float hsv[3] = {sender.hue, point.x, point.y};
+    CGFloat bgr[3];
+    CGFloat hsv[3] = {sender.hue, point.x, point.y};
     HSVtoRGB(hsv,bgr);
     [self doSetText:bgr];
     //NSLog(@"touchCircleColorPicker");
@@ -50,16 +50,16 @@
 - (IBAction)touchSquareColorPicker:(SquareColorPicker*)sender {
     CGPoint point = sender.point;
     self.color = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
-    float bgr[3];
-    float hsv[3] = {sender.hue, point.x, point.y};
+    CGFloat bgr[3];
+    CGFloat hsv[3] = {sender.hue, point.x, point.y};
     HSVtoRGB(hsv, bgr);
     [self doSetText:bgr];
      //NSLog(@"touchSquareColorPicker");
 }
 - (IBAction)moveColorSlider:(id)sender {
-    float bgr[3] = {_slider3.value,_slider2.value,_slider1.value};
+    CGFloat bgr[3] = {_slider3.value,_slider2.value,_slider1.value};
 //    float hsv[3] ;
-    float hsv[3] = { self.circleColorPicker.hue, self.squareColorPicker.point.x, self.squareColorPicker.point.y};
+    CGFloat hsv[3] = { self.circleColorPicker.hue, self.squareColorPicker.point.x, self.squareColorPicker.point.y};
     RGBToHSV(bgr, hsv, YES);
     _circleColorPicker.hue = hsv[0];
     _squareColorPicker.hue = hsv[0];
@@ -69,7 +69,7 @@
     //NSLog(@"moveColorSlider");
 }
 
--(void)doSetText:(float *)bgr
+-(void)doSetText:(CGFloat *)bgr
 {
     _slider1.value = bgr[2];
     _slider2.value = bgr[1];
@@ -100,7 +100,7 @@
 //    }
 }
 
--(void) sliderImageSet:(float *)bgr slider:(UISlider *)slider :(int) index
+-(void) sliderImageSet:(CGFloat *)bgr slider:(UISlider *)slider :(int) index
 {
     UIImage *image = sliderImage(bgr, index, 6);
     UIImage *lImg = imageFromImage(image, CGRectMake(0, 0, bgr[index]*255, image.size.height));

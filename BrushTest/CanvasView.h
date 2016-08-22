@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class  Brush;
-@interface CanvasView : UIImageView
+@interface CanvasView : UIView
 @property (nonatomic, strong) Brush* currentBrush;
 
 - (void)clear;

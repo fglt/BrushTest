@@ -58,7 +58,7 @@
 	
 	// Fill it:
 	
-	CGContextAddArc(context, center.x, center.y, radius - 1.0f, 0.0f, 2.0f * (float) M_PI, YES);
+	CGContextAddArc(context, center.x, center.y, radius - 3.0f, 0.0f, 2.0f * (float) M_PI, YES);
 	[self.color setFill];
 	CGContextFillPath(context);
 	
