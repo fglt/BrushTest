@@ -16,14 +16,15 @@
 @property (nonatomic) BOOL locked;
 @property (nonatomic) CGFloat alpha;
 @property (nonatomic) BOOL activity;
+@property (nonatomic) UIImage *image;
 
-- (void)undo;
-- (UIImage *)imageFromeContext;
+//- (UIImage *)imageFromeContext;
 - (void)newStrokeWithBrush:(Brush*)brush;
 - (void)addStroke;
 - (instancetype)initWithSize:(CGSize)size;
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 - (void)clear;
 - (void)redo;
+- (void)undo;
 + (instancetype)drawingLayerWithSize:(CGSize)size;
 @end

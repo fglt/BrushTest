@@ -19,7 +19,7 @@
     [_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
     UITouch* touch = [touches anyObject];
     CGPoint p = [touch locationInView:self];
-    [_canvas.foreLayer updateStrokeWithPoint:p];
+    [_canvas updateWithPoint:p];
     [self displayContent];
 }
 
@@ -27,7 +27,7 @@
 {
     UITouch* touch = [touches anyObject];
     CGPoint p = [touch locationInView:self];
-    [_canvas.foreLayer updateStrokeWithPoint:p];
+    [_canvas updateWithPoint:p];
     [self displayContent];
 }
 
@@ -38,7 +38,7 @@
 
 - (void)displayContent
 {
-    self.layer.contents = (id)[_canvas image].CGImage;
+    self.layer.contents = (id)_canvas.image.CGImage;
 }
 
 @end

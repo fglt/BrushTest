@@ -33,9 +33,9 @@
     _alpha = 1;
     _strokes = [NSMutableArray array];
     _abandonedStrokes = [NSMutableArray array];
-    //UIGraphicsBeginImageContext(_contextSize);
     UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
     _context = UIGraphicsGetCurrentContext();
+    _image = UIGraphicsGetImageFromCurrentImageContext();
     return self;
 }
 
@@ -48,6 +48,7 @@
     //UIGraphicsEndImageContext();
     //UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
     //_context = UIGraphicsGetCurrentContext();
+    _image = UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)undo
@@ -62,6 +63,7 @@
     for(Stroke* stroke in _strokes){
         [stroke drawInContext:_context];
     }
+    _image = UIGraphicsGetImageFromCurrentImageContext();
 }
 
 -(void)redo
@@ -71,14 +73,7 @@
     [_abandonedStrokes removeLastObject];
     [_strokes addObject:stroke];
     [stroke drawInContext:_context];
-}
-
-- (UIImage *)imageFromeContext
-{
-    CGImageRef cgimage = CGBitmapContextCreateImage(_context);
-    UIImage * newImage = [UIImage imageWithCGImage:cgimage];
-    CGImageRelease(cgimage);
-    return newImage;
+    _image = UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)newStrokeWithBrush:(Brush*)brush
@@ -95,6 +90,7 @@
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
     [_currentStroke addPoint:toPoint inContext:_context];
+    _image = UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (void)setActivity:(BOOL)activity

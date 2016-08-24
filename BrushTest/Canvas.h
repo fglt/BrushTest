@@ -19,13 +19,14 @@
 @property (nonatomic, strong) NSMutableArray *drawingLayers;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *foreLayer;
+@property (nonatomic, strong) UIImage *image;
 
 - (void)clear;
 - (void)undo;
 - (void)redo;
 - (void)addLayer:(DrawingLayer *)layer;
 - (void)addLayer;
-- (UIImage *)image;
 - (instancetype)initWithSize:(CGSize)size;
 - (instancetype)initWithSize:(CGSize)size backgroundColor:(UIColor *)color;
+- (void) updateWithPoint:(CGPoint)point;
 @end

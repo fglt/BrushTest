@@ -54,7 +54,7 @@
     [_foreLayer redo];
 }
 
-- (UIImage *)a;
+- (UIImage *)imageFromContext;
 {
     CGRect rect = CGRectMake(0, 0, _canvasSize.width, _canvasSize.height);
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
@@ -63,8 +63,7 @@
     
     for(DrawingLayer *layer in _drawingLayers){
         if(layer.visable){
-            UIImage *image = [layer imageFromeContext];
-            [image drawInRect:rect blendMode:layer.blendMode alpha:layer.alpha];
+            [layer.image drawInRect:rect blendMode:layer.blendMode alpha:layer.alpha];
         }
     }
     
@@ -75,5 +74,11 @@
 
 -(u_long)layerCount{
     return _drawingLayers.count;
+}
+
+- (void) updateWithPoint:(CGPoint)point
+{
+    [_foreLayer updateStrokeWithPoint:point];
+    _image = [self imageFromContext];
 }
 @end
