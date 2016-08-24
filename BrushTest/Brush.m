@@ -102,7 +102,7 @@ CGFloat const  DeltaWidth = 0.05;
     return image;
 }
 
-- (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:fromPoint endPoint:toPoint width: _width*2];
     [_color set];
@@ -153,7 +153,7 @@ CGFloat const  DeltaWidth = 0.05;
     return [self.color colorWithAlphaComponent: 0.2 + (_curWidth- MinWidth)/(MaxWidth-MinWidth) * (CGColorGetAlpha(self.color.CGColor) -0.2)];
 }
 
-- (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
     CGFloat const  MaxLength = MinLength *MaxWidth/MinWidth + MinLength;
@@ -222,7 +222,7 @@ CGFloat const  DeltaWidth = 0.05;
     return image;
 }
 
-- (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointZero radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
     CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
@@ -283,7 +283,7 @@ CGFloat const  DeltaWidth = 0.05;
     return image;
 }
 
-- (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     CGFloat deltax = toPoint.x-fromPoint.x;
     CGFloat deltay = toPoint.y-fromPoint.y;
@@ -338,7 +338,7 @@ CGFloat const  DeltaWidth = 0.05;
     return self;
 }
 
-- (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIImage *image = [self gradientImageWithWidth:self.width];
     CGFloat width = image.size.width;

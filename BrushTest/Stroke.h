@@ -14,6 +14,6 @@
 @property (nonatomic, strong) NSMutableArray* points;
 
 - (instancetype)initWithBrush:(Brush*)brush;
-- (void)addPoint:(CGPoint)point inContext:(CGContextRef)context;
-- (void)drawInContext:(CGContextRef)context;
+- (void)addPoint:(CGPoint)point;
+- (void)drawInContext;
 @end

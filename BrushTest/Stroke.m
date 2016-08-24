@@ -25,7 +25,7 @@
     return self;
 }
 
-- (void)drawInContext:(CGContextRef)context
+- (void)drawInContext
 {
     CGPoint toPoint;
     CGPoint fromPoint;
@@ -33,27 +33,19 @@
     [_brush clear];
     for(int i=1; i<_points.count; i++){
         [_points[i] getValue:&toPoint];
-        [_brush drawInContext:context fromPoint:fromPoint toPoint:toPoint];
+        [_brush drawFromPoint:fromPoint toPoint:toPoint];
         fromPoint = toPoint;
     }
 }
 
-- (void)addPoint:(CGPoint)point inContext:(CGContextRef)context
+- (void)addPoint:(CGPoint)point
 {
     NSValue* pointValue = [NSValue valueWithCGPoint:point];
     CGPoint fromPoint;
     if(_points.count ==0) fromPoint = point;
     else [[_points lastObject] getValue:&fromPoint];
-    [_brush drawInContext:context fromPoint:fromPoint toPoint:point];
+    [_brush drawFromPoint:fromPoint toPoint:point];
     [_points addObject:pointValue];
 }
-
-//- (void)updatePathBrushInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
-//{
-//
-//    UIImage* image = [_brush imageFromPoint:fromPoint ToPoint:toPoint];
-//    CGRect rect = CGRectMake(MIN(fromPoint.x, toPoint.x) - _brush.radius, MIN(fromPoint.y, toPoint.y) - _brush.radius, ABS(fromPoint.x - toPoint.x) + _brush.radius*2, ABS(fromPoint.y - toPoint.y) + _brush.radius*2);
-//    [image drawInRect:(rect)];
-//}
 
 @end

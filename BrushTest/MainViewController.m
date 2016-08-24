@@ -36,21 +36,35 @@
 @end
 @implementation MainViewController
 - (IBAction)addLayer:(UIButton *)sender {
-    [_canvas  addLayer];
-    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvasView.canvas.layerCount * 88 , 88, 88);
+    if(_canvasView.canvas.layerCount<3){
+    [_canvasView  addLayer];
+    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvasView.canvas.layerCount * 90-90 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+        control.drawingLayer = _canvasView.canvas.foreLayer;
+    control.layer.borderWidth = 2;
+        [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     
     [_layerBoard addSubview:control];
+    }
+}
+
+- (void)clickLayerControl:(LayerControl *)sender
+{
+    [_canvasView.canvas setForeLayer:sender.drawingLayer];
+    NSLog(@"click: %@", sender);
 }
 
 - (IBAction)clickClear:(UIButton *)sender {
     [_canvas clear];
+    [_canvasView displayContent];
 }
 - (IBAction)clickUndo:(UIButton *)sender {
     [_canvas undo];
+    [_canvasView displayContent];
 }
 - (IBAction)clickRedo:(UIButton *)sender {
     [_canvas redo];
+    [_canvasView displayContent];
 }
 - (IBAction)clickColor:(UIButton *)sender {
     self.brushAlphaAndWidthView.hidden = YES;
@@ -109,8 +123,15 @@
     _canvas.currentBrush = _brush;
     _canvasView.canvas = _canvas;
     DrawingLayer *layer = [DrawingLayer drawingLayerWithSize:_canvas.canvasSize];
-    [_canvas addLayer:layer];
-    [_canvasView displayContent];
+    [_canvasView addLayer:layer];
+    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvasView.canvas.layerCount * 90 - 90, 88, 88);
+    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+    control.drawingLayer = _canvasView.canvas.foreLayer;
+    control.layer.borderWidth = 2;
+    [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [_layerBoard addSubview:control];
+
     [self.view insertSubview:_canvasView atIndex:0];
 }
 

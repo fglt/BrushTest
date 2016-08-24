@@ -16,7 +16,7 @@
 @property (nonatomic) BOOL locked;
 @property (nonatomic) CGFloat alpha;
 @property (nonatomic) BOOL activity;
-@property (nonatomic) UIImage *image;
+@property (nonatomic, strong) CALayer *layer;
 
 //- (UIImage *)imageFromeContext;
 - (void)newStrokeWithBrush:(Brush*)brush;
@@ -27,4 +27,7 @@
 - (void)redo;
 - (void)undo;
 + (instancetype)drawingLayerWithSize:(CGSize)size;
+
+-(void)drawInContext;
+
 @end

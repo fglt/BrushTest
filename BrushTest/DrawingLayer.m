@@ -32,10 +32,10 @@
     _locked = FALSE;
     _alpha = 1;
     _strokes = [NSMutableArray array];
+    _layer = [CALayer layer];
+    _layer.frame = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
+    _activity = 1;
     _abandonedStrokes = [NSMutableArray array];
-    UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
-    _context = UIGraphicsGetCurrentContext();
-    _image = UIGraphicsGetImageFromCurrentImageContext();
     return self;
 }
 
@@ -45,10 +45,7 @@
     CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
     [[UIColor clearColor] set];
     UIRectFill(rect);
-    //UIGraphicsEndImageContext();
-    //UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
-    //_context = UIGraphicsGetCurrentContext();
-    _image = UIGraphicsGetImageFromCurrentImageContext();
+    _layer.contents = nil;
 }
 
 - (void)undo
@@ -61,9 +58,9 @@
     [[UIColor clearColor] set];
     UIRectFill(rect);
     for(Stroke* stroke in _strokes){
-        [stroke drawInContext:_context];
+        [stroke drawInContext];
     }
-    _image = UIGraphicsGetImageFromCurrentImageContext();
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 -(void)redo
@@ -72,8 +69,8 @@
     Stroke *stroke = [_abandonedStrokes lastObject];
     [_abandonedStrokes removeLastObject];
     [_strokes addObject:stroke];
-    [stroke drawInContext:_context];
-    _image = UIGraphicsGetImageFromCurrentImageContext();
+    [stroke drawInContext];
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 - (void)newStrokeWithBrush:(Brush*)brush
@@ -89,19 +86,15 @@
 
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
-    [_currentStroke addPoint:toPoint inContext:_context];
-    _image = UIGraphicsGetImageFromCurrentImageContext();
+    [_currentStroke addPoint:toPoint];
+    //_image = UIGraphicsGetImageFromCurrentImageContext();
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
-- (void)setActivity:(BOOL)activity
+-(void)drawInContext
 {
-    _activity = activity;
-    if(_activity){
-        UIGraphicsEndImageContext();
-        self.context = nil;
-    }else{
-        UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
-        _context = UIGraphicsGetCurrentContext();
+    for(Stroke* stroke in _strokes){
+        [stroke drawInContext];
     }
 }
 @end

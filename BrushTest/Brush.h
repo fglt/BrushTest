@@ -36,7 +36,7 @@ typedef enum {
 - (instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius;
 + (instancetype)BrushWithColor:(UIColor*)color radius:(CGFloat)radius type:(BrushType)type;
 - (UIImage*)imageFromPoint:(CGPoint)fromPoint ToPoint:(CGPoint)toPoint;
-- (void)drawInContext:(CGContextRef)context fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
 - (void) clear;
 
 @end

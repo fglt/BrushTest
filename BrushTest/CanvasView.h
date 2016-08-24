@@ -13,4 +13,7 @@
 @property (nonatomic, strong) Canvas *canvas;
 
 - (void)displayContent;
+- (void)addLayer:(DrawingLayer *)layer;
+- (void)addLayer;
+- (void)setForelayer:(DrawingLayer *)layer;
 @end

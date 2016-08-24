@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DrawingLayer.h"
 
 @interface LayerControl : UIControl
+@property (nonatomic, weak) DrawingLayer *drawingLayer;
 @property (nonatomic, strong) UIButton *visableButton;
 @property (nonatomic, strong) UIButton *lockButton;
 @property (nonatomic, strong) UILabel *mixMode;
