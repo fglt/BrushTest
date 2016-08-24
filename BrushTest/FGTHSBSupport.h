@@ -23,9 +23,9 @@ CGFloat pin(CGFloat minValue, CGFloat value, CGFloat maxValue);
 	// relative to the B in RGB, which is Blue.
 
 
-void HSVtoRGB(CGFloat*hsv, CGFloat* bgr);
+void HSVtoRGB(const CGFloat*hsv, CGFloat* bgr);
 
-void RGBToHSV(CGFloat *bgr, CGFloat *hsv,
+void RGBToHSV(const CGFloat *bgr, CGFloat *hsv,
               BOOL preserveHS);
 
 //------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ UIImage* HSVBarContentImage(FGTColorHSVIndex colorHSVIndex, CGFloat hsv[3]);
 //------------------------------------------------------------------------------
 
 
-UIImage * sliderImage(CGFloat* bgr, FGTColorIndex whichColor, int h);
+UIImage * sliderImage(const CGFloat* bgr, FGTColorIndex whichColor, int h);
 UIImage * imageFromImage(UIImage *image, CGRect rect);
 
 void HSVFromUIColor(UIColor* color, CGFloat hsv[3]);

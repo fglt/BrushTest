@@ -15,31 +15,42 @@
 #import "BrushSelectViewController.h"
 #import "Brush.h"
 #import "BrushAlphaAndWidthView.h"
-
+#import "DrawingLayer.h"
+#import "LayerControl.h"
+#import "Canvas.h"
 
 @interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
-@property (weak, nonatomic) IBOutlet CanvasView *canvasView;
+@property (strong, nonatomic) CanvasView *canvasView;
 @property (weak, nonatomic) IBOutlet BrushAlphaAndWidthView *brushAlphaAndWidthView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BrushSelectViewController *brushViewController;
+@property (weak, nonatomic) IBOutlet UIView *layerBoard;
 @end
 @interface MainViewController ()
 @property (nonatomic, copy) UIColor *color;
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) CGFloat radius;
+@property (nonatomic, strong) Canvas *canvas;
 @end
 @implementation MainViewController
+- (IBAction)addLayer:(UIButton *)sender {
+    [_canvas  addLayer];
+    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvasView.canvas.layerCount * 88 , 88, 88);
+    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+    
+    [_layerBoard addSubview:control];
+}
 
 - (IBAction)clickClear:(UIButton *)sender {
-    [self.canvasView clear];
+    [_canvas clear];
 }
 - (IBAction)clickUndo:(UIButton *)sender {
-    [self.canvasView undo];
+    [_canvas undo];
 }
 - (IBAction)clickRedo:(UIButton *)sender {
-    [self.canvasView redo];
+    [_canvas redo];
 }
 - (IBAction)clickColor:(UIButton *)sender {
     self.brushAlphaAndWidthView.hidden = YES;
@@ -59,7 +70,6 @@
     _color =  [UIColor redColor];
     _radius = 26;
     _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeGradient];
-    _canvasView.currentBrush = _brush;
     _brushAlphaAndWidthView.radiusSlider.value = (_radius-1)/30;
     _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
     self.brushAlphaAndWidthView.hidden = YES;
@@ -90,10 +100,26 @@
     _brushViewController.type = _brush.brushType;
 }
 
+- (void)addCanvasView
+{
+    _canvas = [[Canvas alloc] initWithSize:self.view.bounds.size];
+    _canvasView = [[CanvasView alloc] initWithFrame:self.view.bounds];
+    _canvas.backgroundColor = [UIColor whiteColor];
+    _canvas.canvasSize = _canvasView.bounds.size;
+    _canvas.currentBrush = _brush;
+    _canvasView.canvas = _canvas;
+    DrawingLayer *layer = [DrawingLayer drawingLayerWithSize:_canvas.canvasSize];
+    [_canvas addLayer:layer];
+    [_canvasView displayContent];
+    [self.view insertSubview:_canvasView atIndex:0];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
     [self start];
+    [self addCanvasView];
     [self addPaletteView];
     [self addBrushView];
 }
@@ -129,7 +155,7 @@
     }
     self.paletteViewBoard.hidden = YES;
     _brush = [Brush BrushWithColor:_color radius:_radius type:brushType];
-    _canvasView.currentBrush = _brush;
+    _canvas.currentBrush = _brush;
 }
 
 - (BrushType)currentBrushType

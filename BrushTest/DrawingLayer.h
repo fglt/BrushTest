@@ -11,6 +11,11 @@
 
 @interface DrawingLayer : NSObject
 @property (nonatomic) CGSize contextSize;
+@property (nonatomic) CGBlendMode blendMode;
+@property (nonatomic) BOOL visable;
+@property (nonatomic) BOOL locked;
+@property (nonatomic) CGFloat alpha;
+@property (nonatomic) BOOL activity;
 
 - (void)undo;
 - (UIImage *)imageFromeContext;
@@ -20,4 +25,5 @@
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 - (void)clear;
 - (void)redo;
++ (instancetype)drawingLayerWithSize:(CGSize)size;
 @end

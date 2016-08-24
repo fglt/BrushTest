@@ -18,10 +18,19 @@
 @end
 
 @implementation DrawingLayer
++ (instancetype)drawingLayerWithSize:(CGSize)size
+{
+    DrawingLayer *layer = [[DrawingLayer alloc]initWithSize:size];
+    return layer;
+}
 
 - (instancetype)initWithSize:(CGSize)size{
     self =  [super init];
     _contextSize = size;
+    _blendMode = kCGBlendModeNormal;
+    _visable = TRUE;
+    _locked = FALSE;
+    _alpha = 1;
     _strokes = [NSMutableArray array];
     _abandonedStrokes = [NSMutableArray array];
     //UIGraphicsBeginImageContext(_contextSize);
@@ -66,7 +75,9 @@
 
 - (UIImage *)imageFromeContext
 {
-    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();
+    CGImageRef cgimage = CGBitmapContextCreateImage(_context);
+    UIImage * newImage = [UIImage imageWithCGImage:cgimage];
+    CGImageRelease(cgimage);
     return newImage;
 }
 
@@ -84,5 +95,17 @@
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
     [_currentStroke addPoint:toPoint inContext:_context];
+}
+
+- (void)setActivity:(BOOL)activity
+{
+    _activity = activity;
+    if(_activity){
+        UIGraphicsEndImageContext();
+        self.context = nil;
+    }else{
+        UIGraphicsBeginImageContextWithOptions(_contextSize, NO, 0.0);
+        _context = UIGraphicsGetCurrentContext();
+    }
 }
 @end

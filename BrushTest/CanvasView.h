@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@class  Brush;
+@class Canvas;
+@class DrawingLayer;
 @interface CanvasView : UIView
-@property (nonatomic, strong) Brush* currentBrush;
+@property (nonatomic, strong) Canvas *canvas;
 
-- (void)clear;
-- (void)undo;
-- (void)redo;
+- (void)displayContent;
 @end

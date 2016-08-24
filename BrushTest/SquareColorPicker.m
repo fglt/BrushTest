@@ -15,30 +15,20 @@
 IB_DESIGNABLE
 @implementation SquareColorPicker{
     InfColorIndicatorView* indicator;
-    UIImageView *imgView;
+    UIView *imgView;
 }
 
 //------------------------------------------------------------------------------
 #pragma mark	Properties
 //------------------------------------------------------------------------------
-//
-//-(id) initWithCoder:(NSCoder *)aDecoder
-//{
-//    self = [super initWithCoder:aDecoder];
-//
-//    self.hue = 0;
-//
-//    _point.x = 0.5;
-//    _point.y = 0.8;
-//    return self;
-//}
+
 - (void) setHue: (CGFloat) value
 {
-    if (value != _hue || imgView.image == nil) {
+    if (value != _hue) {
         _hue = value;
        
         UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue);
-        imgView.image = img;
+        imgView.layer.contents = (id)img.CGImage;
     }
     
     [self setIndicatorColor];
@@ -79,12 +69,12 @@ IB_DESIGNABLE
 {
     if (imgView == nil)
     {
-        imgView = [[UIImageView alloc] initWithFrame: CGRectMake(self.bounds.origin.x+20, self.bounds.origin.y+20, self.bounds.size.width-40, self.bounds.size.height-40)];
+        CGRect rect = CGRectMake(self.bounds.origin.x+20, self.bounds.origin.y+20, self.bounds.size.width-40, self.bounds.size.height-40);
+        imgView = [[UIImageView alloc] initWithFrame: rect];
         UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue);
-        imgView.image = img;
+        imgView.layer.contents = (id)img.CGImage;
 
         [self addSubview: imgView];
-
     }
 
     if (indicator == nil) {

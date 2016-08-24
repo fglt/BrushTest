@@ -33,7 +33,7 @@ static void hueToComponentFactors(CGFloat h, CGFloat*bgr)
     memcpy(bgr, bgr0 + i*3, 3*sizeof(CGFloat));
 }
 
-void HSVtoRGB(CGFloat*hsv, CGFloat* bgr)
+void HSVtoRGB(const CGFloat*hsv, CGFloat* bgr)
 {
     hueToComponentFactors(hsv[0], bgr);
     
@@ -46,23 +46,22 @@ void HSVtoRGB(CGFloat*hsv, CGFloat* bgr)
 }
 //------------------------------------------------------------------------------
 
-void RGBToHSV(CGFloat *bgr, CGFloat*hsv, BOOL preserveHS)
+void RGBToHSV(const CGFloat * bgr, CGFloat*hsv, BOOL preserveHS)
 {
     CGFloat max = bgr[2];
+    CGFloat min = bgr[2];
     
     if (max <  bgr[1])
         max =  bgr[1];
-    
+    else{
+        min = bgr[1];
+    }
     if (max <  bgr[0])
         max =  bgr[0];
-    
-    CGFloat min =  bgr[2];
-    
-    if (min >  bgr[1])
-        min =  bgr[1];
-    
-    if (min >  bgr[0])
-        min =  bgr[0];
+    else{
+        if (min >  bgr[0])
+            min =  bgr[0];
+    }
     
     // Brightness (aka Value)
     
@@ -246,7 +245,7 @@ UIImage* HSVBarContentImage(FGTColorHSVIndex colorHSVIndex, CGFloat hsv[3])
 
 
 
-UIImage* sliderImage(CGFloat* bgr, FGTColorIndex whichColor, int h)
+UIImage* sliderImage(const CGFloat* bgr, FGTColorIndex whichColor, int h)
 {
     int w =256;
     UInt8 data[w * h<<2];

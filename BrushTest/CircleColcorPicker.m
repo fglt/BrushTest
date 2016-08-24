@@ -20,7 +20,7 @@ const double PI2 = 2*M_PI;
 IB_DESIGNABLE
 @implementation CircleColcorPicker{
     InfColorIndicatorView* indicator;
-    UIImageView *colorView;
+    UIImage *circleImage;
 }
 
 
@@ -28,31 +28,36 @@ IB_DESIGNABLE
 {
     UIImage *image;
     CGRect rect = self.frame;
-    CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    CGPoint center = CGPointMake(rect.size.width/2, rect.size.height/2);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     UIBezierPath *bpath;
+    float r = center.x - 1;
     
-    CGPoint point1;
+    CGPoint point1 = CGPointMake(center.x + r, center.y);
     CGPoint point2;
+    register const CGFloat unitTheta = M_PI/180;
+    const CGFloat unitHue = 1/360.0;
+    CGFloat theta = unitTheta;
+    CGFloat hue = 0;
     
-    //NSLog(@"%d", [bezierPoints count]);
-    float r = rect.size.width/2 -1;
-    for (int i = 0; i < 360 ; ++i)
+   
+    for (int i = 0; i < 360 ; i++)
     {
-        UIColor *color = [UIColor colorWithHue:i/360.0 saturation:1 brightness:1 alpha:1];
-        //NSLog(@"%f: ", i/360.0f);
+        UIColor *color = [UIColor colorWithHue:hue saturation:1 brightness:1 alpha:1];
         bpath = [UIBezierPath bezierPath];
-        point1 = CGPointMake(center.x + r*cos(i/180.0*M_PI), center.y - r*sin(i/180.0*M_PI));
-        point2 = CGPointMake(center.x + r*cos((i+1)/180.0*M_PI), center.y - r*sin((i+1)/180.0*M_PI));
+        point2 = CGPointMake(center.x + r*cos(theta), center.y - r*sin(theta));
         
         [bpath moveToPoint:self.center];
         [bpath addLineToPoint:point1];
         [bpath addLineToPoint:point2];
-        
+
         [color set];
         [bpath fill];
         [bpath stroke];
+        point1 = point2;
+        theta += unitTheta;
+        hue  += unitHue;
     }
     
     
@@ -71,11 +76,9 @@ IB_DESIGNABLE
 
 - (void) layoutSubviews
 {
-    if(colorView == nil){
-        colorView = [[UIImageView  alloc] initWithFrame:self.bounds];
-        colorView.image = [self hueCircleImage];
-        colorView.userInteractionEnabled = NO ;
-        [self addSubview:colorView];
+    if(circleImage == nil){
+        circleImage = [self hueCircleImage];
+        self.layer.contents = (id)circleImage.CGImage;
     }
     if (indicator == nil) {
         _value = CGPointMake(self.bounds.size.width - 16, CGRectGetMidY(self.bounds));
@@ -137,7 +140,7 @@ IB_DESIGNABLE
         CGFloat  y =  CGRectGetMidY(self.bounds) - indicatorDistanceToCenter * sin(_hue * PI2);
         CGFloat x =  CGRectGetMidX(self.bounds) + indicatorDistanceToCenter * cos(_hue * PI2);
         [self setValue:CGPointMake(x, y)];
-       // NSLog(@"center: %f,  %f", x, y);
+        // NSLog(@"center: %f,  %f", x, y);
     }
 }
 
@@ -149,10 +152,10 @@ IB_DESIGNABLE
     CGFloat sx = CGRectGetMidX(self.bounds);
     
     CGFloat dis = sqrt((sx-point.x)*(sx-point.x) + (sy-point.y)*(sy-point.y));
-
+    
     self.value =  CGPointMake(sx + (indicatorDistanceToCenter / dis) * (point.x-sx), sy + (indicatorDistanceToCenter / dis) * (point.y-sy));
-
-   // NSLog(@"point: %f, y: %f", point.x, point.y);
+    
+    // NSLog(@"point: %f, y: %f", point.x, point.y);
 }
 
 - (BOOL) beginTrackingWithTouch: (UITouch*) touch

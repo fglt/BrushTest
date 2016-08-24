@@ -21,7 +21,7 @@
 		176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */; };
 		176C31491D671E8100B9A1D6 /* LayerBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31481D671E8100B9A1D6 /* LayerBoard.m */; };
 		176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */; };
-		176C314F1D69AB5600B9A1D6 /* LayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314E1D69AB5600B9A1D6 /* LayerView.m */; };
+		176C314F1D69AB5600B9A1D6 /* LayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314E1D69AB5600B9A1D6 /* LayerControl.m */; };
 		176D10EE1D5CDF3B00A0DD31 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D10ED1D5CDF3B00A0DD31 /* main.m */; };
 		176D10F11D5CDF3B00A0DD31 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D10F01D5CDF3B00A0DD31 /* AppDelegate.m */; };
 		176D10F41D5CDF3B00A0DD31 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D10F31D5CDF3B00A0DD31 /* MainViewController.m */; };
@@ -35,6 +35,7 @@
 		176D111C1D5CE02400A0DD31 /* UIColor+BFPaperColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D11181D5CE02400A0DD31 /* UIColor+BFPaperColors.m */; };
 		176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */; };
 		176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */; };
+		17C7CD041D6CA4CC00E5D47B /* Canvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD031D6CA4CC00E5D47B /* Canvas.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,8 +67,8 @@
 		176C31481D671E8100B9A1D6 /* LayerBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerBoard.m; sourceTree = "<group>"; };
 		176C314A1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushAlphaAndWidthView.h; sourceTree = "<group>"; };
 		176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushAlphaAndWidthView.m; sourceTree = "<group>"; };
-		176C314D1D69AB5600B9A1D6 /* LayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerView.h; sourceTree = "<group>"; };
-		176C314E1D69AB5600B9A1D6 /* LayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerView.m; sourceTree = "<group>"; };
+		176C314D1D69AB5600B9A1D6 /* LayerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerControl.h; sourceTree = "<group>"; };
+		176C314E1D69AB5600B9A1D6 /* LayerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerControl.m; sourceTree = "<group>"; };
 		176D10E91D5CDF3B00A0DD31 /* BrushTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrushTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		176D10ED1D5CDF3B00A0DD31 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		176D10EF1D5CDF3B00A0DD31 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -92,6 +93,8 @@
 		176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FEBoxBlur.m"; sourceTree = "<group>"; };
 		176D112C1D60CDB500A0DD31 /* FGTHSBSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FGTHSBSupport.h; sourceTree = "<group>"; };
 		176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGTHSBSupport.m; sourceTree = "<group>"; };
+		17C7CD021D6CA4CC00E5D47B /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
+		17C7CD031D6CA4CC00E5D47B /* Canvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canvas.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,8 +133,8 @@
 				176C31481D671E8100B9A1D6 /* LayerBoard.m */,
 				176C314A1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.h */,
 				176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */,
-				176C314D1D69AB5600B9A1D6 /* LayerView.h */,
-				176C314E1D69AB5600B9A1D6 /* LayerView.m */,
+				176C314D1D69AB5600B9A1D6 /* LayerControl.h */,
+				176C314E1D69AB5600B9A1D6 /* LayerControl.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -180,6 +183,8 @@
 				176D11191D5CE02400A0DD31 /* UIImage+FEBoxBlur.h */,
 				176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */,
 				1754A2E71D649FFC00C18717 /* View */,
+				17C7CD021D6CA4CC00E5D47B /* Canvas.h */,
+				17C7CD031D6CA4CC00E5D47B /* Canvas.m */,
 			);
 			path = BrushTest;
 			sourceTree = "<group>";
@@ -277,10 +282,11 @@
 				176C31341D6606B700B9A1D6 /* BrushSelectViewController.m in Sources */,
 				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
 				176C312E1D64B20A00B9A1D6 /* ColorPicker.m in Sources */,
-				176C314F1D69AB5600B9A1D6 /* LayerView.m in Sources */,
+				176C314F1D69AB5600B9A1D6 /* LayerControl.m in Sources */,
 				1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */,
 				176D10F11D5CDF3B00A0DD31 /* AppDelegate.m in Sources */,
 				1754A2E61D649FE500C18717 /* TranslucentToolbar.m in Sources */,
+				17C7CD041D6CA4CC00E5D47B /* Canvas.m in Sources */,
 				1754A2E51D649FE500C18717 /* SquareColorPicker.m in Sources */,
 				176D110F1D5CDFFB00A0DD31 /* Brush.m in Sources */,
 				176D10EE1D5CDF3B00A0DD31 /* main.m in Sources */,
