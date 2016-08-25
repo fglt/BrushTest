@@ -13,7 +13,6 @@
 		1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2D91D649FE500C18717 /* InfColorIndicatorView.m */; };
 		1754A2E51D649FE500C18717 /* SquareColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2DD1D649FE500C18717 /* SquareColorPicker.m */; };
 		1754A2E61D649FE500C18717 /* TranslucentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2DF1D649FE500C18717 /* TranslucentToolbar.m */; };
-		1754A2EA1D64A3FC00C18717 /* PaletteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2E91D64A3FC00C18717 /* PaletteView.m */; };
 		176C312E1D64B20A00B9A1D6 /* ColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C312D1D64B20A00B9A1D6 /* ColorPicker.m */; };
 		176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31301D65EEB000B9A1D6 /* PaletteViewController.m */; };
 		176C31341D6606B700B9A1D6 /* BrushSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31331D6606B700B9A1D6 /* BrushSelectViewController.m */; };
@@ -51,8 +50,6 @@
 		1754A2DD1D649FE500C18717 /* SquareColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareColorPicker.m; sourceTree = "<group>"; };
 		1754A2DE1D649FE500C18717 /* TranslucentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslucentToolbar.h; sourceTree = "<group>"; };
 		1754A2DF1D649FE500C18717 /* TranslucentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslucentToolbar.m; sourceTree = "<group>"; };
-		1754A2E81D64A3FC00C18717 /* PaletteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteView.h; sourceTree = "<group>"; };
-		1754A2E91D64A3FC00C18717 /* PaletteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteView.m; sourceTree = "<group>"; };
 		176C312C1D64B20A00B9A1D6 /* ColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPicker.h; sourceTree = "<group>"; };
 		176C312D1D64B20A00B9A1D6 /* ColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPicker.m; sourceTree = "<group>"; };
 		176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteViewController.h; sourceTree = "<group>"; };
@@ -111,30 +108,28 @@
 		1754A2E71D649FFC00C18717 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1754A2D81D649FE500C18717 /* InfColorIndicatorView.h */,
-				1754A2D91D649FE500C18717 /* InfColorIndicatorView.m */,
+				1754A2D21D649FE500C18717 /* BarColorPicker.h */,
+				1754A2D31D649FE500C18717 /* BarColorPicker.m */,
+				176C314A1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.h */,
+				176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */,
+				176C31381D660DBF00B9A1D6 /* BrushView.h */,
+				176C31391D660DBF00B9A1D6 /* BrushView.m */,
 				176D11051D5CDFFB00A0DD31 /* CanvasView.h */,
 				176D11061D5CDFFB00A0DD31 /* CanvasView.m */,
+				1754A2D41D649FE500C18717 /* CircleColcorPicker.h */,
+				1754A2D51D649FE500C18717 /* CircleColcorPicker.m */,
+				176C312C1D64B20A00B9A1D6 /* ColorPicker.h */,
+				176C312D1D64B20A00B9A1D6 /* ColorPicker.m */,
+				1754A2D81D649FE500C18717 /* InfColorIndicatorView.h */,
+				1754A2D91D649FE500C18717 /* InfColorIndicatorView.m */,
+				176C31471D671E8100B9A1D6 /* LayerBoard.h */,
+				176C31481D671E8100B9A1D6 /* LayerBoard.m */,
+				176C314D1D69AB5600B9A1D6 /* LayerControl.h */,
+				176C314E1D69AB5600B9A1D6 /* LayerControl.m */,
 				1754A2DC1D649FE500C18717 /* SquareColorPicker.h */,
 				1754A2DD1D649FE500C18717 /* SquareColorPicker.m */,
 				1754A2DE1D649FE500C18717 /* TranslucentToolbar.h */,
 				1754A2DF1D649FE500C18717 /* TranslucentToolbar.m */,
-				1754A2D51D649FE500C18717 /* CircleColcorPicker.m */,
-				1754A2D41D649FE500C18717 /* CircleColcorPicker.h */,
-				1754A2D21D649FE500C18717 /* BarColorPicker.h */,
-				1754A2D31D649FE500C18717 /* BarColorPicker.m */,
-				1754A2E81D64A3FC00C18717 /* PaletteView.h */,
-				1754A2E91D64A3FC00C18717 /* PaletteView.m */,
-				176C312C1D64B20A00B9A1D6 /* ColorPicker.h */,
-				176C312D1D64B20A00B9A1D6 /* ColorPicker.m */,
-				176C31381D660DBF00B9A1D6 /* BrushView.h */,
-				176C31391D660DBF00B9A1D6 /* BrushView.m */,
-				176C31471D671E8100B9A1D6 /* LayerBoard.h */,
-				176C31481D671E8100B9A1D6 /* LayerBoard.m */,
-				176C314A1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.h */,
-				176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */,
-				176C314D1D69AB5600B9A1D6 /* LayerControl.h */,
-				176C314E1D69AB5600B9A1D6 /* LayerControl.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -295,7 +290,6 @@
 				176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */,
 				176C31491D671E8100B9A1D6 /* LayerBoard.m in Sources */,
 				176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */,
-				1754A2EA1D64A3FC00C18717 /* PaletteView.m in Sources */,
 				1754A2E21D649FE500C18717 /* constants.m in Sources */,
 				176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */,
 				1754A2E01D649FE500C18717 /* BarColorPicker.m in Sources */,

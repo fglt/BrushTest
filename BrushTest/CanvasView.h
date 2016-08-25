@@ -9,11 +9,16 @@
 #import <UIKit/UIKit.h>
 @class Canvas;
 @class DrawingLayer;
+
+@protocol CanvasViewDelegate <NSObject>
+
+- (void)touchBegan:(CGPoint)point;
+- (void)touchMoved:(CGPoint)point;
+- (void)touchEnded:(CGPoint)point;
+
+@end
 @interface CanvasView : UIView
-@property (nonatomic, strong) Canvas *canvas;
+@property (nonatomic, weak) id<CanvasViewDelegate> delegate;
 
 - (void)displayContent;
-- (void)addLayer:(DrawingLayer *)layer;
-- (void)addLayer;
-- (void)setForelayer:(DrawingLayer *)layer;
 @end

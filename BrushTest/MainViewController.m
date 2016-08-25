@@ -19,7 +19,7 @@
 #import "LayerControl.h"
 #import "Canvas.h"
 
-@interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate>
+@interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate, CanvasViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (strong, nonatomic) CanvasView *canvasView;
@@ -33,38 +33,35 @@
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) CGFloat radius;
 @property (nonatomic, strong) Canvas *canvas;
+@property (weak, nonatomic) IBOutlet UIView *layerEditView;
+@property (nonatomic, strong) LayerControl *currentControl;
 @end
 @implementation MainViewController
 - (IBAction)addLayer:(UIButton *)sender {
-    if(_canvasView.canvas.layerCount<3){
-    [_canvasView  addLayer];
-    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvasView.canvas.layerCount * 90-90 , 88, 88);
-    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
-        control.drawingLayer = _canvasView.canvas.foreLayer;
-    control.layer.borderWidth = 2;
-        [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_layerBoard addSubview:control];
+    if(_canvas.layerCount<3){
+    [self addLayer];
     }
 }
 
 - (void)clickLayerControl:(LayerControl *)sender
 {
-    [_canvasView.canvas setForeLayer:sender.drawingLayer];
-    NSLog(@"click: %@", sender);
+    if(sender == _currentControl){
+          _layerEditView.hidden = !_layerEditView.hidden;
+    }
+    _currentControl.layer.borderColor = [UIColor blackColor].CGColor;
+    _currentControl = sender;
+    _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
+    [_canvas setForeLayer:sender.drawingLayer];
 }
 
 - (IBAction)clickClear:(UIButton *)sender {
     [_canvas clear];
-    [_canvasView displayContent];
 }
 - (IBAction)clickUndo:(UIButton *)sender {
     [_canvas undo];
-    [_canvasView displayContent];
 }
 - (IBAction)clickRedo:(UIButton *)sender {
     [_canvas redo];
-    [_canvasView displayContent];
 }
 - (IBAction)clickColor:(UIButton *)sender {
     self.brushAlphaAndWidthView.hidden = YES;
@@ -121,16 +118,8 @@
     _canvas.backgroundColor = [UIColor whiteColor];
     _canvas.canvasSize = _canvasView.bounds.size;
     _canvas.currentBrush = _brush;
-    _canvasView.canvas = _canvas;
-    DrawingLayer *layer = [DrawingLayer drawingLayerWithSize:_canvas.canvasSize];
-    [_canvasView addLayer:layer];
-    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvasView.canvas.layerCount * 90 - 90, 88, 88);
-    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
-    control.drawingLayer = _canvasView.canvas.foreLayer;
-    control.layer.borderWidth = 2;
-    [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_layerBoard addSubview:control];
+    _canvasView.delegate = self;
+    [self addLayer];
 
     [self.view insertSubview:_canvasView atIndex:0];
 }
@@ -166,6 +155,23 @@
 {
     return _color;
 }
+
+- (void)addLayer
+{
+    [_canvas addLayer];
+    [_canvasView.layer addSublayer:_canvas.foreLayer.layer];
+    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvas.layerCount * 90-90 , 88, 88);
+    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+    control.drawingLayer = _canvas.foreLayer;
+    control.layer.borderWidth = 2;
+    [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
+    _currentControl.layer.borderColor = [UIColor blackColor].CGColor;
+    _currentControl = control;
+    _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
+    [_layerBoard addSubview:control];
+}
+
+
 
 #pragma mark - BrushSelectViewControllerDelegate
 
@@ -210,5 +216,26 @@
                      }
                      completion:^(BOOL finished){}
      ];
+}
+
+#pragma mark - CanvasViewDelegate
+
+- (void)touchBegan:(CGPoint)point
+{
+    _paletteViewBoard.hidden =true;
+    _brushAlphaAndWidthView.hidden = true;
+    _layerEditView.hidden = true;
+    [_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+    [_canvas updateWithPoint:point];
+}
+- (void)touchMoved:(CGPoint)point
+{
+    [_canvas updateWithPoint:point];
+}
+- (void)touchEnded:(CGPoint)point
+{
+    [_canvas updateWithPoint:point];
+    [_canvas.foreLayer addStroke];
+    
 }
 @end

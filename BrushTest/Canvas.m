@@ -43,18 +43,15 @@
 - (void)clear
 {
     [_foreLayer clear];
-    //[self imageFromContext];
 }
 - (void)undo
 {
     [_foreLayer undo];
-    //[self imageFromContext];
 }
 
 - (void)redo
 {
     [_foreLayer redo];
-    //[self imageFromContext];
 }
 
 //- (void)imageFromContext;
