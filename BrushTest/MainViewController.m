@@ -19,25 +19,32 @@
 #import "LayerControl.h"
 #import "Canvas.h"
 
-@interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate, CanvasViewDelegate>
+@interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
-@property (strong, nonatomic) CanvasView *canvasView;
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet BrushAlphaAndWidthView *brushAlphaAndWidthView;
+@property (weak, nonatomic) IBOutlet UIView *layerBoard;
+@property (weak, nonatomic) IBOutlet UIView *layerEditView;
+@end
+
+@interface MainViewController ()<CanvasViewDelegate>
+@property (strong, nonatomic) CanvasView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BrushSelectViewController *brushViewController;
-@property (weak, nonatomic) IBOutlet UIView *layerBoard;
 @end
+
 @interface MainViewController ()
 @property (nonatomic, copy) UIColor *color;
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) CGFloat radius;
 @property (nonatomic, strong) Canvas *canvas;
-@property (weak, nonatomic) IBOutlet UIView *layerEditView;
+
 @property (nonatomic, strong) LayerControl *currentControl;
 @end
 @implementation MainViewController
-- (IBAction)addLayer:(UIButton *)sender {
+- (IBAction)addLayer:(UIButton *)sender
+{
     if(_canvas.layerCount<3){
     [self addLayer];
     }
@@ -45,6 +52,8 @@
 
 - (void)clickLayerControl:(LayerControl *)sender
 {
+    _paletteViewBoard.hidden =true;
+    _brushAlphaAndWidthView.hidden = true;
     if(sender == _currentControl){
           _layerEditView.hidden = !_layerEditView.hidden;
     }
@@ -54,14 +63,47 @@
     [_canvas setForeLayer:sender.drawingLayer];
 }
 
-- (IBAction)clickClear:(UIButton *)sender {
+- (IBAction)clickClear:(UIButton *)sender
+{
     [_canvas clear];
 }
-- (IBAction)clickUndo:(UIButton *)sender {
+- (IBAction)clickUndo:(UIButton *)sender
+{
     [_canvas undo];
 }
-- (IBAction)clickRedo:(UIButton *)sender {
+- (IBAction)clickRedo:(UIButton *)sender
+{
     [_canvas redo];
+}
+- (IBAction)clickFullScreen:(UIView *)sender
+{
+    if(_toolbarView.hidden){
+         _toolbarView.hidden = false;
+        _layerBoard.hidden = false;
+        _brushViewBoard.hidden = false;
+        [UIView animateWithDuration:0.3
+                         animations:^{
+                             _toolbarView.center = CGPointMake(_toolbarView.center.x, _toolbarView.frame.size.height/2);
+                             _layerBoard.center = CGPointMake(self.view.bounds.size.width - _layerBoard.frame.size.width/2, _layerBoard.center.y);
+                             _brushViewBoard.center = CGPointMake(_brushViewBoard.frame.size.width/2, _brushViewBoard.center.y);
+                         }
+                         completion:nil
+         ];
+    }else{
+        [UIView animateWithDuration:0.3
+                         animations:^{
+                            _toolbarView.center = CGPointMake(_toolbarView.center.x, -_toolbarView.frame.size.height/2);
+                             _layerBoard.center = CGPointMake(self.view.bounds.size.width + _layerBoard.frame.size.width/2, _layerBoard.center.y);
+                             _brushViewBoard.center = CGPointMake(- _brushViewBoard.frame.size.width/2, _brushViewBoard.center.y);
+                         }
+                         completion:^(BOOL finished){
+                             _toolbarView.hidden = true;
+                             _layerBoard.hidden = true;
+                             _brushViewBoard.hidden = true;
+                         }
+         ];
+    }
+
 }
 - (IBAction)clickColor:(UIButton *)sender {
     self.brushAlphaAndWidthView.hidden = YES;
@@ -239,3 +281,4 @@
     
 }
 @end
+

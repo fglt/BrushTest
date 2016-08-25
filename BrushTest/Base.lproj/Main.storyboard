@@ -87,6 +87,22 @@
                                     <constraint firstItem="4Sk-pH-eKZ" firstAttribute="leading" secondItem="l2n-lb-wWc" secondAttribute="leading" id="jDb-Rv-QZb"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zzt-bb-c73" userLabel="tg_ui">
+                                <rect key="frame" x="434" y="3" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="G7R-w6-kKO"/>
+                                    <constraint firstAttribute="height" constant="44" id="jxi-Qm-Usb"/>
+                                </constraints>
+                                <state key="normal" image="toolbar_tg_ui"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="self.layer.cornerRadius">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="clickFullScreen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="X5i-Ak-Vz5"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mUt-IZ-IwU" userLabel="toolbarBoard">
                                 <rect key="frame" x="105" y="0.0" width="390" height="50"/>
                                 <subviews>
@@ -130,12 +146,19 @@
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTt-1f-MAe" userLabel="tg_ui">
                                                 <rect key="frame" x="312" y="0.0" width="44" height="44"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="44" id="i5I-XL-hSs"/>
+                                                    <constraint firstAttribute="height" constant="44" id="zNX-rm-BG3"/>
+                                                </constraints>
                                                 <state key="normal" image="toolbar_tg_ui"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="self.layer.cornerRadius">
                                                         <integer key="value" value="0"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="clickFullScreen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cGX-FS-5PC"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
@@ -190,7 +213,7 @@
                                         <rect key="frame" x="8" y="31" width="284" height="184"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="g1u-bU-TPQ">
-                                                <rect key="frame" x="13.5" y="0.0" width="257" height="44"/>
+                                                <rect key="frame" x="13" y="0.0" width="257" height="44"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3n-Jd-Lw8">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -254,7 +277,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="r9r-L3-Hxn">
-                                                <rect key="frame" x="13.5" y="102" width="257" height="44"/>
+                                                <rect key="frame" x="13" y="102" width="257" height="44"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ebi-A7-eij">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -337,8 +360,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="ns0-JD-8xa" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="0b6-4p-oMb"/>
+                            <constraint firstItem="dTt-1f-MAe" firstAttribute="leading" secondItem="Zzt-bb-c73" secondAttribute="leading" id="1mh-g4-Ht5"/>
                             <constraint firstItem="mUt-IZ-IwU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="396-iY-5SN"/>
                             <constraint firstItem="Zcc-tw-YUl" firstAttribute="leading" secondItem="l2n-lb-wWc" secondAttribute="trailing" id="3a4-mL-n5x"/>
+                            <constraint firstItem="dTt-1f-MAe" firstAttribute="top" secondItem="Zzt-bb-c73" secondAttribute="top" id="7P2-Cs-ob1"/>
                             <constraint firstItem="RSm-WH-uMb" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="BHS-Nm-SDe"/>
                             <constraint firstItem="l2n-lb-wWc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Ibu-gz-Q3S"/>
                             <constraint firstItem="mUt-IZ-IwU" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="LNi-j4-9Am"/>
@@ -356,6 +381,7 @@
                         <outlet property="layerBoard" destination="ns0-JD-8xa" id="cB7-hd-YLf"/>
                         <outlet property="layerEditView" destination="RSm-WH-uMb" id="Oo7-89-664"/>
                         <outlet property="paletteViewBoard" destination="jZq-zM-k8W" id="XUi-LC-qad"/>
+                        <outlet property="toolbarView" destination="mUt-IZ-IwU" id="MUi-It-EvW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
