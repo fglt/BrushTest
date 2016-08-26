@@ -111,7 +111,7 @@
     if(_layerControlArray.count==1){
         _layerEditView.merge.activity = false;
         _layerEditView.del.activity = false ;
-        _layerEditView.mergeAll = false;
+        _layerEditView.mergeAll.activity = false;
     }else{
         _layerEditView.merge.activity = true;
         _layerEditView.del.activity = true ;
@@ -304,13 +304,25 @@
      复制30 剪切 粘贴 拷贝
      清除 合并 合并所有 删除37
      **/
+    NSUInteger index = [_layerControlArray indexOfObject:_currentControl];
     switch (sender.tag) {
         case 30:
+            break;
+        case 31:
+            break;
+        case 32:
+            break;
+        case 33:
+            break;
+        case 34:
+            break;
+        case 35:
             
+            break;
+        case 36:
             break;
         case 37:{
             if(_layerControlArray.count ==  1)break;
-            NSUInteger index = [_layerControlArray indexOfObject:_currentControl];
             [_currentControl removeFromSuperview];
             [_currentControl.drawingLayer.layer removeFromSuperlayer];
             [_canvas.drawingLayers removeObject:_currentControl.drawingLayer];
@@ -323,6 +335,8 @@
         default:
             break;
     }
+    
+    _layerEditView.hidden = true;
 }
 
 -(void) reloadLayerBoard
