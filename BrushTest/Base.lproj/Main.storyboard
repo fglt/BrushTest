@@ -203,13 +203,13 @@
                                 <rect key="frame" x="202" y="100" width="300" height="400"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="图层" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nIW-nn-MZL">
-                                        <rect key="frame" x="133" y="0.0" width="34" height="21"/>
+                                        <rect key="frame" x="133" y="10" width="34" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4ZU-ya-9Bt">
-                                        <rect key="frame" x="8" y="31" width="284" height="184"/>
+                                        <rect key="frame" x="8" y="41" width="284" height="184"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="g1u-bU-TPQ">
                                                 <rect key="frame" x="13.5" y="0.0" width="257" height="44"/>
@@ -360,7 +360,7 @@
                                         </subviews>
                                     </stackView>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="mMP-T3-xn1">
-                                        <rect key="frame" x="73" y="235" width="154" height="31"/>
+                                        <rect key="frame" x="73" y="245" width="154" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="4jH-MX-BYd"/>
                                             <constraint firstAttribute="height" constant="30" id="owF-JH-a7d"/>
@@ -371,7 +371,7 @@
                                 <constraints>
                                     <constraint firstItem="mMP-T3-xn1" firstAttribute="top" secondItem="4ZU-ya-9Bt" secondAttribute="bottom" constant="20" id="81z-Gs-iBY"/>
                                     <constraint firstAttribute="width" constant="300" id="854-9t-CBY"/>
-                                    <constraint firstItem="nIW-nn-MZL" firstAttribute="top" secondItem="RSm-WH-uMb" secondAttribute="top" id="9dd-bm-Ysu"/>
+                                    <constraint firstItem="nIW-nn-MZL" firstAttribute="top" secondItem="RSm-WH-uMb" secondAttribute="top" constant="10" id="9dd-bm-Ysu"/>
                                     <constraint firstItem="4ZU-ya-9Bt" firstAttribute="centerX" secondItem="RSm-WH-uMb" secondAttribute="centerX" id="Aae-AW-aTb"/>
                                     <constraint firstItem="nIW-nn-MZL" firstAttribute="centerX" secondItem="RSm-WH-uMb" secondAttribute="centerX" id="Ee4-P5-bmF"/>
                                     <constraint firstItem="mMP-T3-xn1" firstAttribute="centerX" secondItem="RSm-WH-uMb" secondAttribute="centerX" id="K0X-tZ-9Lp"/>

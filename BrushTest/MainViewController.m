@@ -143,7 +143,7 @@
 
 -(void)setCurrentControl:(LayerControl *)currentControl
 {
-    _currentControl.layer.borderColor = [UIColor blackColor].CGColor;
+    _currentControl.layer.borderColor = [UIColor grayColor].CGColor;
     _currentControl = currentControl;
     _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
     [self configLayerEditView];
@@ -177,8 +177,8 @@
                          completion:nil
          ];
     }else{
-        _paletteViewBoard.hidden = YES;
-        _brushAlphaAndWidthView.hidden = YES;
+        _paletteViewBoard.hidden = true;
+        _brushAlphaAndWidthView.hidden = true;
         _layerEditView.hidden = true;
         
         [UIView animateWithDuration:0.3
@@ -296,7 +296,6 @@
     [_canvas.foreLayer addStroke];
     
 }
-
 
 #pragma mark - layerEditView layerborad
 - (IBAction)clickLayerEditButton:(UIButton *)sender {
