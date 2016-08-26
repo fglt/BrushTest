@@ -453,8 +453,9 @@
                                             <constraint firstAttribute="height" secondItem="9q8-3M-cBe" secondAttribute="width" multiplier="1:1" id="ZV6-xL-rvQ"/>
                                         </constraints>
                                         <connections>
-                                            <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="aqe-oO-Eha"/>
-                                            <action selector="touchCircleColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="wtt-Jq-MN1"/>
+                                            <action selector="touchColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="EWE-TU-wzu"/>
+                                            <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpOutside" id="tGm-S2-N2q"/>
+                                            <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="zSd-Ex-0Tp"/>
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrQ-nk-Oj1" customClass="SquareColorPicker">
@@ -464,8 +465,10 @@
                                             <constraint firstAttribute="height" secondItem="BrQ-nk-Oj1" secondAttribute="width" multiplier="1:1" id="OMD-bS-nxS"/>
                                         </constraints>
                                         <connections>
-                                            <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="Nw4-Qu-ces"/>
-                                            <action selector="touchSquareColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="nAj-pr-0IH"/>
+                                            <action selector="touchColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="Wch-rm-LtE"/>
+                                            <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="7d3-uQ-t8B"/>
+                                            <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="k35-wJ-gar"/>
+                                            <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpOutside" id="qkQ-pJ-EYS"/>
                                         </connections>
                                     </view>
                                 </subviews>
@@ -502,7 +505,8 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="moveColorSlider:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="PIi-JJ-TEc"/>
-                                                    <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="mQo-nE-3Vg"/>
+                                                    <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpOutside" id="831-ik-d0l"/>
+                                                    <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="iCP-Em-zEI"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Vf-D4F">
@@ -537,7 +541,8 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="moveColorSlider:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="9Ok-TQ-F5a"/>
-                                                    <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="p8V-ml-EcU"/>
+                                                    <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="1u3-g7-yom"/>
+                                                    <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpOutside" id="sxT-fx-C2F"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFo-UV-rBv">
@@ -570,7 +575,8 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="moveColorSlider:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="xZy-WR-fFf"/>
-                                                    <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="2Ty-Yw-jpO"/>
+                                                    <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="fn0-DY-iO1"/>
+                                                    <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpOutside" id="vhY-qY-QPi"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQk-G1-4no">

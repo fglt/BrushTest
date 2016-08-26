@@ -39,23 +39,16 @@
     _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
 }
 
-- (IBAction)touchCircleColorPicker:(CircleColcorPicker*)sender {
-    self.squareColorPicker.hue = sender.hue;
-    CGPoint point = self.squareColorPicker.point;
-    _currentColorView.backgroundColor =  [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
+- (IBAction)touchColorPicker:(id)sender {
+    _squareColorPicker.hue = _circleColorPicker.hue;
+    CGFloat hsv[3] = {_squareColorPicker.hue, _squareColorPicker.point.x, _squareColorPicker.point.y};
     CGFloat bgr[3];
-    CGFloat hsv[3] = {sender.hue, point.x, point.y};
     HSVtoRGB(hsv,bgr);
+//    _currentColorView.backgroundColor =  [UIColor colorWithHue:hsv[0] saturation:hsv[1] brightness:hsv[2] alpha:1];
+    _currentColorView.backgroundColor =  [UIColor colorWithRed:bgr[2] green:bgr[1] blue:bgr[0] alpha:1];
     [self doSetText:bgr];
 }
-- (IBAction)touchSquareColorPicker:(SquareColorPicker*)sender {
-    CGPoint point = sender.point;
-    _currentColorView.backgroundColor = [UIColor colorWithHue:sender.hue saturation:point.x brightness:point.y alpha:1];
-    CGFloat bgr[3];
-    CGFloat hsv[3] = {sender.hue, point.x, point.y};
-    HSVtoRGB(hsv, bgr);
-    [self doSetText:bgr];
-}
+
 - (IBAction)moveColorSlider:(id)sender {
     CGFloat bgr[3] = {_slider3.value,_slider2.value,_slider1.value};
     CGFloat hsv[3] = { self.circleColorPicker.hue, self.squareColorPicker.point.x, self.squareColorPicker.point.y};
@@ -91,7 +84,7 @@
     [slider setMaximumTrackImage:rImg forState:UIControlStateNormal ];
 }
 
-- (IBAction)touUpInside:(id)sender {
+- (IBAction)touchUp:(id)sender {
     [_delegate colorChanged:_currentColorView.backgroundColor];
 }
 
