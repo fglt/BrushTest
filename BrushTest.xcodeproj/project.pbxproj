@@ -35,6 +35,7 @@
 		176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */; };
 		176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */; };
 		17C7CD041D6CA4CC00E5D47B /* Canvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD031D6CA4CC00E5D47B /* Canvas.m */; };
+		17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD181D6FEA3100E5D47B /* LayerEditView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,8 @@
 		176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGTHSBSupport.m; sourceTree = "<group>"; };
 		17C7CD021D6CA4CC00E5D47B /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
 		17C7CD031D6CA4CC00E5D47B /* Canvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canvas.m; sourceTree = "<group>"; };
+		17C7CD171D6FEA3100E5D47B /* LayerEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerEditView.h; sourceTree = "<group>"; };
+		17C7CD181D6FEA3100E5D47B /* LayerEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerEditView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,8 @@
 				1754A2DD1D649FE500C18717 /* SquareColorPicker.m */,
 				1754A2DE1D649FE500C18717 /* TranslucentToolbar.h */,
 				1754A2DF1D649FE500C18717 /* TranslucentToolbar.m */,
+				17C7CD171D6FEA3100E5D47B /* LayerEditView.h */,
+				17C7CD181D6FEA3100E5D47B /* LayerEditView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 				176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */,
 				176C31491D671E8100B9A1D6 /* LayerBoard.m in Sources */,
 				176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */,
+				17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */,
 				1754A2E21D649FE500C18717 /* constants.m in Sources */,
 				176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */,
 				1754A2E01D649FE500C18717 /* BarColorPicker.m in Sources */,

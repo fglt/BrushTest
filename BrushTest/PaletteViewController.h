@@ -16,6 +16,10 @@
 @end
 
 @interface PaletteViewController : UIViewController
-@property (nonatomic, strong) UIColor *color;
+
+
+//@property (nonatomic, strong) UIColor *color;
 @property (nonatomic, weak) id<PaletteViewControllerDelegate> delegate;
+
+- (void)setLastColor:(UIColor *)color;
 @end

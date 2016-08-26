@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jZq-zM-k8W" userLabel="PaletteView">
-                                <rect key="frame" x="50" y="25" width="320" height="550"/>
+                                <rect key="frame" x="44" y="25" width="320" height="550"/>
                                 <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="LKK-SG-FAH"/>
@@ -29,7 +29,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zcc-tw-YUl" userLabel="Brush radius alpha" customClass="BrushAlphaAndWidthView">
-                                <rect key="frame" x="50" y="0.0" width="50" height="600"/>
+                                <rect key="frame" x="44" y="0.0" width="50" height="600"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tYH-yn-syf">
                                         <rect key="frame" x="-77" y="140" width="204" height="31"/>
@@ -67,13 +67,14 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l2n-lb-wWc">
-                                <rect key="frame" x="0.0" y="0.0" width="50" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="44" height="600"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sk-pH-eKZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="49" height="36"/>
-                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Color"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Sk-pH-eKZ">
+                                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="OdM-fv-Dho"/>
+                                            <constraint firstAttribute="width" constant="44" id="mjb-y3-Nye"/>
+                                        </constraints>
                                         <connections>
                                             <action selector="clickColor:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mv6-l1-8TY"/>
                                         </connections>
@@ -82,7 +83,7 @@
                                 <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="4Sk-pH-eKZ" firstAttribute="top" secondItem="l2n-lb-wWc" secondAttribute="top" id="3FE-GO-2tx"/>
-                                    <constraint firstAttribute="width" constant="50" id="UOR-ln-UX9"/>
+                                    <constraint firstAttribute="width" constant="44" id="UOR-ln-UX9"/>
                                     <constraint firstAttribute="height" constant="600" id="iQp-Xk-IWe"/>
                                     <constraint firstItem="4Sk-pH-eKZ" firstAttribute="leading" secondItem="l2n-lb-wWc" secondAttribute="leading" id="jDb-Rv-QZb"/>
                                 </constraints>
@@ -200,7 +201,7 @@
                                     <constraint firstAttribute="width" constant="88" id="sKm-aY-4Mu"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSm-WH-uMb" userLabel="layerEdit">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSm-WH-uMb" userLabel="layerEdit" customClass="LayerEditView">
                                 <rect key="frame" x="202" y="100" width="300" height="400"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="图层" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nIW-nn-MZL">
@@ -213,7 +214,7 @@
                                         <rect key="frame" x="8" y="31" width="284" height="184"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="g1u-bU-TPQ">
-                                                <rect key="frame" x="13" y="0.0" width="257" height="44"/>
+                                                <rect key="frame" x="13.5" y="0.0" width="257" height="44"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3n-Jd-Lw8">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -277,7 +278,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="r9r-L3-Hxn">
-                                                <rect key="frame" x="13" y="102" width="257" height="44"/>
+                                                <rect key="frame" x="13.5" y="102" width="257" height="44"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ebi-A7-eij">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -344,7 +345,7 @@
                                         </constraints>
                                     </slider>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="mMP-T3-xn1" firstAttribute="top" secondItem="4ZU-ya-9Bt" secondAttribute="bottom" constant="20" id="81z-Gs-iBY"/>
                                     <constraint firstAttribute="width" constant="300" id="854-9t-CBY"/>
@@ -355,6 +356,9 @@
                                     <constraint firstAttribute="height" constant="400" id="uVd-AQ-ThO"/>
                                     <constraint firstItem="4ZU-ya-9Bt" firstAttribute="top" secondItem="nIW-nn-MZL" secondAttribute="bottom" constant="10" id="xMA-J6-a0n"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="title" destination="nIW-nn-MZL" id="bkI-mW-yTM"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -376,6 +380,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="ColorView" destination="4Sk-pH-eKZ" id="Ed3-3Y-jW9"/>
                         <outlet property="brushAlphaAndWidthView" destination="Zcc-tw-YUl" id="ev3-6B-rRU"/>
                         <outlet property="brushViewBoard" destination="l2n-lb-wWc" id="5Nu-SP-3wS"/>
                         <outlet property="layerBoard" destination="ns0-JD-8xa" id="cB7-hd-YLf"/>
@@ -423,6 +428,7 @@
                                             <constraint firstAttribute="height" secondItem="9q8-3M-cBe" secondAttribute="width" multiplier="1:1" id="ZV6-xL-rvQ"/>
                                         </constraints>
                                         <connections>
+                                            <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="aqe-oO-Eha"/>
                                             <action selector="touchCircleColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="wtt-Jq-MN1"/>
                                         </connections>
                                     </view>
@@ -433,6 +439,7 @@
                                             <constraint firstAttribute="height" secondItem="BrQ-nk-Oj1" secondAttribute="width" multiplier="1:1" id="OMD-bS-nxS"/>
                                         </constraints>
                                         <connections>
+                                            <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="Nw4-Qu-ces"/>
                                             <action selector="touchSquareColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="nAj-pr-0IH"/>
                                         </connections>
                                     </view>
@@ -470,6 +477,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="moveColorSlider:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="PIi-JJ-TEc"/>
+                                                    <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="mQo-nE-3Vg"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Vf-D4F">
@@ -504,6 +512,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="moveColorSlider:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="9Ok-TQ-F5a"/>
+                                                    <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="p8V-ml-EcU"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFo-UV-rBv">
@@ -536,6 +545,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <action selector="moveColorSlider:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="xZy-WR-fFf"/>
+                                                    <action selector="touUpInside:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="2Ty-Yw-jpO"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQk-G1-4no">
@@ -569,9 +579,11 @@
                     <size key="freeformSize" width="320" height="550"/>
                     <connections>
                         <outlet property="circleColorPicker" destination="9q8-3M-cBe" id="ZqW-AD-L1m"/>
+                        <outlet property="currentColorView" destination="Jdz-ia-VQT" id="qiR-t6-3zE"/>
                         <outlet property="label1" destination="yX7-Vf-D4F" id="juP-K1-nlw"/>
                         <outlet property="label2" destination="BFo-UV-rBv" id="CQC-n0-KyD"/>
                         <outlet property="label3" destination="nQk-G1-4no" id="9yM-Y8-c2E"/>
+                        <outlet property="lastColorView" destination="tGp-is-Xi7" id="reA-eI-aKe"/>
                         <outlet property="slider1" destination="yAL-pi-Pe7" id="DRn-gy-K6Q"/>
                         <outlet property="slider2" destination="xZY-Wy-7d4" id="Yb3-Co-evd"/>
                         <outlet property="slider3" destination="5C9-SE-3ff" id="XRo-CK-8jr"/>

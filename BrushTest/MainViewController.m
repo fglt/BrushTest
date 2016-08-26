@@ -18,6 +18,7 @@
 #import "DrawingLayer.h"
 #import "LayerControl.h"
 #import "Canvas.h"
+#import "LayerEditView.h"
 
 @interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
@@ -25,13 +26,15 @@
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet BrushAlphaAndWidthView *brushAlphaAndWidthView;
 @property (weak, nonatomic) IBOutlet UIView *layerBoard;
-@property (weak, nonatomic) IBOutlet UIView *layerEditView;
+@property (weak, nonatomic) IBOutlet LayerEditView *layerEditView;
+@property (weak, nonatomic) IBOutlet UIButton *ColorView;
 @end
 
 @interface MainViewController ()<CanvasViewDelegate>
 @property (strong, nonatomic) CanvasView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BrushSelectViewController *brushViewController;
+@property (nonatomic, strong) LayerControl *currentControl;
 @end
 
 @interface MainViewController ()
@@ -39,10 +42,10 @@
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) CGFloat radius;
 @property (nonatomic, strong) Canvas *canvas;
-
-@property (nonatomic, strong) LayerControl *currentControl;
 @end
+
 @implementation MainViewController
+
 - (IBAction)addLayer:(UIButton *)sender
 {
     if(_canvas.layerCount<3){
@@ -61,6 +64,8 @@
     _currentControl = sender;
     _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
     [_canvas setForeLayer:sender.drawingLayer];
+    NSString *text = [NSString stringWithFormat:@"图层 %d / %ld", _currentControl.layerIndex, _canvas.layerCount];
+    _layerEditView.title.text = text;
 }
 
 - (IBAction)clickClear:(UIButton *)sender
@@ -90,6 +95,10 @@
                          completion:nil
          ];
     }else{
+        _paletteViewBoard.hidden = YES;
+        _brushAlphaAndWidthView.hidden = YES;
+        _layerEditView.hidden = true;
+        
         [UIView animateWithDuration:0.3
                          animations:^{
                             _toolbarView.center = CGPointMake(_toolbarView.center.x, -_toolbarView.frame.size.height/2);
@@ -111,6 +120,7 @@
         self.paletteViewBoard.hidden = YES;
     }else{
         [self dispalyPaletteView];
+        [_paletteViewController setLastColor:_color];
     }
 }
 - (IBAction)brushSlider:(UISlider *)sender {
@@ -121,6 +131,12 @@
 - (void) start
 {
     _color =  [UIColor redColor];
+
+    CALayer *layer = [CALayer layer];
+    layer.frame = CGRectMake(0, 0, 44, 44);
+    layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
+    _ColorView.layer.mask = layer;
+    _ColorView.backgroundColor = _color;
     _radius = 26;
     _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeGradient];
     _brushAlphaAndWidthView.radiusSlider.value = (_radius-1)/30;
@@ -186,24 +202,13 @@
     return YES;
 }
 
-#pragma mark - PaletteViewControllerDelegate
--(void)colorChanged:(UIColor*)color
-{
-    self.color = [color copy];
-    self.brush.color = self.color;
-}
-
-- (UIColor *)currentColor
-{
-    return _color;
-}
-
 - (void)addLayer
 {
     [_canvas addLayer];
     [_canvasView.layer addSublayer:_canvas.foreLayer.layer];
     CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvas.layerCount * 90-90 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+    control.layerIndex = (int)_canvas.layerCount;
     control.drawingLayer = _canvas.foreLayer;
     control.layer.borderWidth = 2;
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
@@ -213,7 +218,18 @@
     [_layerBoard addSubview:control];
 }
 
+#pragma mark - PaletteViewControllerDelegate
+-(void)colorChanged:(UIColor*)color
+{
+    self.color = [color copy];
+    _ColorView.layer.backgroundColor = color.CGColor;
+    self.brush.color = self.color;
+}
 
+- (UIColor *)currentColor
+{
+    return _color;
+}
 
 #pragma mark - BrushSelectViewControllerDelegate
 
@@ -265,20 +281,24 @@
 - (void)touchBegan:(CGPoint)point
 {
     _paletteViewBoard.hidden =true;
+    
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
     [_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
     [_canvas updateWithPoint:point];
 }
+
 - (void)touchMoved:(CGPoint)point
 {
     [_canvas updateWithPoint:point];
 }
+
 - (void)touchEnded:(CGPoint)point
 {
     [_canvas updateWithPoint:point];
     [_canvas.foreLayer addStroke];
     
 }
+
 @end
 
