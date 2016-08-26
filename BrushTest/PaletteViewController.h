@@ -10,7 +10,7 @@
 
 @protocol PaletteViewControllerDelegate <NSObject>
 
-- (void) colorChanged:(UIColor*) color;
+- (void)colorChanged:(UIColor*) color;
 - (UIColor *)currentColor;
 
 @end

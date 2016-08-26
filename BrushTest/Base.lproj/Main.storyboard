@@ -37,7 +37,6 @@
                                             <constraint firstAttribute="width" constant="200" id="aa1-yV-3Wa"/>
                                         </constraints>
                                         <connections>
-                                            <action selector="alphaSliderChanged:" destination="mvF-vM-ml9" eventType="valueChanged" id="gSt-wm-Z9a"/>
                                             <action selector="brushSlider:" destination="BYZ-38-t0r" eventType="valueChanged" id="jGp-LW-WhU"/>
                                         </connections>
                                     </slider>
@@ -48,7 +47,6 @@
                                         </constraints>
                                         <connections>
                                             <action selector="brushSlider:" destination="BYZ-38-t0r" eventType="valueChanged" id="t5W-qP-JCh"/>
-                                            <action selector="radiusSliderChanged:" destination="mvF-vM-ml9" eventType="valueChanged" id="rCP-Bk-rla"/>
                                         </connections>
                                     </slider>
                                 </subviews>
@@ -201,7 +199,7 @@
                                     <constraint firstAttribute="width" constant="88" id="sKm-aY-4Mu"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSm-WH-uMb" userLabel="layerEdit" customClass="LayerEditView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSm-WH-uMb" userLabel="layerEdit" customClass="LayerEditView">
                                 <rect key="frame" x="202" y="100" width="300" height="400"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="图层" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nIW-nn-MZL">
@@ -216,21 +214,33 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="g1u-bU-TPQ">
                                                 <rect key="frame" x="13.5" y="0.0" width="257" height="44"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3n-Jd-Lw8">
+                                                    <button opaque="NO" tag="30" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3n-Jd-Lw8">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_copy"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WFZ-LL-U6X"/>
+                                                        </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WdJ-ej-uOX">
+                                                    <button opaque="NO" tag="31" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WdJ-ej-uOX">
                                                         <rect key="frame" x="71" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_cut"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lyK-IY-s0W"/>
+                                                        </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLi-UJ-aOf">
+                                                    <button opaque="NO" tag="32" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLi-UJ-aOf">
                                                         <rect key="frame" x="142" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_paste"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="l4p-OM-noj"/>
+                                                        </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JV2-IU-QFD">
+                                                    <button opaque="NO" tag="33" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JV2-IU-QFD">
                                                         <rect key="frame" x="213" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_duplicate"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="C9b-wV-WXn"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -280,21 +290,33 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="r9r-L3-Hxn">
                                                 <rect key="frame" x="13.5" y="102" width="257" height="44"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ebi-A7-eij">
+                                                    <button opaque="NO" tag="34" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ebi-A7-eij">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_clear"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bt1-Wo-PQs"/>
+                                                        </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0k-Ed-aj7">
+                                                    <button opaque="NO" tag="35" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0k-Ed-aj7">
                                                         <rect key="frame" x="71" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_merge"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h8D-1l-Y1r"/>
+                                                        </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ykp-UL-3QK">
+                                                    <button opaque="NO" tag="36" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ykp-UL-3QK">
                                                         <rect key="frame" x="142" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_layer_merge_all"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CON-Mh-5WQ"/>
+                                                        </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yOd-U0-gsX">
+                                                    <button opaque="NO" tag="37" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yOd-U0-gsX">
                                                         <rect key="frame" x="213" y="0.0" width="44" height="44"/>
                                                         <state key="normal" image="palette_trash"/>
+                                                        <connections>
+                                                            <action selector="clickLayerEditButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nCz-Eh-1aa"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -357,6 +379,9 @@
                                     <constraint firstItem="4ZU-ya-9Bt" firstAttribute="top" secondItem="nIW-nn-MZL" secondAttribute="bottom" constant="10" id="xMA-J6-a0n"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="del" destination="yOd-U0-gsX" id="9SF-eW-5vb"/>
+                                    <outlet property="merge" destination="B0k-Ed-aj7" id="2ET-E6-Hbr"/>
+                                    <outlet property="mergeAll" destination="ykp-UL-3QK" id="5cK-WY-iDh"/>
                                     <outlet property="title" destination="nIW-nn-MZL" id="bkI-mW-yTM"/>
                                 </connections>
                             </view>
@@ -601,7 +626,7 @@
                         <viewControllerLayoutGuide type="top" id="w6A-mu-UDv"/>
                         <viewControllerLayoutGuide type="bottom" id="SDn-do-3fw"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8ic-LD-JMT" customClass="BrushView">
+                    <view key="view" contentMode="scaleToFill" id="8ic-LD-JMT">
                         <rect key="frame" x="0.0" y="0.0" width="44" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -613,8 +638,6 @@
                                         <state key="normal" image="1"/>
                                         <connections>
                                             <action selector="clickBrush:" destination="mvF-vM-ml9" eventType="touchUpInside" id="KMm-VG-HpK"/>
-                                            <action selector="clickBrushType:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qUy-Qn-GOm"/>
-                                            <action selector="selectBrushType:" destination="8bC-Xf-vdC" eventType="touchUpInside" id="qHs-4h-XLL"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Td3-xn-NXS">
@@ -622,8 +645,6 @@
                                         <state key="normal" image="2"/>
                                         <connections>
                                             <action selector="clickBrush:" destination="mvF-vM-ml9" eventType="touchUpInside" id="a0K-dB-pQJ"/>
-                                            <action selector="clickBrushType:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NkY-xb-488"/>
-                                            <action selector="selectBrushType:" destination="8bC-Xf-vdC" eventType="touchUpInside" id="AQu-2i-p1a"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NoJ-Nm-2lp">
@@ -631,8 +652,6 @@
                                         <state key="normal" image="3"/>
                                         <connections>
                                             <action selector="clickBrush:" destination="mvF-vM-ml9" eventType="touchUpInside" id="eqT-Wr-ZFR"/>
-                                            <action selector="clickBrushType:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Edq-r5-rzP"/>
-                                            <action selector="selectBrushType:" destination="8bC-Xf-vdC" eventType="touchUpInside" id="G8M-1y-q1h"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="14" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wbx-4a-2Bu">
@@ -640,8 +659,6 @@
                                         <state key="normal" image="4"/>
                                         <connections>
                                             <action selector="clickBrush:" destination="mvF-vM-ml9" eventType="touchUpInside" id="ef9-eQ-ugZ"/>
-                                            <action selector="clickBrushType:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wJJ-s4-EhJ"/>
-                                            <action selector="selectBrushType:" destination="8bC-Xf-vdC" eventType="touchUpInside" id="r0a-Ho-V7G"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -654,9 +671,6 @@
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="44" height="600"/>
-                    <connections>
-                        <outlet property="brushView" destination="8ic-LD-JMT" id="bCS-l1-Glh"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dTw-ZU-hle" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

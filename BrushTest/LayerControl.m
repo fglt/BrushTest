@@ -12,6 +12,14 @@ IB_DESIGNABLE
 @implementation LayerControl
 
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    self.layer.borderWidth = 2;
+    self.layer.borderColor = [UIColor grayColor].CGColor;
+    return self;
+}
+
 - (void)layoutSubviews
 {
     if( !_visableButton){

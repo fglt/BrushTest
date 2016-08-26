@@ -19,6 +19,7 @@
 #import "LayerControl.h"
 #import "Canvas.h"
 #import "LayerEditView.h"
+#import "UIView+FGTDrawing.h"
 
 @interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
@@ -42,32 +43,113 @@
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) CGFloat radius;
 @property (nonatomic, strong) Canvas *canvas;
+@property (nonatomic, strong) NSMutableArray *layerControlArray;
 @end
 
 @implementation MainViewController
 
-- (IBAction)addLayer:(UIButton *)sender
+
+- (void)start
 {
-    if(_canvas.layerCount<3){
-    [self addLayer];
-    }
+    _color =  [UIColor redColor];
+    _layerControlArray = [NSMutableArray array];
+    
+    CALayer *layer = [CALayer layer];
+    layer.frame = CGRectMake(0, 0, 44, 44);
+    layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
+    _ColorView.layer.mask = layer;
+    _ColorView.backgroundColor = _color;
+    _radius = 26;
+    _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeGradient];
+    _brushAlphaAndWidthView.radiusSlider.value = (_radius-1)/30;
+    _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
+    self.brushAlphaAndWidthView.hidden = YES;
 }
 
-- (void)clickLayerControl:(LayerControl *)sender
+- (void)addPaletteView
 {
-    _paletteViewBoard.hidden =true;
-    _brushAlphaAndWidthView.hidden = true;
-    if(sender == _currentControl){
-          _layerEditView.hidden = !_layerEditView.hidden;
-    }
-    _currentControl.layer.borderColor = [UIColor blackColor].CGColor;
-    _currentControl = sender;
-    _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
-    [_canvas setForeLayer:sender.drawingLayer];
-    NSString *text = [NSString stringWithFormat:@"图层 %d / %ld", _currentControl.layerIndex, _canvas.layerCount];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _paletteViewController = [storyBoard instantiateViewControllerWithIdentifier:@"PaletteViewController"];
+    [self addChildViewController:_paletteViewController];
+    _paletteViewController.delegate = self;
+    
+    _paletteViewController.view.frame = self.paletteViewBoard.bounds;
+    [self.paletteViewBoard addSubview:_paletteViewController.view];
+    [_paletteViewController didMoveToParentViewController:self];
+}
+
+- (void)addBrushView
+{
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _brushViewController = [storyBoard instantiateViewControllerWithIdentifier:@"BrushSelectViewController"];
+    [self addChildViewController:_brushViewController];
+    _brushViewController.brushSelectViewControllerDelegate = self;
+    CGRect frame = CGRectMake(0,60, self.brushViewBoard.frame.size.width, self.brushViewBoard.frame.size.height - 60);
+    _brushViewController.view.frame = frame;
+    [self.brushViewBoard addSubview:_brushViewController.view];
+    [_brushViewController didMoveToParentViewController:self];
+    _brushViewController.type = _brush.brushType;
+}
+
+- (void)addCanvasView
+{
+    _canvas = [[Canvas alloc] initWithSize:self.view.bounds.size];
+    _canvasView = [[CanvasView alloc] initWithFrame:self.view.bounds];
+    _canvas.backgroundColor = [UIColor whiteColor];
+    _canvas.canvasSize = _canvasView.bounds.size;
+    _canvas.currentBrush = _brush;
+    _canvasView.delegate = self;
+    [self addDrawingLayer];
+    
+    [self.view insertSubview:_canvasView atIndex:0];
+}
+
+- (void)configLayerEditView
+{
+    NSString *text = [NSString stringWithFormat:@"图层 %lu / %ld", [_layerControlArray indexOfObject:_currentControl] + 1, _layerControlArray.count];
     _layerEditView.title.text = text;
+    if(_layerControlArray.count==1){
+        _layerEditView.merge.activity = false;
+        _layerEditView.del.activity = false ;
+        _layerEditView.mergeAll = false;
+    }else{
+        _layerEditView.merge.activity = true;
+        _layerEditView.del.activity = true ;
+        _layerEditView.mergeAll.activity = true;
+    }
+    NSUInteger index = [_layerControlArray indexOfObject:_currentControl];
+    _layerEditView.merge.activity = index;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    
+    [self start];
+    [self addCanvasView];
+    [self addPaletteView];
+    [self addBrushView];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+-(void)setCurrentControl:(LayerControl *)currentControl
+{
+    _currentControl.layer.borderColor = [UIColor blackColor].CGColor;
+    _currentControl = currentControl;
+    _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
+    [self configLayerEditView];
+}
+
+#pragma mark - toolbarView events
 - (IBAction)clickClear:(UIButton *)sender
 {
     [_canvas clear];
@@ -114,6 +196,9 @@
     }
 
 }
+
+
+#pragma mark - brushBoardEvents
 - (IBAction)clickColor:(UIButton *)sender {
     self.brushAlphaAndWidthView.hidden = YES;
     if(!self.paletteViewBoard.hidden){
@@ -128,98 +213,10 @@
     _brush.color = [_brush.color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
 }
 
-- (void) start
-{
-    _color =  [UIColor redColor];
 
-    CALayer *layer = [CALayer layer];
-    layer.frame = CGRectMake(0, 0, 44, 44);
-    layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
-    _ColorView.layer.mask = layer;
-    _ColorView.backgroundColor = _color;
-    _radius = 26;
-    _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeGradient];
-    _brushAlphaAndWidthView.radiusSlider.value = (_radius-1)/30;
-    _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
-    self.brushAlphaAndWidthView.hidden = YES;
-}
-
--(void) addPaletteView
-{
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    _paletteViewController = [storyBoard instantiateViewControllerWithIdentifier:@"PaletteViewController"];
-    [self addChildViewController:_paletteViewController];
-    _paletteViewController.delegate = self;
-
-    _paletteViewController.view.frame = self.paletteViewBoard.bounds;
-    [self.paletteViewBoard addSubview:_paletteViewController.view];
-    [_paletteViewController didMoveToParentViewController:self];
-}
-
-- (void)addBrushView
-{
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    _brushViewController = [storyBoard instantiateViewControllerWithIdentifier:@"BrushSelectViewController"];
-    [self addChildViewController:_brushViewController];
-    _brushViewController.brushSelectViewControllerDelegate = self;
-    CGRect frame = CGRectMake(0,60, self.brushViewBoard.frame.size.width, self.brushViewBoard.frame.size.height - 60);
-    _brushViewController.view.frame = frame;
-    [self.brushViewBoard addSubview:_brushViewController.view];
-    [_brushViewController didMoveToParentViewController:self];
-    _brushViewController.type = _brush.brushType;
-}
-
-- (void)addCanvasView
-{
-    _canvas = [[Canvas alloc] initWithSize:self.view.bounds.size];
-    _canvasView = [[CanvasView alloc] initWithFrame:self.view.bounds];
-    _canvas.backgroundColor = [UIColor whiteColor];
-    _canvas.canvasSize = _canvasView.bounds.size;
-    _canvas.currentBrush = _brush;
-    _canvasView.delegate = self;
-    [self addLayer];
-
-    [self.view insertSubview:_canvasView atIndex:0];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
-    [self start];
-    [self addCanvasView];
-    [self addPaletteView];
-    [self addBrushView];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
-
-- (void)addLayer
-{
-    [_canvas addLayer];
-    [_canvasView.layer addSublayer:_canvas.foreLayer.layer];
-    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _canvas.layerCount * 90-90 , 88, 88);
-    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
-    control.layerIndex = (int)_canvas.layerCount;
-    control.drawingLayer = _canvas.foreLayer;
-    control.layer.borderWidth = 2;
-    [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
-    _currentControl.layer.borderColor = [UIColor blackColor].CGColor;
-    _currentControl = control;
-    _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
-    [_layerBoard addSubview:control];
-}
 
 #pragma mark - PaletteViewControllerDelegate
--(void)colorChanged:(UIColor*)color
+- (void)colorChanged:(UIColor*)color
 {
     self.color = [color copy];
     _ColorView.layer.backgroundColor = color.CGColor;
@@ -298,6 +295,74 @@
     [_canvas updateWithPoint:point];
     [_canvas.foreLayer addStroke];
     
+}
+
+
+#pragma mark - layerEditView layerborad
+- (IBAction)clickLayerEditButton:(UIButton *)sender {
+    /**
+     复制30 剪切 粘贴 拷贝
+     清除 合并 合并所有 删除37
+     **/
+    switch (sender.tag) {
+        case 30:
+            
+            break;
+        case 37:{
+            if(_layerControlArray.count ==  1)break;
+            NSUInteger index = [_layerControlArray indexOfObject:_currentControl];
+            [_currentControl removeFromSuperview];
+            [_currentControl.drawingLayer.layer removeFromSuperlayer];
+            [_canvas.drawingLayers removeObject:_currentControl.drawingLayer];
+            [_layerControlArray removeObjectAtIndex:index];
+            [self reloadLayerBoard];
+            if(index>0) index--;
+            self.currentControl = [_layerControlArray objectAtIndex:index];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+-(void) reloadLayerBoard
+{
+    [_layerControlArray enumerateObjectsUsingBlock:^(LayerControl*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.center = CGPointMake(_layerBoard.bounds.size.width/2, _layerBoard.frame.size.height - idx * 90 - 135);
+    }];
+}
+
+- (void)clickLayerControl:(LayerControl *)sender
+{
+    _paletteViewBoard.hidden =true;
+    _brushAlphaAndWidthView.hidden = true;
+    if(sender == _currentControl){
+        _layerEditView.hidden = !_layerEditView.hidden;
+    }
+    self.currentControl = sender;
+    [_canvas setForeLayer:sender.drawingLayer];
+    [self configLayerEditView];
+}
+
+- (IBAction)addLayer:(UIButton *)sender
+{
+    if(_layerControlArray.count<3){
+        [self addDrawingLayer];
+    }
+}
+
+- (void)addDrawingLayer
+{
+    [_canvas addLayer];
+    [_canvasView.layer addSublayer:_canvas.foreLayer.layer];
+    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
+    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+    [_layerControlArray addObject:control];
+    control.layerIndex = (int)_canvas.layerCount;
+    control.drawingLayer = _canvas.foreLayer;
+    [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
+    self.currentControl = control;
+    [_layerBoard addSubview:control];
 }
 
 @end

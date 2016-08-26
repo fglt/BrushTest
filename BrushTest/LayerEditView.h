@@ -10,4 +10,7 @@
 
 @interface LayerEditView : UIView
 @property (weak, nonatomic) IBOutlet UILabel *title;
+@property (weak, nonatomic) IBOutlet UIButton *merge;
+@property (weak, nonatomic) IBOutlet UIButton *del;
+@property (weak, nonatomic) IBOutlet UIButton *mergeAll;
 @end

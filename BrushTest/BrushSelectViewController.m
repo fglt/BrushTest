@@ -8,10 +8,8 @@
 
 #import "BrushSelectViewController.h"
 #import "Brush.h"
-#import "BrushView.h"
 
 @interface BrushSelectViewController()
-@property (strong, nonatomic) IBOutlet BrushView *brushView;
 @end
 
 @implementation BrushSelectViewController
