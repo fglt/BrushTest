@@ -26,6 +26,8 @@ CGFloat pin(CGFloat minValue, CGFloat value, CGFloat maxValue)
 
 static void hueToComponentFactors(CGFloat h, CGFloat*bgr)
 {
+    if(h == 1)
+        h=0;
     CGFloat h_prime = h * 6;
     int  i = h_prime;
     CGFloat x = 1.0f - fabs(fmod(h_prime, 2.0f) - 1.0f);
@@ -225,8 +227,6 @@ UIImage* HSVBarContentImage(FGTColorHSVIndex colorHSVIndex, CGFloat hsv[3])
 		hsv[colorHSVIndex] = (CGFloat) x / 255.0f;
 		
 		HSVtoRGB(hsv, bgr);
-		
-        memcpy(ptr, bgr, 3);
 		ptr[0] = (UInt8) (bgr[0] * 255.0f);
 		ptr[1] = (UInt8) (bgr[1] * 255.0f);
 		ptr[2] = (UInt8) (bgr[2] * 255.0f);
@@ -286,6 +286,58 @@ UIImage* sliderImage(const CGFloat* bgr, FGTColorIndex whichColor, int h)
     
     CGImageRef cgimage = CGBitmapContextCreateImage(context);
     UIImage *image = [UIImage imageWithCGImage:cgimage];
+    CGContextRelease(context);
+    CGImageRelease(cgimage);
+    return image;
+}
+
+UIImage *hsvSliderImage(const CGFloat *hsv,FGTColorHSVIndex index, int h)
+{
+    int w = 256;
+    UInt8 data[w * h* 4];
+    
+    // Set up the bitmap context for filling with color:
+    
+    CGContextRef context = createBGRxImageContext(w, h, data);
+    
+    if (context == nil)
+        return nil;
+    
+    // Draw into context here:
+    
+    UInt8* ptr = CGBitmapContextGetData(context);
+    if (ptr == nil) {
+        CGContextRelease(context);
+        return nil;
+    }
+    
+    CGFloat bgr[3];
+    CGFloat hsv0[3];
+    memcpy(hsv0, hsv, 3 * sizeof(CGFloat));
+    for (int x = 0; x < 256; ++x) {
+        hsv0[index] = (CGFloat) x / 255.0f;
+        
+        HSVtoRGB(hsv0, bgr);
+        ptr[0] = (UInt8) (bgr[0] * 255.0f);
+        ptr[1] = (UInt8) (bgr[1] * 255.0f);
+        ptr[2] = (UInt8) (bgr[2] * 255.0f);
+        
+        ptr += 4;
+    }
+    
+    ptr = data;
+    size_t rowBytes = (w<<2);
+    for(int i=1; i<h; i++)
+    {
+        ptr = ptr + rowBytes;
+        
+        memcpy(ptr, data, rowBytes);
+    }
+
+    // Return an image of the context's content:
+    
+    CGImageRef cgimage = CGBitmapContextCreateImage(context);
+    UIImage* image = [UIImage imageWithCGImage:cgimage];
     CGContextRelease(context);
     CGImageRelease(cgimage);
     return image;

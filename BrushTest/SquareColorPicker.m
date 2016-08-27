@@ -69,7 +69,7 @@ IB_DESIGNABLE
 {
     if (imgView == nil)
     {
-        CGRect rect = CGRectMake(self.bounds.origin.x+20, self.bounds.origin.y+20, self.bounds.size.width-40, self.bounds.size.height-40);
+        CGRect rect = CGRectMake(self.bounds.origin.x+kContentInset, self.bounds.origin.y+kContentInset, self.bounds.size.width-kIndicatorSize, self.bounds.size.height-kIndicatorSize);
         imgView = [[UIImageView alloc] initWithFrame: rect];
         UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue);
         imgView.layer.contents = (id)img.CGImage;
@@ -88,9 +88,9 @@ IB_DESIGNABLE
     
     [self setIndicatorColor];
     
-    CGFloat indicatorX = kContentInsetX + (self.point.x * (self.bounds.size.width - 2 * kContentInsetX));
-    CGFloat indicatorY = self.bounds.size.height - kContentInsetY
-    - (self.point.y * (self.bounds.size.height - 2 * kContentInsetY));
+    CGFloat indicatorX = kContentInset + (self.point.x * (self.bounds.size.width - kIndicatorSize));
+    CGFloat indicatorY = self.bounds.size.height - kContentInset
+    - (self.point.y * (self.bounds.size.height - kIndicatorSize));
     
     indicator.center = CGPointMake(indicatorX, indicatorY);
 }
@@ -107,11 +107,11 @@ IB_DESIGNABLE
     
     CGPoint touchValue;
     
-    touchValue.x = ([touch locationInView: self].x - kContentInsetX)
-    / (bounds.size.width - 2 * kContentInsetX);
+    touchValue.x = ([touch locationInView: self].x - kContentInset)
+    / (bounds.size.width - 2 * kContentInset);
     
-    touchValue.y = ([touch locationInView: self].y - kContentInsetY)
-    / (bounds.size.height - 2 * kContentInsetY);
+    touchValue.y = ([touch locationInView: self].y - kContentInset)
+    / (bounds.size.height - 2 * kContentInset);
     
     touchValue.x = pin(0.0f, touchValue.x, 1.0f);
     touchValue.y = 1.0f - pin(0.0f, touchValue.y, 1.0f);

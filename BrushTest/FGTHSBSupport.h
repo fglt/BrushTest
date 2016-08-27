@@ -56,8 +56,9 @@ UIImage* HSVBarContentImage(FGTColorHSVIndex colorHSVIndex, CGFloat hsv[3]);
 //------------------------------------------------------------------------------
 
 
-UIImage * sliderImage(const CGFloat* bgr, FGTColorIndex whichColor, int h);
-UIImage * imageFromImage(UIImage *image, CGRect rect);
+UIImage *sliderImage(const CGFloat *bgr, FGTColorIndex whichColor, int h);
+UIImage *hsvSliderImage(const CGFloat *hsv,FGTColorHSVIndex index, int h);
+UIImage *imageFromImage(UIImage *image, CGRect rect);
 
 void HSVFromUIColor(UIColor* color, CGFloat hsv[3]);
 

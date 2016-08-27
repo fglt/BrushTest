@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    ColorModeRGB = 0,
+    ColorModeHSV
+} ColorMode;
+
 @protocol PaletteViewControllerDelegate <NSObject>
 
 - (void)colorChanged:(UIColor*) color;
@@ -20,6 +25,6 @@
 
 //@property (nonatomic, strong) UIColor *color;
 @property (nonatomic, weak) id<PaletteViewControllerDelegate> delegate;
-
+@property (nonatomic) ColorMode colorMode;
 - (void)setLastColor:(UIColor *)color;
 @end

@@ -18,8 +18,7 @@ extern NSString * const DrawingViewNotificationName;
 extern NSString * const FileTableNavigationID;
 extern NSString * const MainStoryBoardName;
 
-extern float const kContentInsetX;
-extern float  const kContentInsetY;
+extern float const kContentInset;
 extern float  const kIndicatorSize;
 
 #endif /* constants_h */

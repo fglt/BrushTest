@@ -16,6 +16,5 @@ NSString * const NewDrawingStr = @"新绘图";
 NSString * const DrawingViewNotificationName = @"drawingViewNotification;";
 NSString * const FileTableNavigationID = @"fileTableNavigation";
 NSString * const MainStoryBoardName = @"Main";
-float const kContentInsetX = 20;
-float const kContentInsetY = 20;
+float const kContentInset = 12;
 float const kIndicatorSize = 24;
