@@ -36,7 +36,6 @@
 
 - (void)viewDidLoad
 {
-    //_color = [ _delegate currentColor];
     _currentColorView.backgroundColor = [ _delegate currentColor];
     CGFloat hsv[3];
     HSVFromUIColor(_currentColorView.backgroundColor, hsv);
@@ -48,32 +47,29 @@
 
 - (IBAction)touchColorPicker:(id)sender {
     _squareColorPicker.hue = _circleColorPicker.hue;
-//    CGFloat hsv[3] = {_squareColorPicker.hue, _squareColorPicker.point.x, _squareColorPicker.point.y};
-//    CGFloat bgr[3];
-//    HSVtoRGB(hsv,bgr);
-//    _currentColorView.backgroundColor =  [UIColor colorWithHue:hsv[0] saturation:hsv[1] brightness:hsv[2] alpha:1];
-//    //_currentColorView.backgroundColor =  [UIColor colorWithRed:bgr[2] green:bgr[1] blue:bgr[0] alpha:1];
-    
     _currentColorView.backgroundColor =  [UIColor colorWithHue:_squareColorPicker.hue saturation:_squareColorPicker.point.x brightness:_squareColorPicker.point.y alpha:1];
     [self configureSlider];
 }
 
 - (IBAction)moveColorSlider:(id)sender {
+    CGFloat hsv[3];
     if(_colorMode == ColorModeRGB){
         CGFloat bgr[3] = {_slider3.value,_slider2.value,_slider1.value};
-        CGFloat hsv[3] = { _circleColorPicker.hue, _squareColorPicker.point.x, _squareColorPicker.point.y};
+        hsv[0] = _squareColorPicker.hue;
+        hsv[1] = _squareColorPicker.point.x;
+        hsv[2] = _squareColorPicker.point.y;
         RGBToHSV(bgr, hsv, YES);
-        _circleColorPicker.hue = hsv[0];
-        _squareColorPicker.hue = hsv[0];
-        _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
-        _currentColorView.backgroundColor = [UIColor colorWithRed:bgr[2] green:bgr[1] blue:bgr[0] alpha:1];
     }else{
-        CGFloat hsv[3] = {_slider1.value,_slider2.value,_slider3.value};
-        _circleColorPicker.hue = hsv[0];
-        _squareColorPicker.hue = hsv[0];
-        _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
-        _currentColorView.backgroundColor = [UIColor colorWithHue:hsv[0] saturation:hsv[1] brightness:hsv[2] alpha:1]; 
+        hsv[0] = _slider1.value;
+        hsv[1] = _slider2.value;
+        hsv[2] = _slider3.value;
     }
+    
+    _circleColorPicker.hue = hsv[0];
+    _squareColorPicker.hue = hsv[0];
+    _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
+    _currentColorView.backgroundColor = [UIColor colorWithHue:hsv[0] saturation:hsv[1] brightness:hsv[2] alpha:1];
+    
 }
 
 - (void)configureSlider:(CGFloat *)bgr
