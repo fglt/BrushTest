@@ -101,6 +101,7 @@
     _canvasView.delegate = self;
     [self addDrawingLayer];
     
+    
     [self.view insertSubview:_canvasView atIndex:0];
 }
 
@@ -146,6 +147,7 @@
     _currentControl.layer.borderColor = [UIColor grayColor].CGColor;
     _currentControl = currentControl;
     _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
+    _canvas.foreLayer = _currentControl.drawingLayer;
     [self configLayerEditView];
 }
 
@@ -326,10 +328,13 @@
             [_currentControl removeFromSuperview];
             [_currentControl.drawingLayer.layer removeFromSuperlayer];
             [_canvas.drawingLayers removeObject:_currentControl.drawingLayer];
+
             [_layerControlArray removeObjectAtIndex:index];
             [self reloadLayerBoard];
             if(index>0) index--;
             self.currentControl = [_layerControlArray objectAtIndex:index];
+
+
             break;
         }
         default:
@@ -360,6 +365,9 @@
 
 - (IBAction)addLayer:(UIButton *)sender
 {
+    _layerEditView.hidden = YES;
+    _brushAlphaAndWidthView.hidden = YES;
+    _paletteViewBoard.hidden = YES;
     if(_layerControlArray.count<3){
         [self addDrawingLayer];
     }
@@ -372,7 +380,6 @@
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
-    control.layerIndex = (int)_canvas.layerCount;
     control.drawingLayer = _canvas.foreLayer;
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;

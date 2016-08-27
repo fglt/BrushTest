@@ -14,5 +14,9 @@
 @property (nonatomic, strong) UIButton *visableButton;
 @property (nonatomic, strong) UIButton *lockButton;
 @property (nonatomic, strong) UILabel *mixMode;
-@property (nonatomic) int layerIndex;
+@end
+
+@interface CanvasBackgroundControl : UIControl
+@property (nonatomic, strong) UIButton *visableButton;
+@property (nonatomic, strong) UIView *colorView;
 @end
