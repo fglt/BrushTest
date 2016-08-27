@@ -51,7 +51,7 @@
 
 - (IBAction)moveColorSlider:(id)sender {
     CGFloat bgr[3] = {_slider3.value,_slider2.value,_slider1.value};
-    CGFloat hsv[3] = { self.circleColorPicker.hue, self.squareColorPicker.point.x, self.squareColorPicker.point.y};
+    CGFloat hsv[3] = { _circleColorPicker.hue, _squareColorPicker.point.x, _squareColorPicker.point.y};
     RGBToHSV(bgr, hsv, YES);
     _circleColorPicker.hue = hsv[0];
     _squareColorPicker.hue = hsv[0];

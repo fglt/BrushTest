@@ -200,9 +200,10 @@
 
 #pragma mark - brushBoardEvents
 - (IBAction)clickColor:(UIButton *)sender {
-    self.brushAlphaAndWidthView.hidden = YES;
+    self.brushAlphaAndWidthView.hidden = true;
+    self.layerEditView.hidden = true;
     if(!self.paletteViewBoard.hidden){
-        self.paletteViewBoard.hidden = YES;
+        self.paletteViewBoard.hidden = true;
     }else{
         [self dispalyPaletteView];
         [_paletteViewController setLastColor:_color];
