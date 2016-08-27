@@ -369,7 +369,7 @@
 {
     [_canvas addLayer];
     [_canvasView.layer addSublayer:_canvas.foreLayer.layer];
-    CGRect rect = CGRectMake(0, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
+    CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
     control.layerIndex = (int)_canvas.layerCount;

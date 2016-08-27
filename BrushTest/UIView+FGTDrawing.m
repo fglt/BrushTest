@@ -16,6 +16,6 @@
 
 - (void)setActivity:(BOOL)activity{
     self.userInteractionEnabled = activity;
-    self.alpha = 0.6 * activity + 0.4;
+    self.alpha = activity ? 1 : 0.4;
 }
 @end
