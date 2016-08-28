@@ -12,7 +12,6 @@
 #import "CircleColcorPicker.h"
 #import "SquareColorPicker.h"
 #import "PaletteViewController.h"
-#import "BrushSelectViewController.h"
 #import "Brush.h"
 #import "BrushAlphaAndWidthView.h"
 #import "DrawingLayer.h"
@@ -21,7 +20,7 @@
 #import "LayerEditView.h"
 #import "UIView+FGTDrawing.h"
 
-@interface MainViewController ()<PaletteViewControllerDelegate, BrushSelectViewControllerDelegate>
+@interface MainViewController ()<PaletteViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
@@ -29,18 +28,19 @@
 @property (weak, nonatomic) IBOutlet UIView *layerBoard;
 @property (weak, nonatomic) IBOutlet LayerEditView *layerEditView;
 @property (weak, nonatomic) IBOutlet UIButton *ColorView;
+@property (weak, nonatomic) IBOutlet CanvasBackgroundControl *backgroundColorControl;
 @end
 
 @interface MainViewController ()<CanvasViewDelegate>
 @property (strong, nonatomic) CanvasView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
-@property (nonatomic, strong) BrushSelectViewController *brushViewController;
 @property (nonatomic, strong) LayerControl *currentControl;
 @end
 
 @interface MainViewController ()
 @property (nonatomic, copy) UIColor *color;
 @property (nonatomic, strong) Brush *brush;
+@property (nonatomic) BrushType type;
 @property (nonatomic) CGFloat radius;
 @property (nonatomic, strong) Canvas *canvas;
 @property (nonatomic, strong) NSMutableArray *layerControlArray;
@@ -76,19 +76,6 @@
     _paletteViewController.view.frame = self.paletteViewBoard.bounds;
     [self.paletteViewBoard addSubview:_paletteViewController.view];
     [_paletteViewController didMoveToParentViewController:self];
-}
-
-- (void)addBrushView
-{
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    _brushViewController = [storyBoard instantiateViewControllerWithIdentifier:@"BrushSelectViewController"];
-    [self addChildViewController:_brushViewController];
-    _brushViewController.brushSelectViewControllerDelegate = self;
-    CGRect frame = CGRectMake(0,60, self.brushViewBoard.frame.size.width, self.brushViewBoard.frame.size.height - 60);
-    _brushViewController.view.frame = frame;
-    [self.brushViewBoard addSubview:_brushViewController.view];
-    [_brushViewController didMoveToParentViewController:self];
-    _brushViewController.type = _brush.brushType;
 }
 
 - (void)addCanvasView
@@ -129,7 +116,7 @@
     [self start];
     [self addCanvasView];
     [self addPaletteView];
-    [self addBrushView];
+    //[self addBrushView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -213,10 +200,39 @@
 }
 - (IBAction)brushSlider:(UISlider *)sender {
     _brush.width = _brushAlphaAndWidthView.radiusSlider.value * 30 +1;
-    _brush.color = [_brush.color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
+    _color = [_color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
+    _brush.color = _color;
 }
 
-
+- (IBAction)clickBrush:(UIButton *)sender {
+    switch (sender.tag) {
+        case 11:
+            _type = BrushTypeCircle;
+            break;
+        case 12:
+            _type = BrushTypeOval;
+            break;
+        case 13:
+            _type = BrushTypeGradient;
+            break;
+        case 14:
+            _type = BrushTypeChineseBrush;
+            break;
+        case 15:
+            _type = BrushTypeClear;
+            break;
+        default:
+            _type = BrushTypeCircle;
+            break;
+    }
+    
+    if(self.brushAlphaAndWidthView.hidden){
+        [self displayBrushAlphaAndWidthView];
+    }
+    self.paletteViewBoard.hidden = YES;
+    _brush = [Brush BrushWithColor:_color radius:_radius type:_type];
+    _canvas.currentBrush = _brush;
+}
 
 #pragma mark - PaletteViewControllerDelegate
 - (void)colorChanged:(UIColor*)color
@@ -229,23 +245,6 @@
 - (UIColor *)currentColor
 {
     return _color;
-}
-
-#pragma mark - BrushSelectViewControllerDelegate
-
-- (void)brushTypeSelected:(BrushType)brushType
-{
-    if(self.brushAlphaAndWidthView.hidden){
-        [self displayBrushAlphaAndWidthView];
-    }
-    self.paletteViewBoard.hidden = YES;
-    _brush = [Brush BrushWithColor:_color radius:_radius type:brushType];
-    _canvas.currentBrush = _brush;
-}
-
-- (BrushType)currentBrushType
-{
-    return _brush.brushType;
 }
 
 - (void)displayBrushAlphaAndWidthView
@@ -285,7 +284,6 @@
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
     [_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
-    [_canvas updateWithPoint:point];
 }
 
 - (void)touchMoved:(CGPoint)point
@@ -384,6 +382,8 @@
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
     [_layerBoard addSubview:control];
+}
+- (IBAction)changeBackgroundColor:(CanvasBackgroundControl *)sender {
 }
 
 @end

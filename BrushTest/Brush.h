@@ -22,6 +22,7 @@ typedef enum {
     BrushTypeOval,
     BrushTypeGradient,
     BrushTypeChineseBrush,
+    BrushTypeClear
 } BrushType;
 
 
@@ -54,5 +55,9 @@ typedef enum {
 @end
 
 @interface GradientBrush : Brush
+@end
+
+@interface ClearBrush : Brush
+
 @end
 

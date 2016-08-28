@@ -52,8 +52,8 @@ CGFloat const  DeltaWidth = 0.05;
         case BrushTypeGradient:
             brush = [[GradientBrush alloc]  initWithColor:color radius:radius];
             break;
-        default:
-            break;
+        case BrushTypeClear:
+            brush = [ [ClearBrush alloc] initWithColor:color radius:radius];
     }
     
     return brush;
@@ -392,4 +392,49 @@ CGFloat const  DeltaWidth = 0.05;
 
     return copy;
 }
+@end
+
+@implementation ClearBrush
+
+
+-(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+{
+    self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
+    return self;
+}
+
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+{
+    UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointZero radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
+    CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
+    [bpath applyTransform:translationTransform];
+
+    CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
+    UIColor *color = [UIColor colorWithWhite:1 alpha:alpha];
+    [color set];
+    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint]/2;
+    if(len == 0){
+        [bpath fill];
+        return;
+    }
+    
+    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
+    CGPoint curPoint;
+    translationTransform = CGAffineTransformMakeTranslation((toPoint.x-fromPoint.x)/len, (toPoint.y-fromPoint.y)/len);
+    for(int i = 0; i<points.count; i++){
+        [bpath fill];
+        [points[i] getValue:&curPoint];
+        [bpath applyTransform:translationTransform];
+    }
+}
+
+-(instancetype) copyWithZone:(NSZone *)zone
+{
+    ClearBrush* copy = [[ClearBrush alloc] init];
+    copy.brushType = self.brushType;
+    copy.width = self.width;
+    copy.color = [self.color copy];
+    return copy;
+}
+
 @end

@@ -12,7 +12,6 @@
 		1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2D91D649FE500C18717 /* InfColorIndicatorView.m */; };
 		1754A2E51D649FE500C18717 /* SquareColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2DD1D649FE500C18717 /* SquareColorPicker.m */; };
 		176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31301D65EEB000B9A1D6 /* PaletteViewController.m */; };
-		176C31341D6606B700B9A1D6 /* BrushSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31331D6606B700B9A1D6 /* BrushSelectViewController.m */; };
 		176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */; };
 		176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */; };
 		176C314F1D69AB5600B9A1D6 /* LayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314E1D69AB5600B9A1D6 /* LayerControl.m */; };
@@ -45,8 +44,6 @@
 		1754A2DD1D649FE500C18717 /* SquareColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareColorPicker.m; sourceTree = "<group>"; };
 		176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteViewController.h; sourceTree = "<group>"; };
 		176C31301D65EEB000B9A1D6 /* PaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteViewController.m; sourceTree = "<group>"; };
-		176C31321D6606B700B9A1D6 /* BrushSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushSelectViewController.h; sourceTree = "<group>"; };
-		176C31331D6606B700B9A1D6 /* BrushSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushSelectViewController.m; sourceTree = "<group>"; };
 		176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Brush.h"; sourceTree = "<group>"; };
 		176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Brush.m"; sourceTree = "<group>"; };
 		176C314A1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushAlphaAndWidthView.h; sourceTree = "<group>"; };
@@ -146,8 +143,6 @@
 				176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */,
 				176D11031D5CDFFB00A0DD31 /* Brush.h */,
 				176D11041D5CDFFB00A0DD31 /* Brush.m */,
-				176C31321D6606B700B9A1D6 /* BrushSelectViewController.h */,
-				176C31331D6606B700B9A1D6 /* BrushSelectViewController.m */,
 				1754A2D61D649FE500C18717 /* constants.h */,
 				1754A2D71D649FE500C18717 /* constants.m */,
 				176D11091D5CDFFB00A0DD31 /* DrawingLayer.h */,
@@ -258,7 +253,6 @@
 				176D10F41D5CDF3B00A0DD31 /* MainViewController.m in Sources */,
 				176D111B1D5CE02400A0DD31 /* Stroke.m in Sources */,
 				176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */,
-				176C31341D6606B700B9A1D6 /* BrushSelectViewController.m in Sources */,
 				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
 				17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */,
 				176C314F1D69AB5600B9A1D6 /* LayerControl.m in Sources */,
