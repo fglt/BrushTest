@@ -26,14 +26,13 @@
 
 - (instancetype)initWithSize:(CGSize)size{
     self =  [super init];
-    _contextSize = size;
     _blendMode = kCGBlendModeNormal;
-    _visable = TRUE;
+    _visible = TRUE;
     _locked = FALSE;
     _alpha = 1;
     _strokes = [NSMutableArray array];
     _layer = [CALayer layer];
-    _layer.frame = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
+    _layer.frame = CGRectMake(0, 0, size.width, size.height);
     _activity = 1;
     _abandonedStrokes = [NSMutableArray array];
     return self;
@@ -42,9 +41,8 @@
 - (void)clear
 {
     [_strokes removeAllObjects];
-    CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
     [[UIColor clearColor] set];
-    UIRectFill(rect);
+    UIRectFill(_layer.frame);
     _layer.contents = nil;
 }
 
@@ -54,9 +52,8 @@
     Stroke *stroke = [_strokes lastObject];
     [_strokes removeLastObject];
     [_abandonedStrokes addObject:stroke];
-    CGRect rect = CGRectMake(0, 0, _contextSize.width, _contextSize.height);
     [[UIColor clearColor] set];
-    UIRectFill(rect);
+    UIRectFill(_layer.frame);
     for(Stroke* stroke in _strokes){
         [stroke drawInContext];
     }
@@ -96,4 +93,13 @@
         [stroke drawInContext];
     }
 }
+
+- (void)setVisible:(BOOL)visible
+{
+    if(_visible == visible) return;
+    _visible = visible;
+    if(_visible) self.layer.opacity = 1;
+    else self.layer.opacity = 0;
+}
+
 @end

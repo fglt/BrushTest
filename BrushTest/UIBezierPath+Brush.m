@@ -22,4 +22,15 @@
     bpath.lineJoinStyle = kCGLineJoinRound;
     return bpath;
 }
+
++ (UIBezierPath*)roundBezierPathWithStartPoint:(CGPoint)startPoint width:(CGFloat)width
+{
+    UIBezierPath* bpath = [UIBezierPath bezierPath];
+    
+    [bpath moveToPoint:startPoint];
+    bpath.lineWidth = width;
+    bpath.lineCapStyle = kCGLineCapRound;
+    bpath.lineJoinStyle = kCGLineJoinRound;
+    return bpath;
+}
 @end

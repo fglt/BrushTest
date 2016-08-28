@@ -9,8 +9,6 @@
 
 #import <UIKit/UIKit.h>
 
-
-
 extern const double M_PI2;
 extern const CGFloat  MinWidth ;
 extern CGFloat const  MaxWidth ;
@@ -32,12 +30,12 @@ typedef enum {
 @property (nonatomic) BrushType brushType;
 @property (nonatomic) CGFloat MaxWidth;
 @property (nonatomic) CGFloat MinWidth;
-@property (nonatomic) UIImage* image;
 
 - (instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius;
 + (instancetype)BrushWithColor:(UIColor*)color radius:(CGFloat)radius type:(BrushType)type;
 - (UIImage*)imageFromPoint:(CGPoint)fromPoint ToPoint:(CGPoint)toPoint;
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
+- (void)drawWithPoints:(NSMutableArray *)points;
 - (void) clear;
 
 @end

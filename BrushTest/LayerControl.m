@@ -11,31 +11,79 @@
 IB_DESIGNABLE
 @implementation LayerControl
 
+static UIImage *showOnImage;
+static UIImage *showOffImage;
+static UIImage *lockImage;
+static UIImage *unlockImage;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     self.layer.borderWidth = 2;
     self.layer.borderColor = [UIColor grayColor].CGColor;
+    _visible = YES;
+    _locked =  NO;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        showOnImage = [UIImage imageNamed:@"palette_layer_show_on"];
+        showOffImage = [UIImage imageNamed:@"palette_layer_show_off"];
+        lockImage = [UIImage imageNamed:@"palette_layer_locktrans"];
+        unlockImage = [UIImage imageNamed:@"palette_layer_unlocktrans"];
+    });
     return self;
 }
 
 - (void)layoutSubviews
 {
     if( !_visableButton){
-        UIImage * visableImage = [UIImage imageNamed:@"palette_layer_show_on"];
-        _visableButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, visableImage.size.width, visableImage.size.height)];
-        [_visableButton setImage:visableImage forState:UIControlStateNormal];
+        _visableButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, showOnImage.size.width, showOnImage.size.height)];
+        [_visableButton setImage:showOnImage forState:UIControlStateNormal];
         [self addSubview:_visableButton];
+        [_visableButton addTarget:self action:@selector(visityChanged) forControlEvents:UIControlEventTouchUpInside];
     }
     
     if( !_lockButton){
-        UIImage * lockImage = [UIImage imageNamed:@"palette_layer_locktrans"];
-        _lockButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - lockImage.size.height, lockImage.size.width, lockImage.size.height)];
-        [_lockButton setImage:lockImage forState:UIControlStateNormal];
+        _lockButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - unlockImage.size.height, unlockImage.size.width, unlockImage.size.height)];
+        [_lockButton setImage:unlockImage forState:UIControlStateNormal];
         [self addSubview:_lockButton];
+        [_lockButton addTarget:self action:@selector(lockChanged) forControlEvents:UIControlEventTouchUpInside];
     }
 }
+
+- (void)visityChanged
+{
+    self.visible = !self.visible;
+}
+
+- (void)lockChanged
+{
+    self.locked = !self.locked;
+}
+
+- (void)setVisible:(BOOL)visible{
+    if(_visible != visible){
+         _visible = visible;
+        if(_visible){
+            [_visableButton setImage:showOnImage forState:UIControlStateNormal];
+        }else{
+            [_visableButton setImage:showOffImage forState:UIControlStateNormal];
+        }
+    }
+    self.drawingLayer.visible = _visible;
+}
+
+- (void)setLocked:(BOOL)locked{
+    if(_locked != locked){
+        _locked = locked;
+        if(_locked){
+            [_lockButton setImage:lockImage forState:UIControlStateNormal];
+        }else{
+            [_lockButton setImage:unlockImage forState:UIControlStateNormal];
+        }
+    }
+    self.drawingLayer.locked = _locked;
+}
+
 @end
 
 IB_DESIGNABLE
@@ -55,12 +103,13 @@ IB_DESIGNABLE
         _colorView.layer.mask = maskLayer;
         _colorView.backgroundColor = [UIColor whiteColor];
         [self addSubview:_colorView];
+        
     }
-    if( !_visableButton){
+    if( !_visibleButton){
         UIImage * visableImage = [UIImage imageNamed:@"palette_layer_show_on"];
-        _visableButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, visableImage.size.width, visableImage.size.height)];
-        [_visableButton setImage:visableImage forState:UIControlStateNormal];
-        [self addSubview:_visableButton];
+        _visibleButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, visableImage.size.width, visableImage.size.height)];
+        [_visibleButton setImage:visableImage forState:UIControlStateNormal];
+        [self addSubview:_visibleButton];
     }
 }
 

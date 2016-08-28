@@ -102,6 +102,22 @@ CGFloat const  DeltaWidth = 0.05;
     return image;
 }
 
+- (void)drawWithPoints:(NSMutableArray *)points
+{
+    CGPoint point;
+    [points[0] getValue:&point];
+    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:point width:self.width];
+    
+    for(NSValue * value in points){
+        CGPoint tmpPoint;
+        [value getValue:&tmpPoint];
+        [bpath addLineToPoint:tmpPoint];
+    }
+    
+    [_color set];
+    [bpath stroke];
+}
+
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:fromPoint endPoint:toPoint width: _width*2];
@@ -151,6 +167,22 @@ CGFloat const  DeltaWidth = 0.05;
 
 - (UIColor*)curColor{
     return [self.color colorWithAlphaComponent: 0.2 + (_curWidth- MinWidth)/(MaxWidth-MinWidth) * (CGColorGetAlpha(self.color.CGColor) -0.2)];
+}
+
+- (void)drawWithPoints:(NSMutableArray *)points
+{
+    CGPoint point;
+    [points[0] getValue:&point];
+    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:point width:self.width];
+    
+    for(NSValue * value in points){
+        CGPoint tmpPoint;
+        [value getValue:&tmpPoint];
+        [bpath addLineToPoint:tmpPoint];
+    }
+    
+    [self.color set];
+    [bpath stroke];
 }
 
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
@@ -208,28 +240,12 @@ CGFloat const  DeltaWidth = 0.05;
     return self;
 }
 
--(UIImage*) imageFromBrush
-{
-    CGSize imageSize = CGSizeMake(self.width , self.width );
-    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextClip(context);
-    
-    [self.color set];
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointZero radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
     CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
     [bpath applyTransform:translationTransform];
-    
-//    UIColor * color = [self.color colorWithAlphaComponent:4*CGColorGetAlpha(self.color.CGColor)/self.width];
-//    [color set];
+
     [self.color set];
     int len  = [self lengthFromPoint:fromPoint toPoint:toPoint]/2;
     if(len == 0){
@@ -240,12 +256,14 @@ CGFloat const  DeltaWidth = 0.05;
     NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
     CGPoint curPoint;
     translationTransform = CGAffineTransformMakeTranslation((toPoint.x-fromPoint.x)/len, (toPoint.y-fromPoint.y)/len);
+    
+    
+    
     for(int i = 0; i<points.count; i++){
-        [bpath fill];
         [points[i] getValue:&curPoint];
         [bpath applyTransform:translationTransform];
+        [bpath fill];
     }
-    
 }
 
 -(instancetype) copyWithZone:(NSZone *)zone
@@ -266,21 +284,6 @@ CGFloat const  DeltaWidth = 0.05;
 {
     self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
     return self;
-}
-
--(UIImage*)imageFromBrush
-{
-
-    CGSize imageSize = CGSizeMake(self.width , self.width/2);
-    UIGraphicsBeginImageContextWithOptions(imageSize, YES, 0.0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextClip(context);
-
-    [self.color set];
-
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
 }
 
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint

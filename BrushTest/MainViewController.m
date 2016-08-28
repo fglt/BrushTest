@@ -44,6 +44,7 @@
 @property (nonatomic) CGFloat radius;
 @property (nonatomic, strong) Canvas *canvas;
 @property (nonatomic, strong) NSMutableArray *layerControlArray;
+
 @end
 
 @implementation MainViewController
@@ -60,7 +61,7 @@
     _ColorView.layer.mask = layer;
     _ColorView.backgroundColor = _color;
     _radius = 26;
-    _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeGradient];
+    _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeCircle];
     _brushAlphaAndWidthView.radiusSlider.value = (_radius-1)/30;
     _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
     self.brushAlphaAndWidthView.hidden = YES;
@@ -279,11 +280,18 @@
 
 - (void)touchBegan:(CGPoint)point
 {
+    if(_canvas.foreLayer.locked) return;
+    if(!_canvas.foreLayer.visible){
+        [self presentVisibleAlert];
+        return;
+    }
+
     _paletteViewBoard.hidden =true;
-    
+
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
     [_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+    
 }
 
 - (void)touchMoved:(CGPoint)point
@@ -293,10 +301,36 @@
 
 - (void)touchEnded:(CGPoint)point
 {
+
     [_canvas updateWithPoint:point];
     [_canvas.foreLayer addStroke];
     
 }
+
+- (void)presentVisibleAlert
+{
+    UIAlertController *alertController =
+    [UIAlertController alertControllerWithTitle:@"当前图层已隐藏"
+                                        message:@"不能在隐藏图层上绘制。"
+                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"关闭"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    UIAlertAction *displayAction = [UIAlertAction actionWithTitle:@"显示图层"
+                                                            style:UIAlertActionStyleCancel
+                                                          handler:^(UIAlertAction * _Nonnull action) {
+                                                              _currentControl.visible = YES;
+                                                          }];
+    [alertController addAction:displayAction];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:TRUE completion:nil];
+    
+}
+
 
 #pragma mark - layerEditView layerborad
 - (IBAction)clickLayerEditButton:(UIButton *)sender {
@@ -383,7 +417,9 @@
     self.currentControl = control;
     [_layerBoard addSubview:control];
 }
+
 - (IBAction)changeBackgroundColor:(CanvasBackgroundControl *)sender {
+    
 }
 
 @end

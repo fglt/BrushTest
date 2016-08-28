@@ -120,9 +120,17 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		175BE81F1D72C0E30033EDCE /* modal */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = modal;
+			sourceTree = "<group>";
+		};
 		176D10E01D5CDF3B00A0DD31 = {
 			isa = PBXGroup;
 			children = (
+				175BE81F1D72C0E30033EDCE /* modal */,
 				176D10EB1D5CDF3B00A0DD31 /* BrushTest */,
 				176D10EA1D5CDF3B00A0DD31 /* Products */,
 			);

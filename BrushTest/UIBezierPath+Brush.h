@@ -10,4 +10,5 @@
 
 @interface UIBezierPath (Brush)
 + (UIBezierPath*)roundBezierPathWithStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint width:(CGFloat)width;
++ (UIBezierPath*)roundBezierPathWithStartPoint:(CGPoint)startPoint width:(CGFloat)width;
 @end

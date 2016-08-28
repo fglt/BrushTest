@@ -54,29 +54,6 @@
     [_foreLayer redo];
 }
 
-//- (void)imageFromContext;
-//{
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-//        CGRect rect = CGRectMake(0, 0, _canvasSize.width, _canvasSize.height);
-//        UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-//        [_backgroundColor set];
-//        UIRectFill(rect);
-//        
-//        for(DrawingLayer *layer in _drawingLayers){
-//            if(layer.visable){
-//                [layer.image drawInRect:rect blendMode:layer.blendMode alpha:layer.alpha];
-//            }
-//        }
-//        
-//        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            _image = image;
-//        });
-//    });
-//}
-
 - (u_long)layerCount{
     return _drawingLayers.count;
 }
@@ -84,7 +61,6 @@
 - (void) updateWithPoint:(CGPoint)point
 {
     [_foreLayer updateStrokeWithPoint:point];
-    //[self imageFromContext];
 }
 
 - (void) setForeLayer:(DrawingLayer *)foreLayer

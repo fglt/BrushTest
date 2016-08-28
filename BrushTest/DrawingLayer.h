@@ -10,9 +10,8 @@
 @class Brush;
 
 @interface DrawingLayer : NSObject
-@property (nonatomic) CGSize contextSize;
 @property (nonatomic) CGBlendMode blendMode;
-@property (nonatomic) BOOL visable;
+@property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL locked;
 @property (nonatomic) CGFloat alpha;
 @property (nonatomic) BOOL activity;
