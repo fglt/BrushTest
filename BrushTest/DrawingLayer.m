@@ -24,6 +24,25 @@
     return layer;
 }
 
++ (instancetype)drawingLayerWithDictionary:(NSDictionary *)dict size:(CGSize)size
+{
+    NSMutableArray *strokes = [NSMutableArray array];
+    NSArray *strokedict =dict[@"strokes"];
+    for(NSDictionary *dict in strokedict){
+        Stroke *stroke = [Stroke strokeWithDictionary:dict];
+        [strokes addObject:stroke];
+    }
+    
+    DrawingLayer *dlayer = [[DrawingLayer alloc]initWithSize:size];
+    dlayer.blendMode = [dict[@"blendMode"] intValue];
+    dlayer.visible = [dict[@"visible"] boolValue];
+    dlayer.locked = [dict[@"locked"] boolValue];
+    dlayer.alpha = [dict[@"alpha"] doubleValue];
+    dlayer.strokes = strokes;
+    dlayer.layer.opacity = dlayer.alpha;
+    return dlayer;
+}
+
 - (instancetype)initWithSize:(CGSize)size{
     self =  [super init];
     _blendMode = kCGBlendModeNormal;
@@ -99,7 +118,7 @@
 {
     if(_visible == visible) return;
     _visible = visible;
-    if(_visible) self.layer.opacity = 1;
+    if(_visible) self.layer.opacity = self.alpha;
     else self.layer.opacity = 0;
 }
 
@@ -114,22 +133,9 @@
     return dict;
 }
 
-+ (instancetype)drawingLayerWithDictionary:(NSDictionary *)dict size:(CGSize)size
+- (void)setAlpha:(CGFloat)alpha
 {
-    NSMutableArray *strokes = [NSMutableArray array];
-    NSArray *strokedict =dict[@"strokes"];
-    for(NSDictionary *dict in strokedict){
-        Stroke *stroke = [Stroke strokeWithDictionary:dict];
-        [strokes addObject:stroke];
-    }
-    
-    DrawingLayer *dlayer = [[DrawingLayer alloc]initWithSize:size];
-    dlayer.blendMode = [dict[@"blendMode"] intValue];
-    dlayer.visible = [dict[@"visible"] boolValue];
-    dlayer.locked = [dict[@"locked"] boolValue];
-    dlayer.alpha = [dict[@"alpha"] doubleValue];
-    dlayer.strokes = strokes;
-    
-    return dlayer;
+    _alpha = alpha;
+    self.layer.opacity = alpha;
 }
 @end

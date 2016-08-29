@@ -13,4 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *merge;
 @property (weak, nonatomic) IBOutlet UIButton *del;
 @property (weak, nonatomic) IBOutlet UIButton *mergeAll;
+@property (weak, nonatomic) IBOutlet UISlider *alphaSlider;
+@property (weak, nonatomic) IBOutlet UILabel *alphaLabel;
 @end

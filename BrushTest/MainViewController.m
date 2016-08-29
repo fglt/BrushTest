@@ -120,6 +120,7 @@
 {
     NSString *text = [NSString stringWithFormat:@"图层 %lu / %ld", [_layerControlArray indexOfObject:_currentControl] + 1, _layerControlArray.count];
     _layerEditView.title.text = text;
+    _layerEditView.alphaSlider.value = _currentControl.drawingLayer.alpha;
     if(_layerControlArray.count==1){
         _layerEditView.merge.activity = false;
         _layerEditView.del.activity = false ;
@@ -468,6 +469,7 @@
 }
 - (IBAction)changeLayerAlpha:(UISlider *)sender {
     _currentControl.drawingLayer.alpha = sender.value;
+    _layerEditView.alphaLabel.text = [NSString stringWithFormat:@"%d %%",(int)(sender.value * 100)];
 }
 
 @end
