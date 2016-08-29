@@ -10,7 +10,6 @@
 #import "Stroke.h"
 
 @interface DrawingLayer()
-@property (nonatomic, strong) NSMutableArray *strokes;
 @property (nonatomic, strong) NSMutableArray *abandonedStrokes;
 @property (nonatomic, strong) Stroke* currentStroke;
 @end
@@ -36,7 +35,7 @@
     dlayer.visible = [dict[@"visible"] boolValue];
     dlayer.locked = [dict[@"locked"] boolValue];
     dlayer.alpha = [dict[@"alpha"] doubleValue];
-    dlayer.strokes = strokes;
+    [dlayer addStrokes:strokes];
     dlayer.layer.opacity = dlayer.alpha;
     return dlayer;
 }
@@ -62,7 +61,7 @@
     copy.visible = _visible;
     copy.locked = _locked;
     copy.alpha = _alpha;
-    copy.strokes = [_strokes mutableCopy];
+    [copy addStrokes:_strokes];
     copy.layer.opacity = _alpha;
     
     return copy;
@@ -148,5 +147,15 @@
 {
     _alpha = alpha;
     self.layer.opacity = alpha;
+}
+
+- (void)addStrokes:(NSArray *)strokes
+{
+    for(Stroke *stroke in strokes)
+    {
+        [stroke drawInContext];
+        [_strokes addObject:stroke];
+    }
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 @end

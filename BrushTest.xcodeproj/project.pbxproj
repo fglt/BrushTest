@@ -15,6 +15,7 @@
 		175BE82B1D731B880033EDCE /* CanvasBL.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE82A1D731B880033EDCE /* CanvasBL.m */; };
 		175BE82E1D7331D30033EDCE /* DrawingLayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */; };
 		175BE8341D7420FE0033EDCE /* UIColor+FGTColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */; };
+		175BE8371D747AEC0033EDCE /* DrawingLayerPasteBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE8361D747AEC0033EDCE /* DrawingLayerPasteBoard.m */; };
 		176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31301D65EEB000B9A1D6 /* PaletteViewController.m */; };
 		176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */; };
 		176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */; };
@@ -54,6 +55,8 @@
 		175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingLayerModel.m; sourceTree = "<group>"; };
 		175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+FGTColor.h"; sourceTree = "<group>"; };
 		175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+FGTColor.m"; sourceTree = "<group>"; };
+		175BE8351D747AEC0033EDCE /* DrawingLayerPasteBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLayerPasteBoard.h; sourceTree = "<group>"; };
+		175BE8361D747AEC0033EDCE /* DrawingLayerPasteBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingLayerPasteBoard.m; sourceTree = "<group>"; };
 		176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteViewController.h; sourceTree = "<group>"; };
 		176C31301D65EEB000B9A1D6 /* PaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteViewController.m; sourceTree = "<group>"; };
 		176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Brush.h"; sourceTree = "<group>"; };
@@ -188,6 +191,8 @@
 				17C7CD031D6CA4CC00E5D47B /* Canvas.m */,
 				176D10EC1D5CDF3B00A0DD31 /* Supporting Files */,
 				1754A2E71D649FFC00C18717 /* View */,
+				175BE8351D747AEC0033EDCE /* DrawingLayerPasteBoard.h */,
+				175BE8361D747AEC0033EDCE /* DrawingLayerPasteBoard.m */,
 			);
 			path = BrushTest;
 			sourceTree = "<group>";
@@ -299,6 +304,7 @@
 				176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */,
 				176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */,
 				17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */,
+				175BE8371D747AEC0033EDCE /* DrawingLayerPasteBoard.m in Sources */,
 				1754A2E21D649FE500C18717 /* constants.m in Sources */,
 				176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */,
 			);

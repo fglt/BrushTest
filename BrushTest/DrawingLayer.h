@@ -16,10 +16,12 @@
 @property (nonatomic) CGFloat alpha;
 //@property (nonatomic) BOOL activity;
 @property (nonatomic, strong) CALayer *layer;
+@property (nonatomic, strong, readonly) NSMutableArray *strokes;
 
 //- (UIImage *)imageFromeContext;
 - (void)newStrokeWithBrush:(Brush*)brush;
 - (void)addStroke;
+- (void)addStrokes:(NSArray *)strokes;
 - (instancetype)initWithSize:(CGSize)size;
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 - (void)clear;

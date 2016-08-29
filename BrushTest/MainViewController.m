@@ -46,6 +46,7 @@
 @property (nonatomic, strong) Canvas *canvas;
 @property (nonatomic, strong) NSMutableArray *layerControlArray;
 @property (nonatomic, strong) CanvasDao *canvasDao;
+@property (nonatomic, strong) DrawingLayer *drawingLayerForPaste;
 
 @end
 
@@ -172,19 +173,19 @@
 - (IBAction)clickClear:(UIButton *)sender
 {
     [_canvas clear];
-     _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
+    [_currentControl updateContents];
 }
 
 - (IBAction)clickUndo:(UIButton *)sender
 {
     [_canvas undo];
-     _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
+     [_currentControl updateContents];
 }
 
 - (IBAction)clickRedo:(UIButton *)sender
 {
     [_canvas redo];
-     _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
+    [_currentControl updateContents];
 }
 
 - (IBAction)clickFullScreen:(UIView *)sender
@@ -344,7 +345,7 @@
     [_canvas updateWithPoint:point];
     [_canvas.currentDrawingLayer addStroke];
     [_canvasDao modify:_canvas];
-    _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
+    [_currentControl updateContents];
 }
 
 - (void)presentVisibleAlert
@@ -381,10 +382,16 @@
     NSUInteger index = [_layerControlArray indexOfObject:_currentControl];
     switch (sender.tag) {
         case 30:
+            _drawingLayerForPaste = [_canvas.currentDrawingLayer copy];
             break;
         case 31:
+            _drawingLayerForPaste = [_canvas.currentDrawingLayer copy];
+            [_canvas.currentDrawingLayer clear];
+            [_currentControl updateContents];
             break;
         case 32:
+            [_canvas.currentDrawingLayer addStrokes:_drawingLayerForPaste.strokes];
+            [_currentControl updateContents];
             break;
         case 33:
             _layerEditView.hidden = YES;
@@ -396,7 +403,7 @@
             break;
         case 34:
             [_currentControl.drawingLayer clear];
-            _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
+            [_currentControl updateContents];
             break;
         case 35:{
             self.currentControl = _layerControlArray[index-1];

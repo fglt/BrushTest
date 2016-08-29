@@ -33,6 +33,10 @@ static UIImage *unlockImage;
     return self;
 }
 
+- (void) updateContents
+{
+    self.layer.contents = _drawingLayer.layer.contents;
+}
 - (void)layoutSubviews
 {
     if( !_visableButton){

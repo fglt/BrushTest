@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UILabel *mixMode;
 @property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL locked;
+- (void)updateContents;
 @end
 
 @interface CanvasBackgroundControl : UIControl
