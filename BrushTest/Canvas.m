@@ -95,15 +95,12 @@
 
 - (void) setCurrentDrawingLayer:(DrawingLayer *)layer
 {
-    if(!_currentDrawingLayer){
-        _currentDrawingLayer = layer;
-        return;
-    }
     if(_currentDrawingLayer != layer){
         _currentDrawingLayer = layer;
         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-        [_currentDrawingLayer.layer renderInContext:UIGraphicsGetCurrentContext()];
+        [_currentDrawingLayer drawInContext];
+        layer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
     }
 }
 

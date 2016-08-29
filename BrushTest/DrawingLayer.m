@@ -13,8 +13,6 @@
 @property (nonatomic, strong) NSMutableArray *strokes;
 @property (nonatomic, strong) NSMutableArray *abandonedStrokes;
 @property (nonatomic, strong) Stroke* currentStroke;
-@property (nonatomic) CGContextRef context;
-
 @end
 
 @implementation DrawingLayer
@@ -55,6 +53,19 @@
     //_activity = 1;
     _abandonedStrokes = [NSMutableArray array];
     return self;
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    DrawingLayer *copy = [DrawingLayer drawingLayerWithSize:_layer.frame.size];
+    copy.blendMode = _blendMode;
+    copy.visible = _visible;
+    copy.locked = _locked;
+    copy.alpha = _alpha;
+    copy.strokes = [_strokes mutableCopy];
+    copy.layer.opacity = _alpha;
+    
+    return copy;
 }
 
 - (void)clear

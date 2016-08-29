@@ -387,8 +387,16 @@
         case 32:
             break;
         case 33:
+            _layerEditView.hidden = YES;
+            if(_layerControlArray.count<3){
+                DrawingLayer *layer = [_canvas.currentDrawingLayer copy];
+                [self addDrawingLayer:layer];
+            }
+//            _canvas.currentDrawingLayer.
             break;
         case 34:
+            [_currentControl.drawingLayer clear];
+            _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
             break;
         case 35:{
             self.currentControl = _layerControlArray[index-1];
@@ -461,6 +469,20 @@
 - (void)addDrawingLayer
 {
     [_canvas addLayer];
+    [_canvasView.layer addSublayer:_canvas.currentDrawingLayer.layer];
+    CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
+    LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+    [_layerControlArray addObject:control];
+    control.drawingLayer = _canvas.currentDrawingLayer;
+    control.layer.contents = control.drawingLayer.layer.contents;
+    [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
+    self.currentControl = control;
+    [_layerBoard addSubview:control];
+}
+
+- (void)addDrawingLayer:(DrawingLayer *)dlayer
+{
+    [_canvas addLayer:dlayer];
     [_canvasView.layer addSublayer:_canvas.currentDrawingLayer.layer];
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];

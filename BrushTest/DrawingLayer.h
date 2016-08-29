@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class Brush;
 
-@interface DrawingLayer : NSObject
+@interface DrawingLayer : NSObject<NSCopying>
 @property (nonatomic) CGBlendMode blendMode;
 @property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL locked;
