@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString *canvasName;
 @property (nonatomic, strong) Brush* currentBrush;
 @property (nonatomic) CGSize canvasSize;
-@property (nonatomic, strong) NSMutableArray<DrawingLayer *> *drawingLayers;
+@property (nonatomic, strong) NSMutableArray *drawingLayers;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
 - (void)clear;

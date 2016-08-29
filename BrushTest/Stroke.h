@@ -11,7 +11,7 @@
 
 @interface Stroke : NSObject
 @property (nonatomic, strong) Brush* brush;
-@property (nonatomic, strong) NSMutableArray<NSValue *>* points;
+@property (nonatomic, strong) NSMutableArray* points;
 
 - (instancetype)initWithBrush:(Brush*)brush;
 - (void)addPoint:(CGPoint)point;

@@ -29,7 +29,13 @@
 {
     Stroke *stroke=[[Stroke alloc] init];
     stroke.brush = [Brush BrushWithDictionary:dict[@"brush"]];
-    stroke.points = dict[@"points"];
+    NSArray *p = dict[@"points"];
+    NSMutableArray *points = [NSMutableArray array];
+    for (NSString *pstr in p) {
+        NSValue *value = [NSValue valueWithCGPoint:CGPointFromString(pstr)];
+        [points addObject:value];
+    }
+    stroke.points = points;
     return stroke;
 }
 
@@ -58,7 +64,13 @@
 
 - (NSDictionary *)dictionary
 {
-    NSDictionary *dict = @{@"brush":_brush.dictionary, @"points":_points};
+    NSMutableArray *stringArray = [NSMutableArray array];
+    for(NSValue *value in _points){
+        CGPoint point;
+        [value getValue:&point];
+        [stringArray addObject:NSStringFromCGPoint(point)];
+    }
+    NSDictionary *dict = @{@"brush":_brush.dictionary, @"points":stringArray};
     return dict;
 }
 @end

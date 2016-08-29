@@ -19,6 +19,7 @@
 #import "Canvas.h"
 #import "LayerEditView.h"
 #import "UIView+FGTDrawing.h"
+#import "CanvasDao.h"
 
 @interface MainViewController ()<PaletteViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
@@ -44,6 +45,7 @@
 @property (nonatomic) CGFloat width;
 @property (nonatomic, strong) Canvas *canvas;
 @property (nonatomic, strong) NSMutableArray *layerControlArray;
+@property (nonatomic, strong) CanvasDao *canvasDao;
 
 @end
 
@@ -52,7 +54,6 @@
 
 - (void)start
 {
-    _color =  [UIColor redColor];
     _layerControlArray = [NSMutableArray array];
     
     CALayer *layer = [CALayer layer];
@@ -60,11 +61,8 @@
     layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
     _ColorView.layer.mask = layer;
     _ColorView.backgroundColor = _color;
-    _width = 26;
-    _brush = [Brush BrushWithColor:_color width:_width type:BrushTypeCircle];
-    _brushAlphaAndWidthView.radiusSlider.value = (_width-1)/30;
-    _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
     self.brushAlphaAndWidthView.hidden = YES;
+    _canvasDao = [CanvasDao sharedManager];
 }
 
 - (void)addPaletteView
@@ -81,16 +79,39 @@
 
 - (void)addCanvasView
 {
-    _canvas = [[Canvas alloc] initWithSize:self.view.bounds.size];
-    _canvasView = [[CanvasView alloc] initWithFrame:self.view.bounds];
-    _canvas.backgroundColor = [UIColor whiteColor];
-    _canvas.canvasSize = _canvasView.bounds.size;
-    _canvas.currentBrush = _brush;
+
+    _canvas = [_canvasDao tempCanvs];
+    if(!_canvas){
+        _canvas = [[Canvas alloc]initWithSize:self.view.bounds.size];
+        [_canvasDao create:_canvas];
+    }
+    CGSize screenSize = self.view.bounds.size;
+    _canvasView = [[CanvasView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
     _canvasView.delegate = self;
-    [self addDrawingLayer];
-    
+    [self updateLayers];
     
     [self.view insertSubview:_canvasView atIndex:0];
+    
+    _brush = _canvas.currentBrush;
+    _width = _brush.width;
+    _color = _brush.color;
+    _type = _brush.brushType;
+    _brushAlphaAndWidthView.radiusSlider.value = (_width-1)/30;
+    _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
+}
+
+- (void) updateLayers
+{
+    for (DrawingLayer *dlayer in _canvas.drawingLayers) {
+        [_canvasView.layer addSublayer:dlayer.layer];
+        CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
+        LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
+        [_layerControlArray addObject:control];
+        control.drawingLayer = dlayer;
+        [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
+        [_layerBoard addSubview:control];
+    }
+     self.currentControl = _layerControlArray[_layerControlArray.count -1];
 }
 
 - (void)configLayerEditView
@@ -117,7 +138,6 @@
     [self start];
     [self addCanvasView];
     [self addPaletteView];
-    //[self addBrushView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -140,18 +160,27 @@
 }
 
 #pragma mark - toolbarView events
+
+- (IBAction)clickMenu:(UIButton *)sender
+{
+    [_canvasDao saveToFile:_canvas];
+}
+
 - (IBAction)clickClear:(UIButton *)sender
 {
     [_canvas clear];
 }
+
 - (IBAction)clickUndo:(UIButton *)sender
 {
     [_canvas undo];
 }
+
 - (IBAction)clickRedo:(UIButton *)sender
 {
     [_canvas redo];
 }
+
 - (IBAction)clickFullScreen:(UIView *)sender
 {
     if(_toolbarView.hidden){
@@ -241,6 +270,8 @@
     self.color = [color copy];
     _ColorView.layer.backgroundColor = color.CGColor;
     self.brush.color = self.color;
+    _brush = [Brush BrushWithColor:_color width:_width type:_type];
+    _canvas.currentBrush = _brush;
 }
 
 - (UIColor *)currentColor
@@ -304,7 +335,7 @@
 
     [_canvas updateWithPoint:point];
     [_canvas.currentDrawingLayer addStroke];
-    
+    [_canvasDao modify:_canvas];
 }
 
 - (void)presentVisibleAlert

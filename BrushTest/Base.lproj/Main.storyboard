@@ -145,6 +145,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Geq-gn-j9y" userLabel="menu">
                                                 <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                                 <state key="normal" backgroundImage="toolbar_menu"/>
+                                                <connections>
+                                                    <action selector="clickMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jck-iR-opb"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bMY-tm-zbg" userLabel="undo">
                                                 <rect key="frame" x="52" y="0.0" width="44" height="44"/>

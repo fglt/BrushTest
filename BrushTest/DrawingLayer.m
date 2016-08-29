@@ -92,6 +92,7 @@
     for(Stroke* stroke in _strokes){
         [stroke drawInContext];
     }
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 - (void)setVisible:(BOOL)visible
@@ -109,7 +110,7 @@
         NSDictionary *dict = stroke.dictionary;
         [strokesArray addObject:dict];
     }
-    NSDictionary *dict = @{@"blendMode":[NSNumber numberWithInteger:_blendMode], @"visible":[NSNumber numberWithBool:_visible], @"locked":[NSNumber numberWithBool:_locked], @"alpha":[NSNumber numberWithBool:_alpha], @"strokes":strokesArray };
+    NSDictionary *dict = @{@"blendMode":[NSNumber numberWithInteger:_blendMode], @"visible":[NSNumber numberWithBool:_visible], @"locked":[NSNumber numberWithBool:_locked], @"alpha":[NSNumber numberWithDouble:_alpha], @"strokes":strokesArray };
     return dict;
 }
 

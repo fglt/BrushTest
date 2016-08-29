@@ -68,8 +68,8 @@ CGFloat const  DeltaWidth = 0.05;
     CGFloat width;
     type = [dict[@"type"] unsignedIntValue];
     width = [dict[@"width"] doubleValue];
-    NSString *colorStr = dict[@"color"];
-    color = UIColorFromRGBA([colorStr integerValue]);
+    uint32_t i = [dict[@"color"] unsignedIntValue];
+    color = [UIColor colorWithUint32:i];
     switch (type) {
         case BrushTypeChineseBrush:
             brush = [[ChineseBrush alloc] initWithColor:color width:width];
@@ -95,8 +95,7 @@ CGFloat const  DeltaWidth = 0.05;
 //    CGFloat r,g,b,a;
 //    [_color getRed:&r green:&g blue:&b alpha:&a];
 //    NSArray *colorArray = @[[NSNumber numberWithFloat:r],[NSNumber numberWithFloat:g],[NSNumber numberWithFloat:b],[NSNumber numberWithFloat:a]];
-    NSString *colorStr = [UIColor hexStringFromRGBAColor:_color];
-    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[[NSNumber numberWithUnsignedInteger:_brushType], colorStr, [NSNumber numberWithDouble:_width]] forKeys:@[@"type", @"color", @"width"] ];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[[NSNumber numberWithUnsignedInteger:_brushType], [UIColor numberFromRGBAColor:_color], [NSNumber numberWithDouble:_width]] forKeys:@[@"type", @"color", @"width"] ];
     
     return dict;
 }
@@ -203,7 +202,7 @@ CGFloat const  DeltaWidth = 0.05;
 {
     self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     _curWidth =  MIN(MaxWidth,self.width);
-    
+    self.brushType = BrushTypeChineseBrush;
     return self;
 }
 
@@ -279,6 +278,7 @@ CGFloat const  DeltaWidth = 0.05;
 -(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
     self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
+    self.brushType = BrushTypeCircle;
     return self;
 }
 
@@ -325,6 +325,7 @@ CGFloat const  DeltaWidth = 0.05;
 -(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
     self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
+    self.brushType = BrushTypeOval;
     return self;
 }
 
@@ -380,6 +381,7 @@ CGFloat const  DeltaWidth = 0.05;
 -(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
     self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
+    self.brushType = BrushTypeGradient;
     return self;
 }
 
@@ -439,12 +441,14 @@ CGFloat const  DeltaWidth = 0.05;
 }
 @end
 
+#pragma mark - ClearBrush
 @implementation ClearBrush
 
 
 -(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
     self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
+    self.brushType =  BrushTypeClear;
     return self;
 }
 

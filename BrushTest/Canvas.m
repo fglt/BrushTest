@@ -18,7 +18,11 @@
     self= [super init];
     _canvasName = [NSString stringWithFormat:@"%@",[NSDate date]];
     _canvasSize = size;
+    _backgroundColor = [UIColor whiteColor];
     _drawingLayers = [NSMutableArray array];
+     _currentDrawingLayer = [DrawingLayer drawingLayerWithSize:_canvasSize];
+    [_drawingLayers addObject:_currentDrawingLayer];
+    _currentBrush = [Brush BrushWithColor:[UIColor redColor] width:26 type:BrushTypeCircle];
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
     return self;
 }
@@ -27,16 +31,23 @@
 {
     Canvas* canvas = [[Canvas alloc] init];
     canvas.canvasName = dict[@"name"];
-    CGSize size;
-    [dict[@"size"] getValue:&size];
-    canvas.canvasSize = size;
-    canvas.backgroundColor = UIColorFromRGBA([dict[@"color"] integerValue]);
-    NSMutableArray *array = dict[@"layers"];
+    canvas.canvasSize = CGSizeFromString(dict[@"size"]);
+    uint32_t i = [dict[@"color"] unsignedIntValue];
+    canvas.backgroundColor = [UIColor colorWithUint32:i];
+    canvas.currentBrush = [Brush BrushWithDictionary:dict[@"brush"]];
+    NSArray *array = dict[@"layers"];
+    NSMutableArray *layerArray = [NSMutableArray array];
+   UIGraphicsBeginImageContextWithOptions(canvas.canvasSize, NO, 0.0);
     for (NSDictionary *dict in array) {
-        DrawingLayer *layer = [DrawingLayer drawingLayerWithDictionary:dict size:size];
-        [array addObject:layer];
+        DrawingLayer *layer = [DrawingLayer drawingLayerWithDictionary:dict size:canvas.canvasSize];
+        [[UIColor clearColor] set];
+        UIRectFill(CGRectMake(0, 0, canvas.canvasSize.width, canvas.canvasSize.height));
+        [layer drawInContext];
+        [layerArray addObject:layer];
     }
-    canvas.drawingLayers = array;
+    canvas.drawingLayers = layerArray;
+    
+    canvas.currentDrawingLayer = canvas.drawingLayers[canvas.drawingLayers.count-1];
     return canvas;
 }
 
@@ -84,6 +95,10 @@
 
 - (void) setCurrentDrawingLayer:(DrawingLayer *)layer
 {
+    if(!_currentDrawingLayer){
+        _currentDrawingLayer = layer;
+        return;
+    }
     if(_currentDrawingLayer != layer){
         _currentDrawingLayer = layer;
         UIGraphicsEndImageContext();
@@ -99,7 +114,7 @@
         NSDictionary *dict = layer.dictionary;
         [layerArray addObject:dict];
     }
-    NSDictionary *dict = @{@"size":[NSValue valueWithCGSize:_canvasSize], @"color":[UIColor hexStringFromRGBAColor:_backgroundColor], @"layers":layerArray, @"name":_canvasName};
+    NSDictionary *dict = @{ @"name":_canvasName, @"size":NSStringFromCGSize(_canvasSize), @"color":[UIColor numberFromRGBAColor:_backgroundColor], @"brush":_currentBrush.dictionary, @"layers":layerArray};
     return dict;
 }
 @end

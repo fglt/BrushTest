@@ -17,19 +17,19 @@
 
 + (CanvasDao*)sharedManager;
 
-//插入Note方法
--(int) create:(Canvas*)model;
+- (Canvas *)tempCanvs;
+- (int)create:(Canvas*)model;
 
-//删除Note方法
--(int) remove:(Canvas*)model;
 
-//修改Note方法
--(int) modify:(Canvas*)model;
+- (int)remove:(Canvas*)model;
 
-//查询所有数据方法
--(NSMutableArray*) findAll;
 
-//按照主键查询数据方法
--(Canvas*) findByName:(Canvas*)model;
+- (int)modify:(Canvas*)model;
 
+- (NSMutableArray*)findAll;
+
+
+- (Canvas*)findByName:(Canvas*)model;
+
+- (void)saveToFile:(Canvas *)model;
 @end

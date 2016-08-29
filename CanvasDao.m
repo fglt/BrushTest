@@ -32,14 +32,30 @@ static CanvasDao *sharedManager;
         
         if(sharedManager.listData  == nil)
             sharedManager.listData = [NSMutableArray array];
+        
+        fileExits = [manager fileExistsAtPath:sharedManager.tempCanvasFilePath];
+        if(fileExits){
+            sharedManager.canvasDictionary = [NSDictionary dictionaryWithContentsOfFile:sharedManager.tempCanvasFilePath];
+        }
     });
     return sharedManager;
 }
 
+-(Canvas *) tempCanvs
+{
+    Canvas *canvas;
+    
+    if(_canvasDictionary){
+        canvas = [Canvas canvasWithDictionary:_canvasDictionary];
+    }
+    return canvas;
+}
+
 -(int) create:(Canvas*)model
 {
-    sharedManager.canvasDictionary = model.dictionary;
-    return [sharedManager.listData writeToFile:_tempCanvasFilePath atomically:YES];
+    _canvasDictionary = model.dictionary;
+    [_canvasDictionary writeToFile:_tempCanvasFilePath atomically:YES];
+    return 0;
 }
 
 -(int) remove:(Canvas*)model
@@ -60,13 +76,9 @@ static CanvasDao *sharedManager;
 
 -(int) modify:(Canvas*)model
 {
-    [_listData enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if([obj isEqualToString:model.canvasName]){
-            NSString *path = [_dir  stringByAppendingPathComponent:[obj stringByAppendingPathExtension:@"plist"]];
-            [_canvasDictionary writeToFile:path atomically:YES];
-            *stop = TRUE;
-        }
-    }];
+    _canvasDictionary = model.dictionary;
+
+    [_canvasDictionary writeToFile:_tempCanvasFilePath atomically:YES];
     
     return 0;
 }
@@ -97,6 +109,16 @@ static CanvasDao *sharedManager;
     }];
     
     return [Canvas canvasWithDictionary:dict];
+}
+
+- (void)saveToFile:(Canvas *)model
+{
+    _canvasDictionary = model.dictionary;
+    NSString *path = [_dir stringByAppendingPathComponent:[model.canvasName stringByAppendingPathExtension:@"plist"]];
+    [_canvasDictionary writeToFile:path atomically:YES];
+    [_canvasDictionary writeToFile:TempCanvasFileName atomically:YES];
+    [_listData addObject:model.canvasName];
+    [_listData writeToFile:CanvasNameFileName atomically:YES];
 }
 
 @end
