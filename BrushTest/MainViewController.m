@@ -232,7 +232,7 @@
         self.paletteViewBoard.hidden = true;
     }else{
         [self dispalyPaletteView];
-        [_paletteViewController setLastColor:_color];
+        [_paletteViewController setLastColor:[_color colorWithAlphaComponent:1]];
     }
 }
 - (IBAction)brushSlider:(UISlider *)sender {
