@@ -333,12 +333,14 @@
 
 - (void)touchMoved:(CGPoint)point
 {
+    if(_canvas.currentDrawingLayer.locked) return;
+
     [_canvas updateWithPoint:point];
 }
 
 - (void)touchEnded:(CGPoint)point
 {
-
+    if(_canvas.currentDrawingLayer.locked) return;
     [_canvas updateWithPoint:point];
     [_canvas.currentDrawingLayer addStroke];
     [_canvasDao modify:_canvas];
