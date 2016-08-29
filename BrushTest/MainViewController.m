@@ -412,6 +412,7 @@
             [_layerControlArray[index] removeFromSuperview];
             [_layerControlArray removeObjectAtIndex:index];
             [self reloadLayerBoard];
+            [_currentControl updateContents];
             break;
         }
         case 36:
@@ -422,7 +423,7 @@
                 [_layerControlArray[1] removeFromSuperview];
                 [_layerControlArray removeObjectAtIndex:1];
             }
-            
+            [_currentControl updateContents];
             break;
         case 37:{
             if(_layerControlArray.count ==  1)break;
@@ -434,7 +435,7 @@
             [self reloadLayerBoard];
             if(index>0) index--;
             self.currentControl = [_layerControlArray objectAtIndex:index];
-
+            
             break;
         }
         default:
@@ -481,7 +482,7 @@
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
     control.drawingLayer = _canvas.currentDrawingLayer;
-    control.layer.contents = control.drawingLayer.layer.contents;
+    [control updateContents];
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
     [_layerBoard addSubview:control];
@@ -495,7 +496,7 @@
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
     control.drawingLayer = _canvas.currentDrawingLayer;
-    control.layer.contents = control.drawingLayer.layer.contents;
+    [control updateContents];
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
     [_layerBoard addSubview:control];
