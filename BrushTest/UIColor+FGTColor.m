@@ -25,12 +25,7 @@
     if (self) {
         CGFloat rgba[4];
         [self getRed:rgba green:rgba+1 blue:rgba+2 alpha:rgba+3];
-        uint32_t rgb[4];
-        rgb[0] = rgba[0] *255;
-        rgb[1] = rgba[1] *255;
-        rgb[2] = rgba[2] *255;
-        rgb[3] = rgba[3] *255;
-        c = (rgb[0]<<24)|(rgb[1]<<16)|(rgb[2]<<8)|(rgb[3]);
+        c = ((uint32_t)(rgba[0] *255)<<24)|((uint32_t)(rgba[1] *255)<<16)|((uint32_t)(rgba[2] *255)<<8)|((uint32_t)(rgba[3] *255));
     }
     return [NSNumber numberWithUnsignedInt:c];
 }

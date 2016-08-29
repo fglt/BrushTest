@@ -28,5 +28,7 @@
 - (void) updateWithPoint:(CGPoint)point;
 - (NSDictionary *)dictionary;
 + (instancetype) canvasWithDictionary:(NSDictionary *)dict;
-- (void)mixAll;
+- (void)mergeAllLayers;
+- (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index;
+- (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer;
 @end

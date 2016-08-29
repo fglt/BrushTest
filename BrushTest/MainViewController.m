@@ -388,12 +388,18 @@
             break;
         case 34:
             break;
-        case 35:
-            
+        case 35:{
+            self.currentControl = _layerControlArray[index-1];
+
+            [_canvas mergeCurrentToDownLayerWithIndex:index];
+            [_layerControlArray[index] removeFromSuperview];
+            [_layerControlArray removeObjectAtIndex:index];
+            [self reloadLayerBoard];
             break;
+        }
         case 36:
             self.currentControl = _layerControlArray[0];
-            [_canvas mixAll];
+            [_canvas mergeAllLayers];
             
             while (_layerControlArray.count >1) {
                 [_layerControlArray[1] removeFromSuperview];

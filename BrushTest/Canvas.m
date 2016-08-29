@@ -118,7 +118,7 @@
     return dict;
 }
 
-- (void)mixAll
+- (void)mergeAllLayers
 {
     self.currentDrawingLayer = _drawingLayers[0];
     while (_drawingLayers.count >1) {
@@ -130,5 +130,23 @@
         [_drawingLayers removeObjectAtIndex:1];
     }
     _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+}
+
+- (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index
+{
+    NSAssert(index > 0, @"index of drawing layer = 0");
+    self.currentDrawingLayer = _drawingLayers[index-1];
+    DrawingLayer *dlayer = _drawingLayers[index];
+    CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
+    UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    [image drawAtPoint:CGPointZero blendMode:dlayer.blendMode alpha:dlayer.alpha];
+    [dlayer.layer removeFromSuperlayer];
+    [_drawingLayers removeObjectAtIndex:index];
+    _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+}
+
+- (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer
+{
+    return [_drawingLayers indexOfObject:dlayer];
 }
 @end
