@@ -33,7 +33,7 @@
     _strokes = [NSMutableArray array];
     _layer = [CALayer layer];
     _layer.frame = CGRectMake(0, 0, size.width, size.height);
-    _activity = 1;
+    //_activity = 1;
     _abandonedStrokes = [NSMutableArray array];
     return self;
 }
@@ -102,4 +102,33 @@
     else self.layer.opacity = 0;
 }
 
+- (NSDictionary *)dictionary
+{
+    NSMutableArray *strokesArray = [NSMutableArray array];
+    for (Stroke *stroke in _strokes) {
+        NSDictionary *dict = stroke.dictionary;
+        [strokesArray addObject:dict];
+    }
+    NSDictionary *dict = @{@"blendMode":[NSNumber numberWithInteger:_blendMode], @"visible":[NSNumber numberWithBool:_visible], @"locked":[NSNumber numberWithBool:_locked], @"alpha":[NSNumber numberWithBool:_alpha], @"strokes":strokesArray };
+    return dict;
+}
+
++ (instancetype)drawingLayerWithDictionary:(NSDictionary *)dict size:(CGSize)size
+{
+    NSMutableArray *strokes = [NSMutableArray array];
+    NSArray *strokedict =dict[@"strokes"];
+    for(NSDictionary *dict in strokedict){
+        Stroke *stroke = [Stroke strokeWithDictionary:dict];
+        [strokes addObject:stroke];
+    }
+    
+    DrawingLayer *dlayer = [[DrawingLayer alloc]initWithSize:size];
+    dlayer.blendMode = [dict[@"blendMode"] intValue];
+    dlayer.visible = [dict[@"visible"] boolValue];
+    dlayer.locked = [dict[@"locked"] boolValue];
+    dlayer.alpha = [dict[@"alpha"] doubleValue];
+    dlayer.strokes = strokes;
+    
+    return dlayer;
+}
 @end

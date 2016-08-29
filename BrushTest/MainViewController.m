@@ -41,7 +41,7 @@
 @property (nonatomic, copy) UIColor *color;
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) BrushType type;
-@property (nonatomic) CGFloat radius;
+@property (nonatomic) CGFloat width;
 @property (nonatomic, strong) Canvas *canvas;
 @property (nonatomic, strong) NSMutableArray *layerControlArray;
 
@@ -60,9 +60,9 @@
     layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
     _ColorView.layer.mask = layer;
     _ColorView.backgroundColor = _color;
-    _radius = 26;
-    _brush = [Brush BrushWithColor:_color radius:_radius type:BrushTypeCircle];
-    _brushAlphaAndWidthView.radiusSlider.value = (_radius-1)/30;
+    _width = 26;
+    _brush = [Brush BrushWithColor:_color width:_width type:BrushTypeCircle];
+    _brushAlphaAndWidthView.radiusSlider.value = (_width-1)/30;
     _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
     self.brushAlphaAndWidthView.hidden = YES;
 }
@@ -135,7 +135,7 @@
     _currentControl.layer.borderColor = [UIColor grayColor].CGColor;
     _currentControl = currentControl;
     _currentControl.layer.borderColor = [UIColor blueColor].CGColor;
-    _canvas.foreLayer = _currentControl.drawingLayer;
+    _canvas.currentDrawingLayer = _currentControl.drawingLayer;
     [self configLayerEditView];
 }
 
@@ -231,7 +231,7 @@
         [self displayBrushAlphaAndWidthView];
     }
     self.paletteViewBoard.hidden = YES;
-    _brush = [Brush BrushWithColor:_color radius:_radius type:_type];
+    _brush = [Brush BrushWithColor:_color width:_width type:_type];
     _canvas.currentBrush = _brush;
 }
 
@@ -280,8 +280,8 @@
 
 - (void)touchBegan:(CGPoint)point
 {
-    if(_canvas.foreLayer.locked) return;
-    if(!_canvas.foreLayer.visible){
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible){
         [self presentVisibleAlert];
         return;
     }
@@ -290,7 +290,7 @@
 
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
-    [_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+    [_canvas.currentDrawingLayer newStrokeWithBrush:_canvas.currentBrush];
     
 }
 
@@ -303,7 +303,7 @@
 {
 
     [_canvas updateWithPoint:point];
-    [_canvas.foreLayer addStroke];
+    [_canvas.currentDrawingLayer addStroke];
     
 }
 
@@ -391,7 +391,7 @@
         _layerEditView.hidden = !_layerEditView.hidden;
     }
     self.currentControl = sender;
-    [_canvas setForeLayer:sender.drawingLayer];
+    [_canvas setCurrentDrawingLayer:sender.drawingLayer];
     [self configLayerEditView];
 }
 
@@ -408,11 +408,11 @@
 - (void)addDrawingLayer
 {
     [_canvas addLayer];
-    [_canvasView.layer addSublayer:_canvas.foreLayer.layer];
+    [_canvasView.layer addSublayer:_canvas.currentDrawingLayer.layer];
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
-    control.drawingLayer = _canvas.foreLayer;
+    control.drawingLayer = _canvas.currentDrawingLayer;
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
     [_layerBoard addSubview:control];

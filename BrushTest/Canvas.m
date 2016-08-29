@@ -9,16 +9,35 @@
 #import "Canvas.h"
 #import "DrawingLayer.h"
 #import "Brush.h"
+#import "UIColor+BFPaperColors.h"
 
 @implementation Canvas
 
 - (instancetype)initWithSize:(CGSize)size
 {
     self= [super init];
-    self.canvasSize = size;
+    _canvasName = [NSString stringWithFormat:@"%@",[NSDate date]];
+    _canvasSize = size;
     _drawingLayers = [NSMutableArray array];
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
     return self;
+}
+
++ (instancetype) canvasWithDictionary:(NSDictionary *)dict
+{
+    Canvas* canvas = [[Canvas alloc] init];
+    canvas.canvasName = dict[@"name"];
+    CGSize size;
+    [dict[@"size"] getValue:&size];
+    canvas.canvasSize = size;
+    canvas.backgroundColor = UIColorFromRGBA([dict[@"color"] integerValue]);
+    NSMutableArray *array = dict[@"layers"];
+    for (NSDictionary *dict in array) {
+        DrawingLayer *layer = [DrawingLayer drawingLayerWithDictionary:dict size:size];
+        [array addObject:layer];
+    }
+    canvas.drawingLayers = array;
+    return canvas;
 }
 
 - (instancetype)initWithSize:(CGSize)size backgroundColor:(UIColor *)color
@@ -30,28 +49,28 @@
 - (void)addLayer:(DrawingLayer *)layer
 {
     [_drawingLayers addObject:layer];
-    self.foreLayer = layer;
+    self.currentDrawingLayer = layer;
 }
 
 - (void)addLayer
 {
     DrawingLayer *layer = [DrawingLayer drawingLayerWithSize:_canvasSize];
     [self addLayer:layer];
-    self.foreLayer = layer;
+    self.currentDrawingLayer = layer;
 }
 
 - (void)clear
 {
-    [_foreLayer clear];
+    [_currentDrawingLayer clear];
 }
 - (void)undo
 {
-    [_foreLayer undo];
+    [_currentDrawingLayer undo];
 }
 
 - (void)redo
 {
-    [_foreLayer redo];
+    [_currentDrawingLayer redo];
 }
 
 - (u_long)layerCount{
@@ -60,19 +79,27 @@
 
 - (void) updateWithPoint:(CGPoint)point
 {
-    [_foreLayer updateStrokeWithPoint:point];
+    [_currentDrawingLayer updateStrokeWithPoint:point];
 }
 
-- (void) setForeLayer:(DrawingLayer *)foreLayer
+- (void) setCurrentDrawingLayer:(DrawingLayer *)layer
 {
-    if(_foreLayer != foreLayer){
-        _foreLayer.activity = false;
-
-        _foreLayer = foreLayer;
+    if(_currentDrawingLayer != layer){
+        _currentDrawingLayer = layer;
         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-        [_foreLayer.layer renderInContext:UIGraphicsGetCurrentContext()];
-        _foreLayer.activity = true;
+        [_currentDrawingLayer.layer renderInContext:UIGraphicsGetCurrentContext()];
     }
+}
+
+- (NSDictionary *)dictionary
+{
+    NSMutableArray *layerArray= [NSMutableArray array];
+    for (DrawingLayer *layer in _drawingLayers) {
+        NSDictionary *dict = layer.dictionary;
+        [layerArray addObject:dict];
+    }
+    NSDictionary *dict = @{@"size":[NSValue valueWithCGSize:_canvasSize], @"color":[UIColor hexStringFromRGBAColor:_backgroundColor], @"layers":layerArray, @"name":_canvasName};
+    return dict;
 }
 @end

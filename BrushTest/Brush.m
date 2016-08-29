@@ -19,47 +19,89 @@ CGFloat const  DeltaWidth = 0.05;
 
 @implementation Brush
 
-- (instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius type:(BrushType)type
+- (instancetype)initWithColor:(UIColor*)color width:(CGFloat)width type:(BrushType)type
 {
     self = [super init];
     _brushType = type;
-    _width = radius;
+    _width = width;
     _color = color;
     return self;
 }
 
-- (instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+- (instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
     self = [super init];
-    _width = radius;
+    _width = width;
     _color = color;
     return self;
 }
 
-+ (instancetype)BrushWithColor:(UIColor*)color radius:(CGFloat)radius type:(BrushType)type{
++ (instancetype)BrushWithColor:(UIColor*)color width:(CGFloat)width type:(BrushType)type
+{
     Brush* brush;
     
     switch (type) {
         case BrushTypeChineseBrush:
-            brush = [[ChineseBrush alloc] initWithColor:color radius:radius];
+            brush = [[ChineseBrush alloc] initWithColor:color width:width];
             break;
         case BrushTypeCircle:
-            brush = [[CircleBrush alloc]  initWithColor:color radius:radius];
+            brush = [[CircleBrush alloc]  initWithColor:color width:width];
             break;
         case BrushTypeOval:
-            brush = [[OvalBrush alloc]  initWithColor:color radius:radius];
+            brush = [[OvalBrush alloc]  initWithColor:color width:width];
             break;
         case BrushTypeGradient:
-            brush = [[GradientBrush alloc]  initWithColor:color radius:radius];
+            brush = [[GradientBrush alloc]  initWithColor:color width:width];
             break;
         case BrushTypeClear:
-            brush = [ [ClearBrush alloc] initWithColor:color radius:radius];
+            brush = [ [ClearBrush alloc] initWithColor:color width:width];
     }
     
     return brush;
 }
 
--(instancetype)copyWithZone:(NSZone *)zone
++ (instancetype)BrushWithDictionary:(NSDictionary *)dict
+{
+    Brush* brush;
+    BrushType type;
+    UIColor *color;
+    CGFloat width;
+    type = [dict[@"type"] unsignedIntValue];
+    width = [dict[@"width"] doubleValue];
+    NSString *colorStr = dict[@"color"];
+    color = UIColorFromRGBA([colorStr integerValue]);
+    switch (type) {
+        case BrushTypeChineseBrush:
+            brush = [[ChineseBrush alloc] initWithColor:color width:width];
+            break;
+        case BrushTypeCircle:
+            brush = [[CircleBrush alloc]  initWithColor:color width:width];
+            break;
+        case BrushTypeOval:
+            brush = [[OvalBrush alloc]  initWithColor:color width:width];
+            break;
+        case BrushTypeGradient:
+            brush = [[GradientBrush alloc]  initWithColor:color width:width];
+            break;
+        case BrushTypeClear:
+            brush = [ [ClearBrush alloc] initWithColor:color width:width];
+    }
+    
+    return brush;
+}
+
+- (NSDictionary *)dictionary
+{
+//    CGFloat r,g,b,a;
+//    [_color getRed:&r green:&g blue:&b alpha:&a];
+//    NSArray *colorArray = @[[NSNumber numberWithFloat:r],[NSNumber numberWithFloat:g],[NSNumber numberWithFloat:b],[NSNumber numberWithFloat:a]];
+    NSString *colorStr = [UIColor hexStringFromRGBAColor:_color];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[[NSNumber numberWithUnsignedInteger:_brushType], colorStr, [NSNumber numberWithDouble:_width]] forKeys:@[@"type", @"color", @"width"] ];
+    
+    return dict;
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone
 {
     Brush* copy = [[Brush alloc] init];
     copy.brushType = self.brushType;
@@ -157,9 +199,9 @@ CGFloat const  DeltaWidth = 0.05;
 #pragma mark - ChineseBrush
 @implementation ChineseBrush
 
--(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+-(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
-    self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
+    self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     _curWidth =  MIN(MaxWidth,self.width);
     
     return self;
@@ -234,9 +276,9 @@ CGFloat const  DeltaWidth = 0.05;
 #pragma mark - CircleBrush
 @implementation CircleBrush
 
--(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+-(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
-    self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
+    self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     return self;
 }
 
@@ -280,9 +322,9 @@ CGFloat const  DeltaWidth = 0.05;
 #pragma mark - OvalBrush
 @implementation OvalBrush
 
--(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+-(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
-    self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
+    self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     return self;
 }
 
@@ -335,9 +377,9 @@ CGFloat const  DeltaWidth = 0.05;
 #pragma  mark - GradientBrush
 @implementation GradientBrush
 
--(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+-(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
-    self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
+    self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     return self;
 }
 
@@ -400,9 +442,9 @@ CGFloat const  DeltaWidth = 0.05;
 @implementation ClearBrush
 
 
--(instancetype)initWithColor:(UIColor*)color radius:(CGFloat)radius
+-(instancetype)initWithColor:(UIColor*)color width:(CGFloat)width
 {
-    self =[super initWithColor:(UIColor*)color radius:(CGFloat)radius];
+    self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     return self;
 }
 

@@ -11,6 +11,9 @@
 		1754A2E21D649FE500C18717 /* constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2D71D649FE500C18717 /* constants.m */; };
 		1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2D91D649FE500C18717 /* InfColorIndicatorView.m */; };
 		1754A2E51D649FE500C18717 /* SquareColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1754A2DD1D649FE500C18717 /* SquareColorPicker.m */; };
+		175BE8281D731B190033EDCE /* CanvasDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE8271D731B190033EDCE /* CanvasDao.m */; };
+		175BE82B1D731B880033EDCE /* CanvasBL.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE82A1D731B880033EDCE /* CanvasBL.m */; };
+		175BE82E1D7331D30033EDCE /* DrawingLayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */; };
 		176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31301D65EEB000B9A1D6 /* PaletteViewController.m */; };
 		176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */; };
 		176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */; };
@@ -42,6 +45,12 @@
 		1754A2D91D649FE500C18717 /* InfColorIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfColorIndicatorView.m; sourceTree = "<group>"; };
 		1754A2DC1D649FE500C18717 /* SquareColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareColorPicker.h; sourceTree = "<group>"; };
 		1754A2DD1D649FE500C18717 /* SquareColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareColorPicker.m; sourceTree = "<group>"; };
+		175BE8261D731B190033EDCE /* CanvasDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasDao.h; sourceTree = "<group>"; };
+		175BE8271D731B190033EDCE /* CanvasDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasDao.m; sourceTree = "<group>"; };
+		175BE8291D731B880033EDCE /* CanvasBL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasBL.h; sourceTree = "<group>"; };
+		175BE82A1D731B880033EDCE /* CanvasBL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasBL.m; sourceTree = "<group>"; };
+		175BE82C1D7331D30033EDCE /* DrawingLayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLayerModel.h; sourceTree = "<group>"; };
+		175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingLayerModel.m; sourceTree = "<group>"; };
 		176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteViewController.h; sourceTree = "<group>"; };
 		176C31301D65EEB000B9A1D6 /* PaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteViewController.m; sourceTree = "<group>"; };
 		176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Brush.h"; sourceTree = "<group>"; };
@@ -123,6 +132,12 @@
 		175BE81F1D72C0E30033EDCE /* modal */ = {
 			isa = PBXGroup;
 			children = (
+				175BE8261D731B190033EDCE /* CanvasDao.h */,
+				175BE8271D731B190033EDCE /* CanvasDao.m */,
+				175BE8291D731B880033EDCE /* CanvasBL.h */,
+				175BE82A1D731B880033EDCE /* CanvasBL.m */,
+				175BE82C1D7331D30033EDCE /* DrawingLayerModel.h */,
+				175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -258,11 +273,14 @@
 			files = (
 				176D111C1D5CE02400A0DD31 /* UIColor+BFPaperColors.m in Sources */,
 				1754A2E11D649FE500C18717 /* CircleColcorPicker.m in Sources */,
+				175BE82B1D731B880033EDCE /* CanvasBL.m in Sources */,
 				176D10F41D5CDF3B00A0DD31 /* MainViewController.m in Sources */,
 				176D111B1D5CE02400A0DD31 /* Stroke.m in Sources */,
 				176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */,
 				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
+				175BE8281D731B190033EDCE /* CanvasDao.m in Sources */,
 				17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */,
+				175BE82E1D7331D30033EDCE /* DrawingLayerModel.m in Sources */,
 				176C314F1D69AB5600B9A1D6 /* LayerControl.m in Sources */,
 				1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */,
 				176D10F11D5CDF3B00A0DD31 /* AppDelegate.m in Sources */,

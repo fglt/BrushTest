@@ -7,14 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-NSString * const PathColor = @"color";
-NSString * const PathWidth = @"width";
-NSString * const PathPoints = @"points";
-NSString * const PathPlistFileName = @"PathList.plist";
-NSString * const AllPathsFileName = @"paths.plist";
+NSString * const TempCanvasFileName = @"tempCanvas.plist";
+NSString * const CanvasNameFileName = @"paths.plist";
 NSString * const NewDrawingStr = @"新绘图";
-NSString * const DrawingViewNotificationName = @"drawingViewNotification;";
-NSString * const FileTableNavigationID = @"fileTableNavigation";
-NSString * const MainStoryBoardName = @"Main";
 float const kContentInset = 12;
 float const kIndicatorSize = 24;

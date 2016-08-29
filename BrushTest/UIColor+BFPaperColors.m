@@ -475,6 +475,38 @@
     return hexColor;
 }
 
++ (NSString *)hexStringFromRGBAColor:(UIColor *)color
+{
+    NSString *hexColor = nil;
+    
+    // This method only works for RGB colors.
+    if (color
+        &&
+        CGColorGetNumberOfComponents(color.CGColor) == 4) {
+        CGFloat rgba[4];
+        // Get the red, green and blue components
+        [color getRed:rgba green:rgba+1 blue:rgba+2 alpha:rgba+3];
+        
+        // Convert with %02x (use 02 to always get two chars)
+        hexColor = [[[NSString alloc] initWithFormat:@"%02x%02x%02x%02x", (int)(rgba[0]*255),(int)(rgba[1]*255), (int)(rgba[2]*255),(int)(rgba[3]*255)] uppercaseString];
+    }
+    
+    return hexColor;
+}
+
++ (uint32_t) int32FromRGBAColor:(UIColor *)color
+{
+    uint32_t *c;
+    if (color) {
+        CGFloat rgba[4];
+        // Get the red, green and blue components
+        [color getRed:rgba green:rgba+1 blue:rgba+2 alpha:rgba+3];
+        
+        // Convert with %02x (use 02 to always get two chars)
+        c = (uint32_t*)rgba;
+    }
+    return *c;
+}
 
 -(BOOL) isSameRGBToColor:(UIColor*) color
 {

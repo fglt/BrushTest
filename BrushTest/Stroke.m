@@ -25,6 +25,14 @@
     return self;
 }
 
++ (instancetype)strokeWithDictionary:(NSDictionary *)dict
+{
+    Stroke *stroke=[[Stroke alloc] init];
+    stroke.brush = [Brush BrushWithDictionary:dict[@"brush"]];
+    stroke.points = dict[@"points"];
+    return stroke;
+}
+
 - (void)drawInContext
 {
     CGPoint toPoint;
@@ -48,4 +56,9 @@
     [_points addObject:pointValue];
 }
 
+- (NSDictionary *)dictionary
+{
+    NSDictionary *dict = @{@"brush":_brush.dictionary, @"points":_points};
+    return dict;
+}
 @end

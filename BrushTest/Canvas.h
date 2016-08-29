@@ -12,15 +12,12 @@
 
 @interface Canvas : NSObject
 
+@property (nonatomic, strong) NSString *canvasName;
 @property (nonatomic, strong) Brush* currentBrush;
 @property (nonatomic) CGSize canvasSize;
-@property (nonatomic, readonly) u_long layerCount;
-
-@property (nonatomic, strong) NSMutableArray *drawingLayers;
+@property (nonatomic, strong) NSMutableArray<DrawingLayer *> *drawingLayers;
 @property (nonatomic, strong) UIColor *backgroundColor;
-@property (nonatomic, strong) DrawingLayer *foreLayer;
-@property (nonatomic, strong) UIImage *image;
-
+@property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
 - (void)clear;
 - (void)undo;
 - (void)redo;
@@ -29,4 +26,6 @@
 - (instancetype)initWithSize:(CGSize)size;
 - (instancetype)initWithSize:(CGSize)size backgroundColor:(UIColor *)color;
 - (void) updateWithPoint:(CGPoint)point;
+- (NSDictionary *)dictionary;
++ (instancetype) canvasWithDictionary:(NSDictionary *)dict;
 @end

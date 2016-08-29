@@ -14,7 +14,7 @@
 @property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL locked;
 @property (nonatomic) CGFloat alpha;
-@property (nonatomic) BOOL activity;
+//@property (nonatomic) BOOL activity;
 @property (nonatomic, strong) CALayer *layer;
 
 //- (UIImage *)imageFromeContext;
@@ -26,7 +26,9 @@
 - (void)redo;
 - (void)undo;
 + (instancetype)drawingLayerWithSize:(CGSize)size;
++ (instancetype)drawingLayerWithDictionary:(NSDictionary *)dict size:(CGSize)size;
 
 -(void)drawInContext;
 
+- (NSDictionary *)dictionary;
 @end
