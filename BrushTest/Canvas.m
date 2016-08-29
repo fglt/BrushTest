@@ -9,7 +9,7 @@
 #import "Canvas.h"
 #import "DrawingLayer.h"
 #import "Brush.h"
-#import "UIColor+BFPaperColors.h"
+#import "UIColor+FGTColor.h"
 
 @implementation Canvas
 
@@ -114,7 +114,21 @@
         NSDictionary *dict = layer.dictionary;
         [layerArray addObject:dict];
     }
-    NSDictionary *dict = @{ @"name":_canvasName, @"size":NSStringFromCGSize(_canvasSize), @"color":[UIColor numberFromRGBAColor:_backgroundColor], @"brush":_currentBrush.dictionary, @"layers":layerArray};
+    NSDictionary *dict = @{ @"name":_canvasName, @"size":NSStringFromCGSize(_canvasSize), @"color":[_backgroundColor number], @"brush":_currentBrush.dictionary, @"layers":layerArray};
     return dict;
+}
+
+- (void)mixAll
+{
+    self.currentDrawingLayer = _drawingLayers[0];
+    while (_drawingLayers.count >1) {
+        DrawingLayer *dlayer = _drawingLayers[1];
+        CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
+        UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        [image drawAtPoint:CGPointZero blendMode:dlayer.blendMode alpha:dlayer.alpha];
+        [dlayer.layer removeFromSuperlayer];
+        [_drawingLayers removeObjectAtIndex:1];
+    }
+    _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 @end

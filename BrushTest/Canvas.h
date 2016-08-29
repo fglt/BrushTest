@@ -28,4 +28,5 @@
 - (void) updateWithPoint:(CGPoint)point;
 - (NSDictionary *)dictionary;
 + (instancetype) canvasWithDictionary:(NSDictionary *)dict;
+- (void)mixAll;
 @end

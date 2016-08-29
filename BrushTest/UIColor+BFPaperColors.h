@@ -62,7 +62,6 @@ alpha:((float)(rgbValue & 0xFF))/255.0]
  */
 + (BOOL)isColorClear:(UIColor *)color;
 
-+ (UIColor *) colorWithUint32:(uint32_t)rgbaValue;
 
 /**
  *  Returns a BOOL indicating whether or not the color passed to this function is dark or not.
@@ -102,9 +101,7 @@ alpha:((float)(rgbValue & 0xFF))/255.0]
  *  @return An NSString representing the hex-code of the passed in color.
  */
 + (NSString *)hexStringFromRGBColor:(UIColor *)color;
-+ (NSString *)hexStringFromRGBAColor:(UIColor *)color;
-+ (uint64_t) uint64FromRGBAColor:(UIColor *)color;
-+ (NSNumber *)numberFromRGBAColor:(UIColor *)color;
+
 
 /**
  *  Returns a simple gradient layer built from two colors.

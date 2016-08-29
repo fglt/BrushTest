@@ -65,7 +65,6 @@ static CanvasDao *sharedManager;
             [_listData removeObjectAtIndex:idx];
             NSError *err;
             NSString *path = [_dir  stringByAppendingPathComponent:[obj stringByAppendingPathExtension:@"plist"]];
-
             [[ NSFileManager defaultManager] removeItemAtPath:path error:&err];
             *stop = TRUE;
         }
@@ -77,8 +76,10 @@ static CanvasDao *sharedManager;
 -(int) modify:(Canvas*)model
 {
     _canvasDictionary = model.dictionary;
-
-    [_canvasDictionary writeToFile:_tempCanvasFilePath atomically:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{
+                       [_canvasDictionary writeToFile:_tempCanvasFilePath atomically:YES];
+                   });
     
     return 0;
 }
@@ -96,7 +97,7 @@ static CanvasDao *sharedManager;
     return array;
 }
 
-//按照主键查询数据方法
+
 -(Canvas*) findByName:(Canvas*)model
 {
     __block NSDictionary *dict;
@@ -115,10 +116,13 @@ static CanvasDao *sharedManager;
 {
     _canvasDictionary = model.dictionary;
     NSString *path = [_dir stringByAppendingPathComponent:[model.canvasName stringByAppendingPathExtension:@"plist"]];
-    [_canvasDictionary writeToFile:path atomically:YES];
-    [_canvasDictionary writeToFile:TempCanvasFileName atomically:YES];
-    [_listData addObject:model.canvasName];
-    [_listData writeToFile:CanvasNameFileName atomically:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{
+                       [_canvasDictionary writeToFile:path atomically:YES];
+                       [_canvasDictionary writeToFile:_tempCanvasFilePath atomically:YES];
+                       [_listData addObject:model.canvasName];
+                       [_listData writeToFile:_canvasNameFilePath atomically:YES];
+                   });
 }
 
 @end

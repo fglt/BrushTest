@@ -108,10 +108,12 @@
         LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
         [_layerControlArray addObject:control];
         control.drawingLayer = dlayer;
+        control.layer.contents = control.drawingLayer.layer.contents;
         [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
         [_layerBoard addSubview:control];
     }
      self.currentControl = _layerControlArray[_layerControlArray.count -1];
+    
 }
 
 - (void)configLayerEditView
@@ -169,16 +171,19 @@
 - (IBAction)clickClear:(UIButton *)sender
 {
     [_canvas clear];
+     _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
 }
 
 - (IBAction)clickUndo:(UIButton *)sender
 {
     [_canvas undo];
+     _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
 }
 
 - (IBAction)clickRedo:(UIButton *)sender
 {
     [_canvas redo];
+     _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
 }
 
 - (IBAction)clickFullScreen:(UIView *)sender
@@ -336,6 +341,7 @@
     [_canvas updateWithPoint:point];
     [_canvas.currentDrawingLayer addStroke];
     [_canvasDao modify:_canvas];
+    _currentControl.layer.contents = _currentControl.drawingLayer.layer.contents;
 }
 
 - (void)presentVisibleAlert
@@ -385,6 +391,14 @@
             
             break;
         case 36:
+            self.currentControl = _layerControlArray[0];
+            [_canvas mixAll];
+            
+            while (_layerControlArray.count >1) {
+                [_layerControlArray[1] removeFromSuperview];
+                [_layerControlArray removeObjectAtIndex:1];
+            }
+            
             break;
         case 37:{
             if(_layerControlArray.count ==  1)break;
@@ -396,7 +410,6 @@
             [self reloadLayerBoard];
             if(index>0) index--;
             self.currentControl = [_layerControlArray objectAtIndex:index];
-
 
             break;
         }
@@ -444,6 +457,7 @@
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
     control.drawingLayer = _canvas.currentDrawingLayer;
+    control.layer.contents = control.drawingLayer.layer.contents;
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
     [_layerBoard addSubview:control];
@@ -451,6 +465,9 @@
 
 - (IBAction)changeBackgroundColor:(CanvasBackgroundControl *)sender {
     
+}
+- (IBAction)changeLayerAlpha:(UISlider *)sender {
+    _currentControl.drawingLayer.alpha = sender.value;
 }
 
 @end

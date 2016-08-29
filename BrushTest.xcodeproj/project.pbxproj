@@ -14,6 +14,7 @@
 		175BE8281D731B190033EDCE /* CanvasDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE8271D731B190033EDCE /* CanvasDao.m */; };
 		175BE82B1D731B880033EDCE /* CanvasBL.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE82A1D731B880033EDCE /* CanvasBL.m */; };
 		175BE82E1D7331D30033EDCE /* DrawingLayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */; };
+		175BE8341D7420FE0033EDCE /* UIColor+FGTColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */; };
 		176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31301D65EEB000B9A1D6 /* PaletteViewController.m */; };
 		176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */; };
 		176C314C1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m in Sources */ = {isa = PBXBuildFile; fileRef = 176C314B1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.m */; };
@@ -51,6 +52,8 @@
 		175BE82A1D731B880033EDCE /* CanvasBL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasBL.m; sourceTree = "<group>"; };
 		175BE82C1D7331D30033EDCE /* DrawingLayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLayerModel.h; sourceTree = "<group>"; };
 		175BE82D1D7331D30033EDCE /* DrawingLayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingLayerModel.m; sourceTree = "<group>"; };
+		175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+FGTColor.h"; sourceTree = "<group>"; };
+		175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+FGTColor.m"; sourceTree = "<group>"; };
 		176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteViewController.h; sourceTree = "<group>"; };
 		176C31301D65EEB000B9A1D6 /* PaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaletteViewController.m; sourceTree = "<group>"; };
 		176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Brush.h"; sourceTree = "<group>"; };
@@ -125,6 +128,8 @@
 				17C7CD181D6FEA3100E5D47B /* LayerEditView.m */,
 				17C7CD1A1D70876A00E5D47B /* UIView+FGTDrawing.h */,
 				17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */,
+				175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */,
+				175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -278,6 +283,7 @@
 				176D111B1D5CE02400A0DD31 /* Stroke.m in Sources */,
 				176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */,
 				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
+				175BE8341D7420FE0033EDCE /* UIColor+FGTColor.m in Sources */,
 				175BE8281D731B190033EDCE /* CanvasDao.m in Sources */,
 				17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */,
 				175BE82E1D7331D30033EDCE /* DrawingLayerModel.m in Sources */,

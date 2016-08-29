@@ -18,11 +18,10 @@
 + (CanvasDao*)sharedManager;
 
 - (Canvas *)tempCanvs;
+
 - (int)create:(Canvas*)model;
 
-
 - (int)remove:(Canvas*)model;
-
 
 - (int)modify:(Canvas*)model;
 

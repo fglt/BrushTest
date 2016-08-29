@@ -43,7 +43,7 @@
     [_strokes removeAllObjects];
     [[UIColor clearColor] set];
     UIRectFill(_layer.frame);
-    _layer.contents = nil;
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 - (void)undo

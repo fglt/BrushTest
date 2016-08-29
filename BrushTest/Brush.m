@@ -7,7 +7,7 @@
 //
 
 #import "Brush.h"
-#import "UIColor+BFPaperColors.h"
+#import "UIColor+FGTColor.h"
 #import "FGTHSBSupport.h"
 #import "UIbezierPath+brush.h"
 
@@ -95,7 +95,7 @@ CGFloat const  DeltaWidth = 0.05;
 //    CGFloat r,g,b,a;
 //    [_color getRed:&r green:&g blue:&b alpha:&a];
 //    NSArray *colorArray = @[[NSNumber numberWithFloat:r],[NSNumber numberWithFloat:g],[NSNumber numberWithFloat:b],[NSNumber numberWithFloat:a]];
-    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[[NSNumber numberWithUnsignedInteger:_brushType], [UIColor numberFromRGBAColor:_color], [NSNumber numberWithDouble:_width]] forKeys:@[@"type", @"color", @"width"] ];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[[NSNumber numberWithUnsignedInteger:_brushType], [_color number], [NSNumber numberWithDouble:_width]] forKeys:@[@"type", @"color", @"width"] ];
     
     return dict;
 }
