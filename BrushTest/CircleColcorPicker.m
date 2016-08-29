@@ -81,7 +81,8 @@ IB_DESIGNABLE
         self.layer.contents = (id)circleImage.CGImage;
     }
     if (indicator == nil) {
-        _value = CGPointMake(self.bounds.size.width - 16, CGRectGetMidY(self.bounds));
+        if(CGPointEqualToPoint(_value, CGPointZero))
+            _value = CGPointMake(self.bounds.size.width - 16, CGRectGetMidY(self.bounds));
         
         indicator = [[InfColorIndicatorView alloc] initWithFrame: CGRectMake(_value.x, _value.y, kIndicatorSize, kIndicatorSize)];
         [self addSubview: indicator];
