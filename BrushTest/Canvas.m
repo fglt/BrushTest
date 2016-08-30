@@ -21,6 +21,8 @@
     _backgroundColor = [UIColor whiteColor];
     _drawingLayers = [NSMutableArray array];
      _currentDrawingLayer = [DrawingLayer drawingLayerWithSize:_canvasSize];
+    _currentLayer = [CALayer layer];
+    _currentLayer.frame = CGRectMake(0, 0, _canvasSize.width,_canvasSize.height);
     [_drawingLayers addObject:_currentDrawingLayer];
     _currentBrush = [Brush BrushWithColor:[UIColor redColor] width:26 type:BrushTypeCircle];
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
@@ -67,6 +69,14 @@
 {
     DrawingLayer *layer = [DrawingLayer drawingLayerWithSize:_canvasSize];
     [self addLayer:layer];
+    self.currentDrawingLayer = layer;
+}
+
+- (void)addLayerAboveCurrentDrawingLayer
+{
+    DrawingLayer *layer = [DrawingLayer drawingLayerWithSize:_canvasSize];
+    NSUInteger index = [_drawingLayers indexOfObject:_currentDrawingLayer];
+    [_drawingLayers insertObject:layer atIndex:index+1];
     self.currentDrawingLayer = layer;
 }
 

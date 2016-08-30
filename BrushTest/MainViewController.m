@@ -476,16 +476,18 @@
 
 - (void)addDrawingLayer
 {
-    [_canvas addLayer];
-    [_canvasView.layer addSublayer:_canvas.currentDrawingLayer.layer];
+    unsigned index = (unsigned)[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer];
+    [_canvas addLayerAboveCurrentDrawingLayer];
+    [_canvasView.layer insertSublayer:_canvas.currentDrawingLayer.layer atIndex:index+1];
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
-    [_layerControlArray addObject:control];
+    [_layerControlArray insertObject:control atIndex:[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer]];
     control.drawingLayer = _canvas.currentDrawingLayer;
     [control updateContents];
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
     [_layerBoard addSubview:control];
+    [self reloadLayerBoard];
 }
 
 - (void)addDrawingLayer:(DrawingLayer *)dlayer

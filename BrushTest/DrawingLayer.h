@@ -18,7 +18,6 @@
 @property (nonatomic, strong) CALayer *layer;
 @property (nonatomic, strong, readonly) NSMutableArray *strokes;
 
-//- (UIImage *)imageFromeContext;
 - (void)newStrokeWithBrush:(Brush*)brush;
 - (void)addStroke;
 - (void)addStrokes:(NSArray *)strokes;
