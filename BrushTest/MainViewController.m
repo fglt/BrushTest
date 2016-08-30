@@ -328,7 +328,7 @@
 
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
-    [_canvas.currentDrawingLayer newStrokeWithBrush:_canvas.currentBrush];
+    [_canvas newStroke];
     
 }
 
@@ -336,13 +336,13 @@
 {
     if(_canvas.currentDrawingLayer.locked) return;
 
-    [_canvas updateWithPoint:point];
+    [_canvas addPoint:point];
 }
 
 - (void)touchEnded:(CGPoint)point
 {
     if(_canvas.currentDrawingLayer.locked) return;
-    [_canvas updateWithPoint:point];
+    [_canvas addPoint:point];
     [_canvas addStroke];
     [_canvasDao modify:_canvas];
     [_currentControl updateContents];

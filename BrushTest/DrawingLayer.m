@@ -113,6 +113,7 @@
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
     [_currentStroke addPoint:toPoint];
+    [_currentStroke drawInContext];
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 

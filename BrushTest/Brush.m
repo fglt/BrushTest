@@ -250,6 +250,7 @@ CGFloat const  DeltaWidth = 0.05;
     int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
     CGFloat const  MaxLength = MinLength *MaxWidth/MinWidth + MinLength;
     len = MIN(len, MaxLength);
+    self.curWidth = MAX(MIN(self.curWidth, MaxWidth), MinWidth);
     if(len == 0){
         UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:fromPoint radius:self.curWidth/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
         [[self curColor] set];

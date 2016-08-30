@@ -58,7 +58,7 @@
     CGPoint fromPoint;
     if(_points.count ==0) fromPoint = point;
     else [[_points lastObject] getValue:&fromPoint];
-    [_brush drawFromPoint:fromPoint toPoint:point];
+    //[_brush drawFromPoint:fromPoint toPoint:point];
     [_points addObject:pointValue];
 }
 

@@ -24,7 +24,7 @@
 
     [_drawingLayers addObject:_currentDrawingLayer];
     _currentBrush = [Brush BrushWithColor:[UIColor redColor] width:26 type:BrushTypeCircle];
-    UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
+    //UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
     return self;
 }
 
@@ -46,6 +46,7 @@
         [layer drawInContext];
         [layerArray addObject:layer];
     }
+    UIGraphicsEndImageContext();
     canvas.drawingLayers = layerArray;
     
     canvas.currentDrawingLayer = canvas.drawingLayers[canvas.drawingLayers.count-1];
@@ -82,10 +83,13 @@
 - (void)clear
 {
     [_currentDrawingLayer clear];
+    _image = nil;
 }
 - (void)undo
 {
     [_currentDrawingLayer undo];
+    CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
+    _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 }
 
 - (void)redo
@@ -96,12 +100,21 @@
 - (u_long)layerCount{
     return _drawingLayers.count;
 }
+
+- (void) newStroke
+{
+    [_currentDrawingLayer newStrokeWithBrush:_currentBrush];
+    UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
+    [_image drawAtPoint:CGPointZero];
+}
 - (void) addStroke
 {
     [_currentDrawingLayer addStroke];
+    CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
+    _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 }
 
-- (void) updateWithPoint:(CGPoint)point
+- (void) addPoint:(CGPoint)point
 {
     [_currentDrawingLayer updateStrokeWithPoint:point];
 }
@@ -110,10 +123,11 @@
 {
     if(_currentDrawingLayer != layer){
         _currentDrawingLayer = layer;
-        UIGraphicsEndImageContext();
+         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
         [_currentDrawingLayer drawInContext];
-        layer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+        _image = UIGraphicsGetImageFromCurrentImageContext();
+        layer.layer.contents = (id)_image.CGImage;
     }
 }
 
