@@ -95,6 +95,8 @@
 - (void)redo
 {
     [_currentDrawingLayer redo];
+    CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
+    _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 }
 
 - (u_long)layerCount{
@@ -104,8 +106,9 @@
 - (void) newStroke
 {
     [_currentDrawingLayer newStrokeWithBrush:_currentBrush];
-    UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-    [_image drawAtPoint:CGPointZero];
+   
+    //UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
+    //[_image drawAtPoint:CGPointZero];
 }
 - (void) addStroke
 {
@@ -116,6 +119,9 @@
 
 - (void) addPoint:(CGPoint)point
 {
+    [[UIColor clearColor] set];
+    UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
+    [_image drawAtPoint:CGPointZero];
     [_currentDrawingLayer updateStrokeWithPoint:point];
 }
 
@@ -123,11 +129,13 @@
 {
     if(_currentDrawingLayer != layer){
         _currentDrawingLayer = layer;
-         UIGraphicsEndImageContext();
+        UIGraphicsEndImageContext();
         UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-        [_currentDrawingLayer drawInContext];
-        _image = UIGraphicsGetImageFromCurrentImageContext();
-        layer.layer.contents = (id)_image.CGImage;
+        CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
+        _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+//        [_currentDrawingLayer drawInContext];
+//        _image = UIGraphicsGetImageFromCurrentImageContext();
+//        layer.layer.contents = (id)_image.CGImage;
     }
 }
 
@@ -144,7 +152,12 @@
 
 - (void)mergeAllLayers
 {
+    [[UIColor clearColor] set];
+    UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
     self.currentDrawingLayer = _drawingLayers[0];
+    CGImageRef cgimage = (__bridge CGImageRef)self.currentDrawingLayer.layer.contents;
+    UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    [image drawAtPoint:CGPointZero blendMode:_currentDrawingLayer.blendMode alpha:_currentDrawingLayer.alpha];
     while (_drawingLayers.count >1) {
         DrawingLayer *dlayer = _drawingLayers[1];
         CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
@@ -153,20 +166,35 @@
         [dlayer.layer removeFromSuperlayer];
         [_drawingLayers removeObjectAtIndex:1];
     }
-    _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+    _image = UIGraphicsGetImageFromCurrentImageContext();
+    _currentDrawingLayer.layer.contents = (id)_image.CGImage;
 }
 
 - (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index
 {
+    
     NSAssert(index > 0, @"index of drawing layer = 0");
     self.currentDrawingLayer = _drawingLayers[index-1];
     DrawingLayer *dlayer = _drawingLayers[index];
-    CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
-    UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-    [image drawAtPoint:CGPointZero blendMode:dlayer.blendMode alpha:dlayer.alpha];
-    [dlayer.layer removeFromSuperlayer];
+    [[UIColor clearColor] set];
+    UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    CGContextSetBlendMode(context, _currentDrawingLayer.blendMode);
+    CGContextSetAlpha(context, _currentDrawingLayer.alpha);
+    [_currentDrawingLayer.layer renderInContext:context];
+     CGContextSetAlpha(context, dlayer.alpha);
+    CGContextSetBlendMode(context, dlayer.blendMode);
+    [dlayer.layer renderInContext:context];
+    _image = UIGraphicsGetImageFromCurrentImageContext();
+    CGContextRestoreGState(context);
+//    CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
+//    UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+//    [image drawAtPoint:CGPointZero blendMode:dlayer.blendMode alpha:dlayer.alpha];
+     [dlayer.layer removeFromSuperlayer];
     [_drawingLayers removeObjectAtIndex:index];
-    _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+    _currentDrawingLayer.layer.contents = (id)_image.CGImage;
+
 }
 
 - (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer

@@ -61,7 +61,6 @@
     layer.frame = CGRectMake(0, 0, 44, 44);
     layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
     _ColorView.layer.mask = layer;
-    _ColorView.backgroundColor = _color;
     self.brushAlphaAndWidthView.hidden = YES;
     _canvasDao = [CanvasDao sharedManager];
 }
@@ -274,7 +273,8 @@
 #pragma mark - PaletteViewControllerDelegate
 - (void)colorChanged:(UIColor*)color
 {
-    self.color = [color copy];
+    //self.color = [color copy];错误，alpha总是1
+    self.color = [color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
     _ColorView.layer.backgroundColor = color.CGColor;
     self.brush.color = self.color;
     _brush = [Brush BrushWithColor:_color width:_width type:_type];
