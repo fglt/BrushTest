@@ -386,7 +386,7 @@
             break;
         case 31:
             _drawingLayerForPaste = [_canvas.currentDrawingLayer copy];
-            [_canvas.currentDrawingLayer clear];
+            [_canvas clear];
             [_currentControl updateContents];
             break;
         case 32:
@@ -402,7 +402,7 @@
 //            _canvas.currentDrawingLayer.
             break;
         case 34:
-            [_currentControl.drawingLayer clear];
+            [_canvas clear];
             [_currentControl updateContents];
             break;
         case 35:{
