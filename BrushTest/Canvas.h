@@ -18,7 +18,6 @@
 @property (nonatomic, strong) NSMutableArray *drawingLayers;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
-@property (nonatomic, strong) CALayer *currentLayer;
 - (void)clear;
 - (void)undo;
 - (void)redo;
@@ -28,6 +27,7 @@
 - (instancetype)initWithSize:(CGSize)size;
 - (instancetype)initWithSize:(CGSize)size backgroundColor:(UIColor *)color;
 - (void) updateWithPoint:(CGPoint)point;
+- (void) addStroke;
 - (NSDictionary *)dictionary;
 + (instancetype) canvasWithDictionary:(NSDictionary *)dict;
 - (void)mergeAllLayers;

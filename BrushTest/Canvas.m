@@ -21,8 +21,7 @@
     _backgroundColor = [UIColor whiteColor];
     _drawingLayers = [NSMutableArray array];
      _currentDrawingLayer = [DrawingLayer drawingLayerWithSize:_canvasSize];
-    _currentLayer = [CALayer layer];
-    _currentLayer.frame = CGRectMake(0, 0, _canvasSize.width,_canvasSize.height);
+
     [_drawingLayers addObject:_currentDrawingLayer];
     _currentBrush = [Brush BrushWithColor:[UIColor redColor] width:26 type:BrushTypeCircle];
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
@@ -96,6 +95,10 @@
 
 - (u_long)layerCount{
     return _drawingLayers.count;
+}
+- (void) addStroke
+{
+    [_currentDrawingLayer addStroke];
 }
 
 - (void) updateWithPoint:(CGPoint)point

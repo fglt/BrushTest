@@ -343,7 +343,7 @@
 {
     if(_canvas.currentDrawingLayer.locked) return;
     [_canvas updateWithPoint:point];
-    [_canvas.currentDrawingLayer addStroke];
+    [_canvas addStroke];
     [_canvasDao modify:_canvas];
     [_currentControl updateContents];
 }

@@ -189,6 +189,25 @@ CGFloat const  DeltaWidth = 0.05;
     return array;
 }
 
+//- (NSArray *)pointsWithPoints:(NSArray *)sourcePoints
+//{
+//    NSMutableArray *outPoints = [NSMutableArray array];
+//    if(sourcePoints.count == 0) return nil;
+//    [outPoints addObject:sourcePoints[0]];
+//    if(sourcePoints.count == 1) {
+//        return outPoints;
+//    }
+//    CGPoint fromPoint;
+//    CGPoint toPoint;
+//    [sourcePoints[0] getValue:&fromPoint];
+//    for(int i=1; i<sourcePoints.count; i++){
+//        [sourcePoints[i] getValue:&toPoint];
+//        
+//    }
+//    
+//    return outPoints;
+//}
+
 - (void) clear{
     
 }
@@ -308,6 +327,10 @@ CGFloat const  DeltaWidth = 0.05;
     }
 }
 
+- (void)drawWithPoints:(NSMutableArray *)points
+{
+    
+}
 -(instancetype) copyWithZone:(NSZone *)zone
 {
     CircleBrush* copy = [[CircleBrush alloc] init];
