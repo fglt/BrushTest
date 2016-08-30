@@ -121,7 +121,6 @@
     for(Stroke* stroke in _strokes){
         [stroke drawInContext];
     }
-    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 - (void)setVisible:(BOOL)visible
