@@ -36,6 +36,7 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     _currentColorView.backgroundColor = [ _delegate currentColor];
     CGFloat hsv[3];
     HSVFromUIColor(_currentColorView.backgroundColor, hsv);

@@ -421,7 +421,8 @@ CGFloat const  DeltaWidth = 0.05;
     CFArrayRef array =  CFArrayCreate(kCFAllocatorDefault, (const void*[]){startColor.CGColor, endColor.CGColor}, 2, nil);
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace,array,locations);
     CGContextDrawRadialGradient(context, gradient, center,0, center, width/2, kCGGradientDrawsBeforeStartLocation);
-    
+    CFRelease(array);
+    CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
