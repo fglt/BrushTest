@@ -28,6 +28,7 @@
 - (instancetype)initWithSize:(CGSize)size;
 - (instancetype)initWithSize:(CGSize)size backgroundColor:(UIColor *)color;
 - (void) newStroke;
+- (void) newStrokeIfNull;
 - (void) addPoint:(CGPoint)point;
 - (void) addStroke;
 - (NSDictionary *)dictionary;

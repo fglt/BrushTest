@@ -99,6 +99,10 @@
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
+- (void)newStrokeWithBrushIfNull:(Brush *)brush
+{
+    if(!_currentStroke) _currentStroke = [[Stroke alloc]initWithBrush:brush];
+}
 - (void)newStrokeWithBrush:(Brush*)brush
 {
     _currentStroke = [[Stroke alloc]initWithBrush:brush];
@@ -112,6 +116,7 @@
 
 - (void)updateStrokeWithPoint:(CGPoint)toPoint;
 {
+    NSAssert(_currentStroke !=nil, @"updateStrokeWithPoint: _currentStroke = nil");
     [_currentStroke addPoint:toPoint];
     [_currentStroke drawInContext];
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;

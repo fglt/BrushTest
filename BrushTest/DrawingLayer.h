@@ -18,6 +18,7 @@
 @property (nonatomic, strong) CALayer *layer;
 @property (nonatomic, strong, readonly) NSMutableArray *strokes;
 
+- (void)newStrokeWithBrushIfNull:(Brush *)brush;
 - (void)newStrokeWithBrush:(Brush*)brush;
 - (void)addStroke;
 - (void)addStrokes:(NSArray *)strokes;

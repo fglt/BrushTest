@@ -55,6 +55,7 @@
 
 - (void)start
 {
+    self.view.backgroundColor = [UIColor clearColor];
     _layerControlArray = [NSMutableArray array];
     
     CALayer *layer = [CALayer layer];
@@ -82,12 +83,13 @@
 
     _canvas = [_canvasDao tempCanvs];
     if(!_canvas){
-        _canvas = [[Canvas alloc]initWithSize:self.view.bounds.size];
+        _canvas = [[Canvas alloc]initWithSize:CGSizeMake(600, 600)];
         [_canvasDao create:_canvas];
     }
     CGSize screenSize = self.view.bounds.size;
     _canvasView = [[CanvasView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
     _canvasView.delegate = self;
+    _canvasView.backgroundColor = _canvas.backgroundColor;
     [self updateLayers];
     
     [self.view insertSubview:_canvasView atIndex:0];
@@ -314,20 +316,70 @@
      ];
 }
 
-#pragma mark - CanvasViewDelegate
-
-- (void)touchBegan:(CGPoint)point
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    _paletteViewBoard.hidden =true;
+    
+    _brushAlphaAndWidthView.hidden = true;
+    _layerEditView.hidden = true;
     if(_canvas.currentDrawingLayer.locked) return;
     if(!_canvas.currentDrawingLayer.visible){
         [self presentVisibleAlert];
         return;
     }
 
-    _paletteViewBoard.hidden =true;
+    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    BOOL inside = [_canvasView pointInside:point withEvent:event];
+    if(inside){
+        [_canvas newStroke];
+        [_canvas addPoint:point];
+    }
+}
 
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    BOOL inside = [_canvasView pointInside:point withEvent:event];
+    if(inside){
+        [_canvas newStrokeIfNull];
+        [_canvas addPoint:point];
+    }
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    BOOL inside = [_canvasView pointInside:point withEvent:event];
+    if(inside){
+        [_canvas addPoint:point];
+        [_canvas addStroke];
+        [_canvasDao modify:_canvas];
+        [_currentControl updateContents];
+    }
+
+}
+
+#pragma mark - CanvasViewDelegate
+- (void)touchBegan:(CGPoint)point
+{
+    _paletteViewBoard.hidden =true;
+    
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible){
+        [self presentVisibleAlert];
+        return;
+    }
+    
     [_canvas newStroke];
     
 }
@@ -335,13 +387,15 @@
 - (void)touchMoved:(CGPoint)point
 {
     if(_canvas.currentDrawingLayer.locked) return;
-
-    [_canvas addPoint:point];
+    if(!_canvas.currentDrawingLayer.visible) return;
+        [_canvas addPoint:point];
+    
 }
 
 - (void)touchEnded:(CGPoint)point
 {
     if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
     [_canvas addPoint:point];
     [_canvas addStroke];
     [_canvasDao modify:_canvas];

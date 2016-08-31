@@ -24,7 +24,7 @@
 
     [_drawingLayers addObject:_currentDrawingLayer];
     _currentBrush = [Brush BrushWithColor:[UIColor redColor] width:26 type:BrushTypeCircle];
-    //UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
     return self;
 }
 
@@ -101,7 +101,10 @@
 - (u_long)layerCount{
     return _drawingLayers.count;
 }
-
+- (void) newStrokeIfNull
+{
+    [_currentDrawingLayer newStrokeWithBrushIfNull:_currentBrush];
+}
 - (void) newStroke
 {
     [_currentDrawingLayer newStrokeWithBrush:_currentBrush];
