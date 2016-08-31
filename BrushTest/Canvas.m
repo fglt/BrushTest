@@ -43,7 +43,6 @@
         DrawingLayer *layer = [DrawingLayer drawingLayerWithDictionary:dict size:canvas.canvasSize];
         [[UIColor clearColor] set];
         UIRectFill(CGRectMake(0, 0, canvas.canvasSize.width, canvas.canvasSize.height));
-        [layer drawInContext];
         [layerArray addObject:layer];
     }
     UIGraphicsEndImageContext();
