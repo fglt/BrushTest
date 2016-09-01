@@ -83,7 +83,7 @@
 
     _canvas = [_canvasDao tempCanvs];
     if(!_canvas){
-        _canvas = [[Canvas alloc]initWithSize:CGSizeMake(600, 600)];
+        _canvas = [[Canvas alloc]initWithSize:self.view.bounds.size];
         [_canvasDao create:_canvas];
     }
     CGSize screenSize = self.view.bounds.size;
