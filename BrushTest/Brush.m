@@ -412,8 +412,8 @@ CGFloat const  DeltaWidth = 0.05;
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIImage *image = [self gradientImageWithWidth:self.width];
-    CGFloat width = image.size.width;
-    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint]/2;
+    CGFloat width = self.width*2;
+    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
     if(len == 0){
         CGRect rect = CGRectMake(fromPoint.x- width/2, fromPoint.y - width/2, width,  width);
         [image drawInRect:rect];
@@ -453,6 +453,22 @@ CGFloat const  DeltaWidth = 0.05;
     
     return image;
 
+}
+-(UIImage* )gradient2ImageWithWidth:(CGFloat)width{
+    UIImage* image = [UIImage imageNamed:@"Particle"];
+
+    CGSize size = image.size;
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    CGPoint center = CGPointMake(size.width/2, size.height/2);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [self.color set];
+    UIRectFill(rect);
+    [image drawInRect:rect blendMode:kCGBlendModeDestinationIn alpha:1];
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+    
 }
 
 -(instancetype) copyWithZone:(NSZone *)zone

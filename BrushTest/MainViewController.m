@@ -237,6 +237,7 @@
     }
 }
 - (IBAction)brushSlider:(UISlider *)sender {
+    //_width = _brushAlphaAndWidthView.radiusSlider.value * 30 +1;
     _brush.width = _brushAlphaAndWidthView.radiusSlider.value * 30 +1;
     _color = [_color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
     _brush.color = _color;
