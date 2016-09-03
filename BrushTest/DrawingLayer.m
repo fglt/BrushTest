@@ -118,7 +118,7 @@
 {
     NSAssert(_currentStroke !=nil, @"updateStrokeWithPoint: _currentStroke = nil");
     [_currentStroke addPoint:toPoint];
-    [_currentStroke drawInContext];
+    //[_currentStroke drawInContext];
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 

@@ -82,20 +82,17 @@
 - (void)clear
 {
     [_currentDrawingLayer clear];
-    _image = nil;
+
 }
 - (void)undo
 {
     [_currentDrawingLayer undo];
-    CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
-    _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 }
 
 - (void)redo
 {
     [_currentDrawingLayer redo];
-    CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
-    _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+
 }
 
 - (u_long)layerCount{
@@ -115,15 +112,10 @@
 - (void) addStroke
 {
     [_currentDrawingLayer addStroke];
-    CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
-    _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 }
 
 - (void) addPoint:(CGPoint)point
 {
-    [[UIColor clearColor] set];
-    UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
-    [_image drawAtPoint:CGPointZero];
     [_currentDrawingLayer updateStrokeWithPoint:point];
 }
 
@@ -133,8 +125,7 @@
         _currentDrawingLayer = layer;
         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-        CGImageRef cgimage = (__bridge CGImageRef)_currentDrawingLayer.layer.contents;
-        _image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        [_currentDrawingLayer.layer renderInContext:UIGraphicsGetCurrentContext()];
 //        [_currentDrawingLayer drawInContext];
 //        _image = UIGraphicsGetImageFromCurrentImageContext();
 //        layer.layer.contents = (id)_image.CGImage;
@@ -168,8 +159,7 @@
         [dlayer.layer removeFromSuperlayer];
         [_drawingLayers removeObjectAtIndex:1];
     }
-    _image = UIGraphicsGetImageFromCurrentImageContext();
-    _currentDrawingLayer.layer.contents = (id)_image.CGImage;
+    _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 - (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index
@@ -188,14 +178,13 @@
      CGContextSetAlpha(context, dlayer.alpha);
     CGContextSetBlendMode(context, dlayer.blendMode);
     [dlayer.layer renderInContext:context];
-    _image = UIGraphicsGetImageFromCurrentImageContext();
     CGContextRestoreGState(context);
 //    CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
 //    UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 //    [image drawAtPoint:CGPointZero blendMode:dlayer.blendMode alpha:dlayer.alpha];
      [dlayer.layer removeFromSuperlayer];
     [_drawingLayers removeObjectAtIndex:index];
-    _currentDrawingLayer.layer.contents = (id)_image.CGImage;
+    _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 
 }
 

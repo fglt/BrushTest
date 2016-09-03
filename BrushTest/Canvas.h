@@ -18,7 +18,6 @@
 @property (nonatomic, strong) NSMutableArray *drawingLayers;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
-@property (nonatomic, strong) UIImage *image;
 - (void)clear;
 - (void)undo;
 - (void)redo;
