@@ -37,7 +37,7 @@
 @end
 
 @interface MainViewController ()<CanvasViewDelegate>
-@property (strong, nonatomic) UIView *canvasView;
+@property (strong, nonatomic) GPUImageView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BlendModeTableViewController *blendModeController;
 @property (nonatomic, strong) LayerControl *currentControl;
@@ -105,10 +105,12 @@
         [_canvasDao create:_canvas];
     }
     CGSize screenSize = self.view.bounds.size;
-    _canvasView = [[UIView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    _canvasView = [[GPUImageView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
     //_canvasView.delegate = self;
     _canvasView.backgroundColor = _canvas.backgroundColor;
+    _canvas.view = _canvasView;
     [_canvasView.layer addSublayer:_canvas.layer];
+
     [_canvas updateLayer];
 
     [self updateLayers];

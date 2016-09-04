@@ -20,7 +20,7 @@
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
 @property (nonatomic, strong) CALayer *layer;
-
+@property (nonatomic, weak) GPUImageView *view;
 - (void)clear;
 - (void)undo;
 - (void)redo;
