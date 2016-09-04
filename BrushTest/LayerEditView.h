@@ -15,4 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *mergeAll;
 @property (weak, nonatomic) IBOutlet UISlider *alphaSlider;
 @property (weak, nonatomic) IBOutlet UILabel *alphaLabel;
+@property (weak, nonatomic) IBOutlet UIView *blendMode;
+@property (weak, nonatomic) IBOutlet UIButton *blendModeButton;
 @end

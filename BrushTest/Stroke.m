@@ -62,6 +62,27 @@
     [_points addObject:pointValue];
 }
 
+- (void)addPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode
+{
+    NSValue* pointValue = [NSValue valueWithCGPoint:point];
+    CGPoint fromPoint;
+    if(_points.count ==0) fromPoint = point;
+    else [[_points lastObject] getValue:&fromPoint];
+    [_brush drawFromPoint:fromPoint toPoint:point];
+    [_points addObject:pointValue];
+}
+- (void)drawInContextWithBlendMode:(CGBlendMode)blendMode
+{
+    CGPoint toPoint;
+    CGPoint fromPoint;
+    [_points[0] getValue:&fromPoint];
+    [_brush clear];
+    for(int i=1; i<_points.count; i++){
+        [_points[i] getValue:&toPoint];
+        [_brush drawFromPoint:fromPoint toPoint:toPoint];
+        fromPoint = toPoint;
+    }
+}
 - (NSDictionary *)dictionary
 {
     NSMutableArray *stringArray = [NSMutableArray array];

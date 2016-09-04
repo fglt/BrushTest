@@ -10,12 +10,10 @@
 
 @implementation LayerEditView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    _blendMode.layer.borderWidth = 1;
+    _blendMode.layer.borderColor = [UIColor grayColor].CGColor;
 
+}
 @end

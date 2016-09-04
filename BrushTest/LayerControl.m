@@ -23,6 +23,7 @@ static UIImage *unlockImage;
     self.layer.borderColor = [UIColor grayColor].CGColor;
     _visible = YES;
     _locked =  NO;
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         showOnImage = [UIImage imageNamed:@"palette_layer_show_on"];

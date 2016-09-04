@@ -20,8 +20,9 @@
 #import "LayerEditView.h"
 #import "UIView+FGTDrawing.h"
 #import "CanvasDao.h"
+#import "BlendModeTableViewController.h"
 
-@interface MainViewController ()<PaletteViewControllerDelegate>
+@interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
@@ -30,11 +31,13 @@
 @property (weak, nonatomic) IBOutlet LayerEditView *layerEditView;
 @property (weak, nonatomic) IBOutlet UIButton *ColorView;
 @property (weak, nonatomic) IBOutlet CanvasBackgroundControl *backgroundColorControl;
+@property (weak, nonatomic) IBOutlet UIView *blendModeBoard;
 @end
 
 @interface MainViewController ()<CanvasViewDelegate>
 @property (strong, nonatomic) CanvasView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
+@property (nonatomic, strong) BlendModeTableViewController *blendModeController;
 @property (nonatomic, strong) LayerControl *currentControl;
 @end
 
@@ -47,7 +50,7 @@
 @property (nonatomic, strong) NSMutableArray *layerControlArray;
 @property (nonatomic, strong) CanvasDao *canvasDao;
 @property (nonatomic, strong) DrawingLayer *drawingLayerForPaste;
-
+@property (nonatomic, strong) BlendMode * blendMode;
 @end
 
 @implementation MainViewController
@@ -66,8 +69,21 @@
     _canvasDao = [CanvasDao sharedManager];
 }
 
+- (void)addBlendModeView
+{
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _blendModeController = [storyBoard instantiateViewControllerWithIdentifier:@"blendModeController"];
+    [self addChildViewController:_blendModeController];
+    _blendModeController.controllerDelegate = self;
+    
+    _blendModeController.view.frame = _blendModeBoard.bounds;
+    [_blendModeBoard addSubview:_blendModeController.view];
+    [_blendModeController didMoveToParentViewController:self];
+}
+
 - (void)addPaletteView
 {
+
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     _paletteViewController = [storyBoard instantiateViewControllerWithIdentifier:@"PaletteViewController"];
     [self addChildViewController:_paletteViewController];
@@ -120,6 +136,7 @@
 
 - (void)configLayerEditView
 {
+    [_layerEditView.blendModeButton setTitle:[self blendModeNameForBlendMode:_currentControl.drawingLayer.blendMode] forState:UIControlStateNormal];
     NSString *text = [NSString stringWithFormat:@"图层 %lu / %ld", [_layerControlArray indexOfObject:_currentControl] + 1, _layerControlArray.count];
     _layerEditView.title.text = text;
     _layerEditView.alphaSlider.value = _currentControl.drawingLayer.alpha;
@@ -143,6 +160,7 @@
     [self start];
     [self addCanvasView];
     [self addPaletteView];
+    [self addBlendModeView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -207,7 +225,7 @@
         _paletteViewBoard.hidden = true;
         _brushAlphaAndWidthView.hidden = true;
         _layerEditView.hidden = true;
-        
+        _blendModeBoard.hidden = YES;
         [UIView animateWithDuration:0.3
                          animations:^{
                             _toolbarView.center = CGPointMake(_toolbarView.center.x, -_toolbarView.frame.size.height/2);
@@ -227,10 +245,11 @@
 
 #pragma mark - brushBoardEvents
 - (IBAction)clickColor:(UIButton *)sender {
-    self.brushAlphaAndWidthView.hidden = true;
-    self.layerEditView.hidden = true;
+    self.brushAlphaAndWidthView.hidden = YES;
+    self.layerEditView.hidden = YES;
+    _blendModeBoard.hidden = YES;
     if(!self.paletteViewBoard.hidden){
-        self.paletteViewBoard.hidden = true;
+        self.paletteViewBoard.hidden = YES;
     }else{
         [self dispalyPaletteView];
         [_paletteViewController setLastColor:[_color colorWithAlphaComponent:1]];
@@ -268,6 +287,7 @@
     if(self.brushAlphaAndWidthView.hidden){
         [self displayBrushAlphaAndWidthView];
     }
+    _blendModeBoard.hidden = YES;
     self.paletteViewBoard.hidden = YES;
     _brush = [Brush BrushWithColor:_color width:_width type:_type];
     _canvas.currentBrush = _brush;
@@ -320,7 +340,7 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     _paletteViewBoard.hidden =true;
-    
+     _blendModeBoard.hidden = YES;
     _brushAlphaAndWidthView.hidden = true;
     _layerEditView.hidden = true;
     if(_canvas.currentDrawingLayer.locked) return;
@@ -389,7 +409,7 @@
 {
     if(_canvas.currentDrawingLayer.locked) return;
     if(!_canvas.currentDrawingLayer.visible) return;
-        [_canvas addPoint:point];
+    [_canvas addPoint:point];
     
 }
 
@@ -509,8 +529,9 @@
 
 - (void)clickLayerControl:(LayerControl *)sender
 {
-    _paletteViewBoard.hidden =true;
-    _brushAlphaAndWidthView.hidden = true;
+    _blendModeBoard.hidden = YES;
+    _paletteViewBoard.hidden = YES;
+    _brushAlphaAndWidthView.hidden = YES;
     if(sender == _currentControl){
         _layerEditView.hidden = !_layerEditView.hidden;
     }
@@ -524,6 +545,7 @@
     _layerEditView.hidden = YES;
     _brushAlphaAndWidthView.hidden = YES;
     _paletteViewBoard.hidden = YES;
+    _blendModeBoard.hidden = YES;
     if(_layerControlArray.count<3){
         [self addDrawingLayer];
     }
@@ -566,6 +588,34 @@
     _currentControl.drawingLayer.alpha = sender.value;
     _layerEditView.alphaLabel.text = [NSString stringWithFormat:@"%d %%",(int)(sender.value * 100)];
 }
+- (IBAction)changeBlendMode:(UIButton *)sender {
+    _blendModeBoard.hidden = !_blendModeBoard.hidden;
+}
 
+
+#pragma mark - BlendModeTableViewControllerDelegate
+- (CGBlendMode)curBlendMode
+{
+    return _currentControl.drawingLayer.blendMode;
+}
+
+- (void)blendModeChanged:(BlendMode *)blendMode
+{
+    _currentControl.drawingLayer.blendMode = blendMode.blendMode;
+    [_layerEditView.blendModeButton setTitle:blendMode.blendModeName forState:UIControlStateNormal];
+}
+
+- (NSString *)blendModeNameForBlendMode:(CGBlendMode)blendMode
+{
+    for( NSArray * array in _blendModeController.sectionArray){
+        for(BlendMode * mode in array){
+            if(mode.blendMode == blendMode){
+                return mode.blendModeName;
+            }
+        }
+    }
+    
+    return nil;
+}
 @end
 

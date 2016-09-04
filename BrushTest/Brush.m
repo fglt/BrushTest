@@ -167,6 +167,16 @@ CGFloat const  DeltaWidth = 0.05;
     //NSLog(@"do default drawing");
 }
 
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint blendMode:(CGBlendMode)blendMode
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:fromPoint endPoint:toPoint width: _width*2];
+    [_color set];
+    [bpath stroke];
+    CGContextRestoreGState(context);
+}
+
 - (int)lengthFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     CGFloat deltax = fromPoint.x-toPoint.x;

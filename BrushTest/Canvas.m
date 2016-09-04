@@ -38,7 +38,7 @@
     canvas.currentBrush = [Brush BrushWithDictionary:dict[@"brush"]];
     NSArray *array = dict[@"layers"];
     NSMutableArray *layerArray = [NSMutableArray array];
-   UIGraphicsBeginImageContextWithOptions(canvas.canvasSize, NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(canvas.canvasSize, NO, 0.0);
     for (NSDictionary *dict in array) {
         DrawingLayer *layer = [DrawingLayer drawingLayerWithDictionary:dict size:canvas.canvasSize];
         [[UIColor clearColor] set];
@@ -126,6 +126,7 @@
         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
         [_currentDrawingLayer.layer renderInContext:UIGraphicsGetCurrentContext()];
+        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), _currentDrawingLayer.blendMode);
 //        [_currentDrawingLayer drawInContext];
 //        _image = UIGraphicsGetImageFromCurrentImageContext();
 //        layer.layer.contents = (id)_image.CGImage;
@@ -191,5 +192,10 @@
 - (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer
 {
     return [_drawingLayers indexOfObject:dlayer];
+}
+
+-(void)dealloc
+{
+    UIGraphicsEndImageContext();
 }
 @end

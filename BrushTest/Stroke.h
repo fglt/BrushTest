@@ -16,6 +16,8 @@
 - (instancetype)initWithBrush:(Brush*)brush;
 - (void)addPoint:(CGPoint)point;
 - (void)drawInContext;
+- (void)addPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode;
+- (void)drawInContextWithBlendMode:(CGBlendMode)blendMode;
 - (NSDictionary *)dictionary;
 + (instancetype)strokeWithDictionary:(NSDictionary *)dict;
 

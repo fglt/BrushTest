@@ -39,6 +39,7 @@ typedef enum {
 - (void)drawWithPoints:(NSMutableArray *)points;
 - (void) clear;
 - (NSDictionary *)dictionary;
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint blendMode:(CGBlendMode)blendMode;
 
 @end
 

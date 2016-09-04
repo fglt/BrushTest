@@ -163,4 +163,5 @@
     }
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
+
 @end
