@@ -32,12 +32,42 @@
 		1775FBEF1D7AB6A20096FF50 /* CanvasDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FBEE1D7AB6A20096FF50 /* CanvasDao.m */; };
 		1775FBF51D7B14B30096FF50 /* BlendModeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FBF41D7B14B30096FF50 /* BlendModeCell.m */; };
 		1775FBF81D7B156F0096FF50 /* BlendModeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */; };
-		1775FBFE1D7B1ED90096FF50 /* BlendMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FBFD1D7B1ED90096FF50 /* BlendMode.m */; };
 		1775FC041D7BBDCA0096FF50 /* BlendModeTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FC031D7BBDCA0096FF50 /* BlendModeTableDataSource.m */; };
+		1775FC091D7BD8E20096FF50 /* BlendMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FC061D7BD8E20096FF50 /* BlendMode.m */; };
+		1775FC1B1D7BE2E10096FF50 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1775FC1A1D7BE2E10096FF50 /* OpenGLES.framework */; };
+		1775FC301D7BE9AD0096FF50 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1775FC261D7BE7B70096FF50 /* libGPUImage.a */; };
+		1775FC321D7BE9C70096FF50 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1775FC311D7BE9C70096FF50 /* CoreMedia.framework */; };
+		1775FC341D7BE9D20096FF50 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1775FC331D7BE9D20096FF50 /* CoreVideo.framework */; };
+		1775FC361D7BE9E00096FF50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1775FC351D7BE9E00096FF50 /* AVFoundation.framework */; };
+		1775FC381D7BE9EE0096FF50 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1775FC371D7BE9EE0096FF50 /* QuartzCore.framework */; };
 		17C7CD041D6CA4CC00E5D47B /* Canvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD031D6CA4CC00E5D47B /* Canvas.m */; };
 		17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD181D6FEA3100E5D47B /* LayerEditView.m */; };
 		17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1775FC251D7BE7B70096FF50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1775FC1F1D7BE7B70096FF50 /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+		1775FC271D7BE7B70096FF50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1775FC1F1D7BE7B70096FF50 /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCE209E51943F20C002FEED8;
+			remoteInfo = GPUImageFramework;
+		};
+		1775FC2E1D7BE9A80096FF50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1775FC1F1D7BE7B70096FF50 /* GPUImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCF1A33314DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1754A2D41D649FE500C18717 /* CircleColcorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleColcorPicker.h; sourceTree = "<group>"; };
@@ -88,10 +118,16 @@
 		1775FBF41D7B14B30096FF50 /* BlendModeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlendModeCell.m; sourceTree = "<group>"; };
 		1775FBF61D7B156F0096FF50 /* BlendModeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlendModeTableViewController.h; sourceTree = "<group>"; };
 		1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlendModeTableViewController.m; sourceTree = "<group>"; };
-		1775FBFC1D7B1ED90096FF50 /* BlendMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlendMode.h; sourceTree = "<group>"; };
-		1775FBFD1D7B1ED90096FF50 /* BlendMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlendMode.m; sourceTree = "<group>"; };
 		1775FC021D7BBDCA0096FF50 /* BlendModeTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlendModeTableDataSource.h; sourceTree = "<group>"; };
 		1775FC031D7BBDCA0096FF50 /* BlendModeTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlendModeTableDataSource.m; sourceTree = "<group>"; };
+		1775FC051D7BD8E20096FF50 /* BlendMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlendMode.h; path = BrushTest/BlendMode.h; sourceTree = "<group>"; };
+		1775FC061D7BD8E20096FF50 /* BlendMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlendMode.m; path = BrushTest/BlendMode.m; sourceTree = "<group>"; };
+		1775FC1A1D7BE2E10096FF50 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		1775FC1F1D7BE7B70096FF50 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../GPUImage-master/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
+		1775FC311D7BE9C70096FF50 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1775FC331D7BE9D20096FF50 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		1775FC351D7BE9E00096FF50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1775FC371D7BE9EE0096FF50 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		17C7CD021D6CA4CC00E5D47B /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Canvas.h; path = BrushTest/Canvas.h; sourceTree = "<group>"; };
 		17C7CD031D6CA4CC00E5D47B /* Canvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Canvas.m; path = BrushTest/Canvas.m; sourceTree = "<group>"; };
 		17C7CD171D6FEA3100E5D47B /* LayerEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerEditView.h; sourceTree = "<group>"; };
@@ -105,6 +141,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1775FC381D7BE9EE0096FF50 /* QuartzCore.framework in Frameworks */,
+				1775FC361D7BE9E00096FF50 /* AVFoundation.framework in Frameworks */,
+				1775FC341D7BE9D20096FF50 /* CoreVideo.framework in Frameworks */,
+				1775FC321D7BE9C70096FF50 /* CoreMedia.framework in Frameworks */,
+				1775FC301D7BE9AD0096FF50 /* libGPUImage.a in Frameworks */,
+				1775FC1B1D7BE2E10096FF50 /* OpenGLES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +189,8 @@
 		175BE81F1D72C0E30033EDCE /* modal */ = {
 			isa = PBXGroup;
 			children = (
+				1775FC051D7BD8E20096FF50 /* BlendMode.h */,
+				1775FC061D7BD8E20096FF50 /* BlendMode.m */,
 				176D11091D5CDFFB00A0DD31 /* DrawingLayer.h */,
 				176D110A1D5CDFFB00A0DD31 /* DrawingLayer.m */,
 				176D11031D5CDFFB00A0DD31 /* Brush.h */,
@@ -157,8 +201,6 @@
 				17C7CD031D6CA4CC00E5D47B /* Canvas.m */,
 				1775FBED1D7AB6A20096FF50 /* CanvasDao.h */,
 				1775FBEE1D7AB6A20096FF50 /* CanvasDao.m */,
-				1775FBFC1D7B1ED90096FF50 /* BlendMode.h */,
-				1775FBFD1D7B1ED90096FF50 /* BlendMode.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -166,6 +208,11 @@
 		176D10E01D5CDF3B00A0DD31 = {
 			isa = PBXGroup;
 			children = (
+				1775FC371D7BE9EE0096FF50 /* QuartzCore.framework */,
+				1775FC351D7BE9E00096FF50 /* AVFoundation.framework */,
+				1775FC331D7BE9D20096FF50 /* CoreVideo.framework */,
+				1775FC311D7BE9C70096FF50 /* CoreMedia.framework */,
+				1775FC291D7BE7BA0096FF50 /* framework */,
 				175BE81F1D72C0E30033EDCE /* modal */,
 				176D10EB1D5CDF3B00A0DD31 /* BrushTest */,
 				176D10EA1D5CDF3B00A0DD31 /* Products */,
@@ -215,6 +262,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		1775FC201D7BE7B70096FF50 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1775FC261D7BE7B70096FF50 /* libGPUImage.a */,
+				1775FC281D7BE7B70096FF50 /* GPUImage.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1775FC291D7BE7BA0096FF50 /* framework */ = {
+			isa = PBXGroup;
+			children = (
+				1775FC1F1D7BE7B70096FF50 /* GPUImage.xcodeproj */,
+				1775FC1A1D7BE2E10096FF50 /* OpenGLES.framework */,
+			);
+			name = framework;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -229,6 +294,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1775FC2F1D7BE9A80096FF50 /* PBXTargetDependency */,
 			);
 			name = BrushTest;
 			productName = BrushTest;
@@ -261,12 +327,35 @@
 			mainGroup = 176D10E01D5CDF3B00A0DD31;
 			productRefGroup = 176D10EA1D5CDF3B00A0DD31 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1775FC201D7BE7B70096FF50 /* Products */;
+					ProjectRef = 1775FC1F1D7BE7B70096FF50 /* GPUImage.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				176D10E81D5CDF3B00A0DD31 /* BrushTest */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		1775FC261D7BE7B70096FF50 /* libGPUImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGPUImage.a;
+			remoteRef = 1775FC251D7BE7B70096FF50 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1775FC281D7BE7B70096FF50 /* GPUImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GPUImage.framework;
+			remoteRef = 1775FC271D7BE7B70096FF50 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		176D10E71D5CDF3B00A0DD31 /* Resources */ = {
@@ -294,6 +383,7 @@
 				1775FBF51D7B14B30096FF50 /* BlendModeCell.m in Sources */,
 				176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */,
 				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
+				1775FC091D7BD8E20096FF50 /* BlendMode.m in Sources */,
 				175BE8341D7420FE0033EDCE /* UIColor+FGTColor.m in Sources */,
 				1775FBF81D7B156F0096FF50 /* BlendModeTableViewController.m in Sources */,
 				17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */,
@@ -312,11 +402,18 @@
 				17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */,
 				1754A2E21D649FE500C18717 /* constants.m in Sources */,
 				176C31461D67002600B9A1D6 /* UIBezierPath+Brush.m in Sources */,
-				1775FBFE1D7B1ED90096FF50 /* BlendMode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1775FC2F1D7BE9A80096FF50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImage;
+			targetProxy = 1775FC2E1D7BE9A80096FF50 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		176D10F51D5CDF3B00A0DD31 /* Main.storyboard */ = {
@@ -426,11 +523,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = "/Users/coding/GPUImage-master/framework/**";
 				INFOPLIST_FILE = BrushTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BrushTest",
+				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = fglt.BrushTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -438,11 +542,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = "/Users/coding/GPUImage-master/framework/**";
 				INFOPLIST_FILE = BrushTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BrushTest",
+				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = fglt.BrushTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

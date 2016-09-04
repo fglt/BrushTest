@@ -21,6 +21,8 @@
 #import "UIView+FGTDrawing.h"
 #import "CanvasDao.h"
 #import "BlendModeTableViewController.h"
+#import "GPUImage.h"
+
 
 @interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
@@ -35,7 +37,7 @@
 @end
 
 @interface MainViewController ()<CanvasViewDelegate>
-@property (strong, nonatomic) CanvasView *canvasView;
+@property (strong, nonatomic) UIView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BlendModeTableViewController *blendModeController;
 @property (nonatomic, strong) LayerControl *currentControl;
@@ -103,9 +105,12 @@
         [_canvasDao create:_canvas];
     }
     CGSize screenSize = self.view.bounds.size;
-    _canvasView = [[CanvasView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
-    _canvasView.delegate = self;
+    _canvasView = [[UIView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    //_canvasView.delegate = self;
     _canvasView.backgroundColor = _canvas.backgroundColor;
+    [_canvasView.layer addSublayer:_canvas.layer];
+    [_canvas updateLayer];
+
     [self updateLayers];
     
     [self.view insertSubview:_canvasView atIndex:0];
@@ -121,7 +126,7 @@
 - (void) updateLayers
 {
     for (DrawingLayer *dlayer in _canvas.drawingLayers) {
-        [_canvasView.layer addSublayer:dlayer.layer];
+        //[_canvasView.layer addSublayer:dlayer.layer];
         CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
         LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
         [_layerControlArray addObject:control];
@@ -369,6 +374,7 @@
     if(inside){
         [_canvas newStrokeIfNull];
         [_canvas addPoint:point];
+        [_canvas updateLayer];
     }
 }
 
@@ -410,6 +416,7 @@
     if(_canvas.currentDrawingLayer.locked) return;
     if(!_canvas.currentDrawingLayer.visible) return;
     [_canvas addPoint:point];
+    [_canvas updateLayer];
     
 }
 
@@ -555,7 +562,7 @@
 {
     unsigned index = (unsigned)[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer];
     [_canvas addLayerAboveCurrentDrawingLayer];
-    [_canvasView.layer insertSublayer:_canvas.currentDrawingLayer.layer atIndex:index+1];
+//    [_canvasView.layer insertSublayer:_canvas.currentDrawingLayer.layer atIndex:index+1];
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray insertObject:control atIndex:[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer]];
@@ -570,7 +577,7 @@
 - (void)addDrawingLayer:(DrawingLayer *)dlayer
 {
     [_canvas addLayer:dlayer];
-    [_canvasView.layer addSublayer:_canvas.currentDrawingLayer.layer];
+//    [_canvasView.layer addSublayer:_canvas.currentDrawingLayer.layer];
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray addObject:control];
@@ -590,6 +597,7 @@
 }
 - (IBAction)changeBlendMode:(UIButton *)sender {
     _blendModeBoard.hidden = !_blendModeBoard.hidden;
+    [_blendModeController.tableView reloadData];
 }
 
 
@@ -603,6 +611,7 @@
 {
     _currentControl.drawingLayer.blendMode = blendMode.blendMode;
     [_layerEditView.blendModeButton setTitle:blendMode.blendModeName forState:UIControlStateNormal];
+    [_canvas updateLayer];
 }
 
 - (NSString *)blendModeNameForBlendMode:(CGBlendMode)blendMode

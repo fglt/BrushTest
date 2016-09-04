@@ -164,4 +164,9 @@
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
+//- (void)setBlendMode:(CGBlendMode)blendMode
+//{
+//    _blendMode = blendMode;
+//    CGContextSetBlendMode(UIGraphicsGetCurrentContext(), _blendMode);
+//}
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GPUImage.h"
 @class  Brush;
 @class DrawingLayer;
 
@@ -18,6 +19,8 @@
 @property (nonatomic, strong) NSMutableArray *drawingLayers;
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
+@property (nonatomic, strong) CALayer *layer;
+
 - (void)clear;
 - (void)undo;
 - (void)redo;
@@ -35,4 +38,5 @@
 - (void)mergeAllLayers;
 - (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index;
 - (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer;
+- (void)updateLayer;
 @end
