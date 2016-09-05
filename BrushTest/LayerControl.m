@@ -43,6 +43,7 @@ static UIImage *unlockImage;
     if( !_visableButton){
         _visableButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, showOnImage.size.width, showOnImage.size.height)];
         [_visableButton setImage:showOnImage forState:UIControlStateNormal];
+        self.visible = _drawingLayer.visible;
         [self addSubview:_visableButton];
         [_visableButton addTarget:self action:@selector(visityChanged) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -50,6 +51,7 @@ static UIImage *unlockImage;
     if( !_lockButton){
         _lockButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - unlockImage.size.height, unlockImage.size.width, unlockImage.size.height)];
         [_lockButton setImage:unlockImage forState:UIControlStateNormal];
+        self.locked = _drawingLayer.locked;
         [self addSubview:_lockButton];
         [_lockButton addTarget:self action:@selector(lockChanged) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -74,8 +76,9 @@ static UIImage *unlockImage;
         }else{
             [_visableButton setImage:showOffImage forState:UIControlStateNormal];
         }
+        self.drawingLayer.visible = _visible;
+         [_LayerControlDelegate visableChanged];
     }
-    self.drawingLayer.visible = _visible;
 }
 
 - (void)setLocked:(BOOL)locked{

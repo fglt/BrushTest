@@ -363,7 +363,7 @@
     BOOL inside = [_canvasView pointInside:point withEvent:event];
     if(inside){
         [_canvas newStroke];
-        [_canvas addPoint:point];
+        //[_canvas addPoint:point];
     }
 }
 
@@ -473,6 +473,7 @@
             _drawingLayerForPaste = [_canvas.currentDrawingLayer copy];
             [_canvas clear];
             [_currentControl updateContents];
+            [_canvas updateLayer];
             break;
         case 32:
             [_canvas.currentDrawingLayer addStrokes:_drawingLayerForPaste.strokes];
@@ -484,11 +485,13 @@
                 DrawingLayer *layer = [_canvas.currentDrawingLayer copy];
                 [self addDrawingLayer:layer];
             }
+             [_canvas updateLayer];
 //            _canvas.currentDrawingLayer.
             break;
         case 34:
             [_canvas clear];
             [_currentControl updateContents];
+             [_canvas updateLayer];
             break;
         case 35:{
             self.currentControl = _layerControlArray[index-1];
@@ -498,6 +501,7 @@
             [_layerControlArray removeObjectAtIndex:index];
             [self reloadLayerBoard];
             [_currentControl updateContents];
+             [_canvas updateLayer];
             break;
         }
         case 36:
@@ -509,6 +513,7 @@
                 [_layerControlArray removeObjectAtIndex:1];
             }
             [_currentControl updateContents];
+             [_canvas updateLayer];
             break;
         case 37:{
             if(_layerControlArray.count ==  1)break;
@@ -520,6 +525,7 @@
             [self reloadLayerBoard];
             if(index>0) index--;
             self.currentControl = [_layerControlArray objectAtIndex:index];
+             [_canvas updateLayer];
             
             break;
         }
