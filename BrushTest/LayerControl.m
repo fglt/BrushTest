@@ -58,6 +58,7 @@ static UIImage *unlockImage;
 - (void)visityChanged
 {
     self.visible = !self.visible;
+    [_LayerControlDelegate visableChanged];
 }
 
 - (void)lockChanged

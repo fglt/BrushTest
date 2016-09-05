@@ -175,15 +175,15 @@
     NSAssert(index > 0, @"index of drawing layer = 0");
     self.currentDrawingLayer = _drawingLayers[index-1];
     DrawingLayer *dlayer = _drawingLayers[index];
-    [[UIColor clearColor] set];
+    [[UIColor whiteColor] set];
     UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
-    CGContextSetBlendMode(context, _currentDrawingLayer.blendMode);
+    //CGContextSetBlendMode(context, _currentDrawingLayer.blendMode);
     CGContextSetAlpha(context, _currentDrawingLayer.alpha);
     [_currentDrawingLayer.layer renderInContext:context];
      CGContextSetAlpha(context, dlayer.alpha);
-    CGContextSetBlendMode(context, dlayer.blendMode);
+   // CGContextSetBlendMode(context, dlayer.blendMode);
     [dlayer.layer renderInContext:context];
     CGContextRestoreGState(context);
 //    CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
@@ -205,36 +205,51 @@
     UIGraphicsEndImageContext();
 }
 
-- (void)updateLayer
-{
-    NSMutableArray *picArray = [NSMutableArray array];
+- (void)updateLayer{
     
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
     [[UIColor whiteColor] set];
     UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
-    UIImage *back = UIGraphicsGetImageFromCurrentImageContext();
+    for(DrawingLayer *dlayer in _drawingLayers){
+        if(!dlayer.visible) continue;
+        CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
+        UIImage *image = [UIImage imageWithCGImage:cgimage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        [image drawAtPoint:CGPointZero blendMode:dlayer.blendMode alpha:dlayer.alpha];
+        
+    }
+    _layer.contents = (id) UIGraphicsGetImageFromCurrentImageContext().CGImage;
     UIGraphicsEndImageContext();
-    GPUImagePicture *backpic = [[GPUImagePicture alloc]initWithImage:back];
-    DrawingLayer *layer0 = _drawingLayers[0];
-    CGImageRef cgimage = (__bridge CGImageRef)layer0.layer.contents;
-    GPUImagePicture *curPic = [[GPUImagePicture alloc]initWithCGImage:cgimage];
-    GPUImageOutput<GPUImageInput>  *curfilter =[[GPUImageColorBurnBlendFilter alloc] init];
-    [curfilter forceProcessingAtSize:CGSizeMake(_canvasSize.width*2, _canvasSize.height*2)];
-    [curfilter useNextFrameForImageCapture];
-    [backpic addTarget:curfilter];
-    [curPic addTarget:curfilter];
-    [picArray addObject:backpic];
-    [picArray addObject:curPic];
-            int i = 1;
+}
+//- (void)updateLayer
+//{
+//    NSMutableArray *picArray = [NSMutableArray array];
+//    
+//    UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
+//    [[UIColor whiteColor] set];
+//    UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
+//    UIImage *back = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    GPUImagePicture *backpic = [[GPUImagePicture alloc]initWithImage:back];
+//    DrawingLayer *layer0 = _drawingLayers[0];
+//    CGImageRef cgimage = (__bridge CGImageRef)layer0.layer.contents;
+//    GPUImagePicture *curPic = [[GPUImagePicture alloc]initWithCGImage:cgimage];
+//    GPUImageOutput<GPUImageInput>  *curfilter =[[GPUImageDifferenceBlendFilter alloc] init];
+//    [curfilter forceProcessingAtSize:CGSizeMake(_canvasSize.width*2, _canvasSize.height*2)];
+//    //[curfilter useNextFrameForImageCapture];
+//    [backpic addTarget:curfilter];
+//    [curPic addTarget:curfilter];
+//    [picArray addObject:backpic];
+//    [picArray addObject:curPic];
+//            int i = 1;
 //        while(i< _drawingLayers.count){
 //            DrawingLayer *dlayer= _drawingLayers[i];
 //            if(!dlayer.visible){
 //                i++;
 //                continue;
 //            }
-//            GPUImageOutput<GPUImageInput>  *filter =[[GPUImageColorBurnBlendFilter alloc] init];
+//            GPUImageOutput<GPUImageInput>  *filter =[[GPUImageDifferenceBlendFilter alloc] init];
 //            [filter forceProcessingAtSize:CGSizeMake(_canvasSize.width*2, _canvasSize.height*2)];
-//            [filter useNextFrameForImageCapture];
+//            //[filter useNextFrameForImageCapture];
 //            [curfilter addTarget:filter];
 //            CGImageRef cgimage = (__bridge CGImageRef)dlayer.layer.contents;
 //            GPUImagePicture *pic = [[GPUImagePicture alloc]initWithCGImage:cgimage];
@@ -243,11 +258,12 @@
 //            curfilter = filter;
 //            i++;
 //        }
-    for (GPUImagePicture *pic in picArray) {
-        [pic processImage];
-    }
-    _layer.contents = (id)[curfilter imageFromCurrentFramebuffer].CGImage;
-}
+//    [curfilter useNextFrameForImageCapture];
+//    for (GPUImagePicture *pic in picArray) {
+//        [pic processImage];
+//    }
+//    _layer.contents = (id)[curfilter imageFromCurrentFramebuffer].CGImage;
+//}
 
 //- (void)updateLayer
 //{

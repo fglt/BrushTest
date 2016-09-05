@@ -9,7 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "DrawingLayer.h"
 
+@protocol LayerControlDelegate <NSObject>
+
+- (void)visableChanged;
+
+@end
 @interface LayerControl : UIControl
+@property (nonatomic, weak) id<LayerControlDelegate> LayerControlDelegate;
 @property (nonatomic, weak) DrawingLayer *drawingLayer;
 @property (nonatomic, strong) UIButton *visableButton;
 @property (nonatomic, strong) UIButton *lockButton;

@@ -36,7 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIView *blendModeBoard;
 @end
 
-@interface MainViewController ()<CanvasViewDelegate>
+@interface MainViewController ()<CanvasViewDelegate, LayerControlDelegate>
 @property (strong, nonatomic) GPUImageView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BlendModeTableViewController *blendModeController;
@@ -133,6 +133,7 @@
         LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
         [_layerControlArray addObject:control];
         control.drawingLayer = dlayer;
+        control.LayerControlDelegate =self;
         control.layer.contents = control.drawingLayer.layer.contents;
         [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
         [_layerBoard addSubview:control];
@@ -562,13 +563,14 @@
 
 - (void)addDrawingLayer
 {
-    unsigned index = (unsigned)[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer];
+//    unsigned index = (unsigned)[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer];
     [_canvas addLayerAboveCurrentDrawingLayer];
 //    [_canvasView.layer insertSublayer:_canvas.currentDrawingLayer.layer atIndex:index+1];
     CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray insertObject:control atIndex:[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer]];
     control.drawingLayer = _canvas.currentDrawingLayer;
+    control.LayerControlDelegate = self;
     [control updateContents];
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
@@ -596,6 +598,7 @@
 - (IBAction)changeLayerAlpha:(UISlider *)sender {
     _currentControl.drawingLayer.alpha = sender.value;
     _layerEditView.alphaLabel.text = [NSString stringWithFormat:@"%d %%",(int)(sender.value * 100)];
+    [_canvas updateLayer];
 }
 - (IBAction)changeBlendMode:(UIButton *)sender {
     _blendModeBoard.hidden = !_blendModeBoard.hidden;
@@ -627,6 +630,13 @@
     }
     
     return nil;
+}
+
+#pragma mark - LayerControlDelegate
+
+- (void)visableChanged
+{
+    [_canvas updateLayer];
 }
 @end
 
