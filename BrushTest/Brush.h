@@ -14,7 +14,7 @@ extern const CGFloat  MinWidth ;
 extern CGFloat const  MaxWidth ;
 extern CGFloat const  MinLength ;
 extern CGFloat const  DeltaWidth ;
-
+extern int const kBrushPixelStep;
 typedef enum {
     BrushTypeCircle,
     BrushTypeOval,
@@ -37,9 +37,8 @@ typedef enum {
 - (UIImage*)imageFromPoint:(CGPoint)fromPoint ToPoint:(CGPoint)toPoint;
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
 - (void)drawWithPoints:(NSMutableArray *)points;
-- (void) clear;
+- (void)clear;
 - (NSDictionary *)dictionary;
-- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint blendMode:(CGBlendMode)blendMode;
 
 @end
 

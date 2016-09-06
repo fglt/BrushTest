@@ -200,6 +200,7 @@
 - (IBAction)clickClear:(UIButton *)sender
 {
     [_canvas clear];
+    [_canvas updateLayer];
     [_currentControl updateContents];
 }
 
@@ -392,6 +393,7 @@
         [_canvas addPoint:point];
         [_canvas addStroke];
         [_canvasDao modify:_canvas];
+        [_canvas updateLayer];
         [_currentControl updateContents];
     }
 

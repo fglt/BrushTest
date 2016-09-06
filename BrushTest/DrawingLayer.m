@@ -133,8 +133,7 @@
 {
     if(_visible == visible) return;
     _visible = visible;
-    if(_visible) self.layer.opacity = self.alpha;
-    else self.layer.opacity = 0;
+   self.layer.opacity = self.alpha;
 }
 
 - (NSDictionary *)dictionary
