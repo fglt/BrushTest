@@ -109,40 +109,6 @@ int const kBrushPixelStep = 3;
     return copy;
 }
 
-- (UIImage*)imageFromPoint:(CGPoint)fromPoint ToPoint:(CGPoint)toPoint;
-{
-    UIImage* image;
-    CGFloat deltax = fromPoint.x-toPoint.x;
-    CGFloat deltay = fromPoint.y-toPoint.y;
-    CGSize insize = CGSizeMake(ABS(deltax) + self.width, ABS(deltay) + self.width);
-    CGSize size = CGSizeMake(insize.width + self.width, insize.height + self.width);
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-
-    CGPoint newFromPoint;
-    CGPoint newToPoint;
-    
-    CGPoint leftTop = CGPointMake(self.width, self.width);
-    CGPoint leftDown = CGPointMake(self.width,insize.height);
-    CGPoint rightTop = CGPointMake(insize.width, self.width);
-    CGPoint rightDown = CGPointMake(insize.width , insize.height );
-    
-    if( ( (int)deltax^(int)deltay) >= 0 ){
-        newFromPoint = leftTop;
-        newToPoint = rightDown;
-    }else{
-        newFromPoint = rightTop;
-        newToPoint = leftDown;
-    }
-
-    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:newFromPoint endPoint:newToPoint width: _width*2];
-    [_color set];
-    [bpath stroke];
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
 - (void)drawWithPoints:(NSMutableArray *)points
 {
     CGPoint point;
@@ -324,20 +290,6 @@ int const kBrushPixelStep = 3;
     return self;
 }
 
-- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
-{
-    UIImage *image = [self imageForDraw];
-    CGFloat width = self.width;
-    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
-    CGPoint curPoint;
-    for(int i = 0; i<points.count; i++){
-        [points[i] getValue:&curPoint];
-        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
-        [image drawInRect:rect];
-    }
-}
-
 - (UIImage *)imageForDraw
 {
     UIImage *image;
@@ -426,20 +378,6 @@ int const kBrushPixelStep = 3;
     return self;
 }
 
-- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
-{
-    UIImage *image = [self imageForDraw];
-    CGFloat width = self.width;
-    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
-    CGPoint curPoint;
-    for(int i = 0; i<points.count; i++){
-        [points[i] getValue:&curPoint];
-        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
-        [image drawInRect:rect];
-    }
-}
-
 -(UIImage* )imageForDraw{
     UIImage* image = [UIImage imageNamed:@"Particle"];
 
@@ -480,20 +418,6 @@ int const kBrushPixelStep = 3;
     self =[super initWithColor:(UIColor*)color width:(CGFloat)width];
     self.brushType =  BrushTypeClear;
     return self;
-}
-
-- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
-{
-    UIImage *image = [self imageForDraw];
-    CGFloat width = self.width;
-    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
-    CGPoint curPoint;
-    for(int i = 0; i<points.count; i++){
-        [points[i] getValue:&curPoint];
-        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
-        [image drawInRect:rect];
-    }
 }
 
 - (UIImage *)imageForDraw
