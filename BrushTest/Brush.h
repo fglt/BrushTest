@@ -34,7 +34,6 @@ typedef enum {
 - (instancetype)initWithColor:(UIColor*)color width:(CGFloat)width;
 + (instancetype)BrushWithColor:(UIColor*)color width:(CGFloat)width type:(BrushType)type;
 + (instancetype)BrushWithDictionary:(NSDictionary *)dict;
-- (UIImage*)imageFromPoint:(CGPoint)fromPoint ToPoint:(CGPoint)toPoint;
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
 - (void)drawWithPoints:(NSMutableArray *)points;
 - (void)clear;

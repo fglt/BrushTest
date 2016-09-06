@@ -235,7 +235,7 @@ int const kBrushPixelStep = 3;
 
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
-    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep;
+    int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
     CGFloat const  MaxLength = MinLength *MaxWidth/MinWidth + MinLength;
     len = MIN(len, MaxLength);
     self.curWidth = MAX(MIN(self.curWidth, MaxWidth), MinWidth);
