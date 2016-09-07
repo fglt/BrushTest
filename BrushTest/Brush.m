@@ -414,8 +414,9 @@ int const kBrushPixelStep = 3;
     CGRect rect = CGRectMake(0, 0, self.width, self.width);
     UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(rect.size.width/2, rect.size.width/2) radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
+    
     CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
-    UIColor *color = [UIColor colorWithWhite:1 alpha:alpha];
+    UIColor *color = [UIColor colorWithWhite:0 alpha:alpha];
     [color set];
     [bpath fill];
     image = UIGraphicsGetImageFromCurrentImageContext();
@@ -425,6 +426,20 @@ int const kBrushPixelStep = 3;
 
 }
 
+- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+{
+    UIImage *image = [self imageForDraw];
+     CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
+    CGFloat width = self.width;
+    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
+    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
+    CGPoint curPoint;
+    for(int i = 0; i<points.count; i++){
+        [points[i] getValue:&curPoint];
+        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
+        [image drawInRect:rect blendMode:kCGBlendModeDestinationOut alpha:1];
+    }
+}
 //- (instancetype)copyWithZone:(NSZone *)zone
 //{
 //    ClearBrush* copy = [[ClearBrush alloc] init];

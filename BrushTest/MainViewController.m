@@ -104,7 +104,7 @@
         [_canvasDao create:_canvas];
     }
     CGSize screenSize = self.view.bounds.size;
-    _canvasView = [[GPUImageView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    _canvasView = [[UIView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
     //_canvasView.delegate = self;
     _canvasView.backgroundColor = _canvas.backgroundColor;
     _canvas.view = _canvasView;

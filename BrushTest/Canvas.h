@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GPUImage.h"
+
 @class  Brush;
 @class DrawingLayer;
 
