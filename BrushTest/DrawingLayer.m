@@ -114,12 +114,18 @@
     _currentStroke = nil;
 }
 
-- (void)updateStrokeWithPoint:(CGPoint)toPoint;
+- (void)addPointAndDraw:(CGPoint)toPoint
+{
+    NSAssert(_currentStroke !=nil, @"updateStrokeWithPoint: _currentStroke = nil");
+    [_currentStroke addPointAndDraw:toPoint];
+    //[_currentStroke drawInContext];
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+}
+
+- (void)addPoint:(CGPoint)toPoint
 {
     NSAssert(_currentStroke !=nil, @"updateStrokeWithPoint: _currentStroke = nil");
     [_currentStroke addPoint:toPoint];
-    //[_currentStroke drawInContext];
-    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
 -(void)drawInContext

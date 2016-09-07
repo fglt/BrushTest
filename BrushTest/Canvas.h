@@ -20,7 +20,7 @@
 @property (nonatomic, strong) UIColor *backgroundColor;
 @property (nonatomic, strong) DrawingLayer *currentDrawingLayer;
 @property (nonatomic, strong) CALayer *layer;
-@property (nonatomic, weak) GPUImageView *view;
+@property (nonatomic, weak) UIView *view;
 - (void)clear;
 - (void)undo;
 - (void)redo;
@@ -32,6 +32,7 @@
 - (void) newStroke;
 - (void) newStrokeIfNull;
 - (void) addPoint:(CGPoint)point;
+- (void) addPointAndDraw:(CGPoint)point;
 - (void) addStroke;
 - (NSDictionary *)dictionary;
 + (instancetype) canvasWithDictionary:(NSDictionary *)dict;

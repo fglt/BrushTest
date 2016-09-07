@@ -21,7 +21,6 @@
 #import "UIView+FGTDrawing.h"
 #import "CanvasDao.h"
 #import "BlendModeTableViewController.h"
-#import "GPUImage.h"
 
 
 @interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate>
@@ -36,8 +35,8 @@
 @property (weak, nonatomic) IBOutlet UIView *blendModeBoard;
 @end
 
-@interface MainViewController ()<CanvasViewDelegate, LayerControlDelegate>
-@property (strong, nonatomic) GPUImageView *canvasView;
+@interface MainViewController ()<LayerControlDelegate>
+@property (strong, nonatomic) UIView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BlendModeTableViewController *blendModeController;
 @property (nonatomic, strong) LayerControl *currentControl;
@@ -200,7 +199,6 @@
 - (IBAction)clickClear:(UIButton *)sender
 {
     [_canvas clear];
-    [_canvas updateLayer];
     [_currentControl updateContents];
 }
 
@@ -361,11 +359,9 @@
     //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
     UITouch* touch = [touches anyObject];
     CGPoint point = [touch locationInView:_canvasView];
-    BOOL inside = [_canvasView pointInside:point withEvent:event];
-    if(inside){
-        [_canvas newStroke];
-        //[_canvas addPoint:point];
-    }
+
+    [_canvas newStroke];
+    [_canvas addPoint:point];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -374,12 +370,10 @@
     if(!_canvas.currentDrawingLayer.visible) return;
     UITouch* touch = [touches anyObject];
     CGPoint point = [touch locationInView:_canvasView];
-    BOOL inside = [_canvasView pointInside:point withEvent:event];
-    if(inside){
-        [_canvas newStrokeIfNull];
-        [_canvas addPoint:point];
-        [_canvas updateLayer];
-    }
+
+    [_canvas newStrokeIfNull];
+    [_canvas addPointAndDraw:point];
+    
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -390,49 +384,14 @@
     CGPoint point = [touch locationInView:_canvasView];
     BOOL inside = [_canvasView pointInside:point withEvent:event];
     if(inside){
-        [_canvas addPoint:point];
+        [_canvas addPointAndDraw:point];
         [_canvas addStroke];
         [_canvasDao modify:_canvas];
-        [_canvas updateLayer];
-        [_currentControl updateContents];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_currentControl updateContents];
+        });
     }
 
-}
-
-#pragma mark - CanvasViewDelegate
-- (void)touchBegan:(CGPoint)point
-{
-    _paletteViewBoard.hidden =true;
-    
-    _brushAlphaAndWidthView.hidden = true;
-    _layerEditView.hidden = true;
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible){
-        [self presentVisibleAlert];
-        return;
-    }
-    
-    [_canvas newStroke];
-    
-}
-
-- (void)touchMoved:(CGPoint)point
-{
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible) return;
-    [_canvas addPoint:point];
-    [_canvas updateLayer];
-    
-}
-
-- (void)touchEnded:(CGPoint)point
-{
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible) return;
-    [_canvas addPoint:point];
-    [_canvas addStroke];
-    [_canvasDao modify:_canvas];
-    [_currentControl updateContents];
 }
 
 - (void)presentVisibleAlert
@@ -507,15 +466,12 @@
             break;
         }
         case 36:
-            self.currentControl = _layerControlArray[0];
             [_canvas mergeAllLayers];
-            
-            while (_layerControlArray.count >1) {
-                [_layerControlArray[1] removeFromSuperview];
-                [_layerControlArray removeObjectAtIndex:1];
+            for(LayerControl *control in _layerControlArray){
+                [control removeFromSuperview];
             }
-            [_currentControl updateContents];
-             [_canvas updateLayer];
+            [_layerControlArray removeAllObjects];
+            [self updateLayers];
             break;
         case 37:{
             if(_layerControlArray.count ==  1)break;

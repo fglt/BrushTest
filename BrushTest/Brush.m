@@ -21,10 +21,8 @@ int const kBrushPixelStep = 3;
 
 - (instancetype)initWithColor:(UIColor*)color width:(CGFloat)width type:(BrushType)type
 {
-    self = [super init];
+    self = [self initWithColor:color width:width];
     _brushType = type;
-    _width = width;
-    _color = color;
     return self;
 }
 
@@ -102,10 +100,8 @@ int const kBrushPixelStep = 3;
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    Brush* copy = [[Brush alloc] init];
-    copy.brushType = self.brushType;
-    copy.width = self.width;
-    copy.color = [self.color copy];
+    Class brushClass = [self class];
+    Brush* copy = [[brushClass alloc] initWithColor:self.color width:self.width];
     return copy;
 }
 
@@ -159,7 +155,7 @@ int const kBrushPixelStep = 3;
 {
     CGFloat deltax = fromPoint.x-toPoint.x;
     CGFloat deltay = fromPoint.y-toPoint.y;
-    return (int)(sqrt( deltax *deltax + deltay * deltay) );
+    return ceilf(sqrt( deltax *deltax + deltay * deltay) );
 }
 
 - (NSMutableArray*)arrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint WithCount:(int)count
@@ -269,15 +265,6 @@ int const kBrushPixelStep = 3;
     _curWidth = self.width;
 }
 
--(instancetype) copyWithZone:(NSZone *)zone
-{
-    ChineseBrush* copy = [[ChineseBrush alloc] init];
-    copy.brushType = self.brushType;
-    copy.width = self.width;
-    copy.color = [self.color copy];
-    copy.curWidth = self.curWidth;
-    return copy;
-}
 @end
 
 #pragma mark - CircleBrush
@@ -306,14 +293,14 @@ int const kBrushPixelStep = 3;
     return image;
 }
 
--(instancetype) copyWithZone:(NSZone *)zone
-{
-    CircleBrush* copy = [[CircleBrush alloc] init];
-    copy.brushType = self.brushType;
-    copy.width = self.width;
-    copy.color = [self.color copy];
-    return copy;
-}
+//-(instancetype) copyWithZone:(NSZone *)zone
+//{
+//    CircleBrush* copy = [[CircleBrush alloc] init];
+//    copy.brushType = self.brushType;
+//    copy.width = self.width;
+//    copy.color = [self.color copy];
+//    return copy;
+//}
 @end
 
 
@@ -355,16 +342,16 @@ int const kBrushPixelStep = 3;
     }
 }
 
--(instancetype) copyWithZone:(NSZone *)zone
-{
-    OvalBrush* copy = [[OvalBrush alloc] init];
-    copy.brushType = self.brushType;
-    copy.width = self.width;
-    copy.color = [self.color copy];
-    copy.angle = self.angle;
-
-    return copy;
-}
+//-(instancetype) copyWithZone:(NSZone *)zone
+//{
+//    OvalBrush* copy = [[OvalBrush alloc] init];
+//    copy.brushType = self.brushType;
+//    copy.width = self.width;
+//    copy.color = [self.color copy];
+//    copy.angle = self.angle;
+//
+//    return copy;
+//}
 @end
 
 
@@ -398,15 +385,15 @@ int const kBrushPixelStep = 3;
     return image;
 }
 
--(instancetype) copyWithZone:(NSZone *)zone
-{
-    GradientBrush* copy = [[GradientBrush alloc] init];
-    copy.brushType = self.brushType;
-    copy.width = self.width;
-    copy.color = [self.color copy];
-
-    return copy;
-}
+//-(instancetype) copyWithZone:(NSZone *)zone
+//{
+//    GradientBrush* copy = [[GradientBrush alloc] init];
+//    copy.brushType = self.brushType;
+//    copy.width = self.width;
+//    copy.color = [self.color copy];
+//
+//    return copy;
+//}
 @end
 
 #pragma mark - ClearBrush
@@ -438,13 +425,13 @@ int const kBrushPixelStep = 3;
 
 }
 
-- (instancetype)copyWithZone:(NSZone *)zone
-{
-    ClearBrush* copy = [[ClearBrush alloc] init];
-    copy.brushType = self.brushType;
-    copy.width = self.width;
-    copy.color = [self.color copy];
-    return copy;
-}
+//- (instancetype)copyWithZone:(NSZone *)zone
+//{
+//    ClearBrush* copy = [[ClearBrush alloc] init];
+//    copy.brushType = self.brushType;
+//    copy.width = self.width;
+//    copy.color = [self.color copy];
+//    return copy;
+//}
 
 @end

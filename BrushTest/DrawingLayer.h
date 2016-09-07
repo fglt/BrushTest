@@ -23,7 +23,8 @@
 - (void)addStroke;
 - (void)addStrokes:(NSArray *)strokes;
 - (instancetype)initWithSize:(CGSize)size;
-- (void)updateStrokeWithPoint:(CGPoint)toPoint;
+- (void)addPointAndDraw:(CGPoint)toPoint;
+- (void)addPoint:(CGPoint)toPoint;
 - (void)clear;
 - (void)redo;
 - (void)undo;

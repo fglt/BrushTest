@@ -10,7 +10,6 @@
 #import "DrawingLayer.h"
 #import "Brush.h"
 #import "UIColor+FGTColor.h"
-#import "GPUImage.h"
 
 @implementation Canvas
 
@@ -86,16 +85,19 @@
 - (void)clear
 {
     [_currentDrawingLayer clear];
+    [self updateLayer];
 
 }
 - (void)undo
 {
     [_currentDrawingLayer undo];
+    [self updateLayer];
 }
 
 - (void)redo
 {
     [_currentDrawingLayer redo];
+    [self updateLayer];
 
 }
 
@@ -120,9 +122,13 @@
 
 - (void) addPoint:(CGPoint)point
 {
-    [_currentDrawingLayer updateStrokeWithPoint:point];
+    [_currentDrawingLayer addPoint:point];
 }
-
+- (void) addPointAndDraw:(CGPoint)point
+{
+    [_currentDrawingLayer addPointAndDraw:point];
+    [self updateLayer];
+}
 - (void) setCurrentDrawingLayer:(DrawingLayer *)layer
 {
     if(_currentDrawingLayer != layer){
@@ -148,18 +154,37 @@
 
 - (void)mergeAllLayers
 {
-    _currentDrawingLayer = _drawingLayers[0];
-    while (_drawingLayers.count >1) {
-        DrawingLayer *dlayer = _drawingLayers[1];
-        [_currentDrawingLayer addStrokes:dlayer.strokes];
-        [_drawingLayers removeObjectAtIndex:1];
+    int i = 0;
+    DrawingLayer *startLayer;
+    for(; i<_drawingLayers.count; i++){
+        startLayer = _drawingLayers[i];
+        if(startLayer.visible){
+            break;
+        }
     }
+    if(!startLayer.visible){
+        startLayer = _drawingLayers[0];
+    }
+    DrawingLayer *newLayer = [[DrawingLayer alloc]initWithSize:_canvasSize];
+
+    newLayer.blendMode = startLayer.blendMode;
+    newLayer.locked = startLayer.locked;
+    
+    for(i =0; i<_drawingLayers.count; i++){
+        DrawingLayer *dlayer = _drawingLayers[i];
+        if(dlayer.visible){
+            [newLayer addStrokes:dlayer.strokes];
+        }
+    }
+    [_drawingLayers removeAllObjects];
+    [_drawingLayers addObject:newLayer];
+    _currentDrawingLayer = newLayer;
     [[UIColor clearColor]set];
     UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
     [_currentDrawingLayer drawInContext];
     UIImage *image =UIGraphicsGetImageFromCurrentImageContext();
     _currentDrawingLayer.layer.contents = (id)image.CGImage;
-     _layer.contents = (id)image.CGImage;
+     _layer.contents = (id) image.CGImage;
 }
 
 - (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index
@@ -168,7 +193,14 @@
     NSAssert(index > 0, @"index of drawing layer = 0");
     self.currentDrawingLayer = _drawingLayers[index-1];
     DrawingLayer *dlayer = _drawingLayers[index];
-    [_currentDrawingLayer addStrokes:dlayer.strokes];
+    if(!_currentDrawingLayer.visible){
+        [_currentDrawingLayer.strokes removeAllObjects];
+    }
+    if(dlayer.visible){
+        [_currentDrawingLayer addStrokes:dlayer.strokes];
+    }
+    _currentDrawingLayer.visible = true;
+    _currentDrawingLayer.alpha = 1;
     [[UIColor clearColor] set];
     UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
     [_currentDrawingLayer drawInContext];

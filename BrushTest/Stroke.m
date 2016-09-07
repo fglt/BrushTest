@@ -55,34 +55,31 @@
 - (void)addPoint:(CGPoint)point
 {
     NSValue* pointValue = [NSValue valueWithCGPoint:point];
-    CGPoint fromPoint;
-    if(_points.count ==0) fromPoint = point;
-    else [[_points lastObject] getValue:&fromPoint];
-    [_brush drawFromPoint:fromPoint toPoint:point];
     [_points addObject:pointValue];
 }
 
-- (void)addPoint:(CGPoint)point blendMode:(CGBlendMode)blendMode
+- (void)addPointAndDraw:(CGPoint)point
 {
     NSValue* pointValue = [NSValue valueWithCGPoint:point];
     CGPoint fromPoint;
     if(_points.count ==0) fromPoint = point;
     else [[_points lastObject] getValue:&fromPoint];
+    
+    if(ccpFuzzyEqual(fromPoint, point, kBrushPixelStep)){
+        return;
+    }
     [_brush drawFromPoint:fromPoint toPoint:point];
     [_points addObject:pointValue];
 }
-- (void)drawInContextWithBlendMode:(CGBlendMode)blendMode
+
+BOOL ccpFuzzyEqual(CGPoint a, CGPoint b, float var)
 {
-    CGPoint toPoint;
-    CGPoint fromPoint;
-    [_points[0] getValue:&fromPoint];
-    [_brush clear];
-    for(int i=1; i<_points.count; i++){
-        [_points[i] getValue:&toPoint];
-        [_brush drawFromPoint:fromPoint toPoint:toPoint];
-        fromPoint = toPoint;
-    }
+    if(a.x - var <= b.x && b.x <= a.x + var)
+        if(a.y - var <= b.y && b.y <= a.y + var)
+            return true;
+    return false;
 }
+
 - (NSDictionary *)dictionary
 {
     NSMutableArray *stringArray = [NSMutableArray array];
