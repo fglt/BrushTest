@@ -151,8 +151,8 @@
 				176D11151D5CE02400A0DD31 /* Stroke.h */,
 				176D11161D5CE02400A0DD31 /* Stroke.m */,
 				17C7CD021D6CA4CC00E5D47B /* Canvas.h */,
-				17C7CD031D6CA4CC00E5D47B /* Canvas.m */,
 				1775FBED1D7AB6A20096FF50 /* CanvasDao.h */,
+				17C7CD031D6CA4CC00E5D47B /* Canvas.m */,
 				1775FBEE1D7AB6A20096FF50 /* CanvasDao.m */,
 			);
 			name = modal;

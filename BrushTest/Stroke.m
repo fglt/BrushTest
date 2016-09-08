@@ -62,10 +62,16 @@
 {
     NSValue* pointValue = [NSValue valueWithCGPoint:point];
     CGPoint fromPoint;
-    if(_points.count ==0) fromPoint = point;
+    if(_points.count ==0){
+        fromPoint = point;
+    }
     else [[_points lastObject] getValue:&fromPoint];
     
     if(ccpFuzzyEqual(fromPoint, point, kBrushPixelStep)){
+        if(_points.count ==1){
+            fromPoint = point;
+            [_brush drawFromPoint:fromPoint toPoint:point];
+        }
         return;
     }
     [_brush drawFromPoint:fromPoint toPoint:point];

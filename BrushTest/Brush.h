@@ -20,7 +20,7 @@ typedef enum {
     BrushTypeOval,
     BrushTypeGradient,
     BrushTypeChineseBrush,
-    BrushTypeClear
+    BrushTypeClear,
 } BrushType;
 
 

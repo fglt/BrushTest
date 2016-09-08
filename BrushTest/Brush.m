@@ -90,9 +90,6 @@ int const kBrushPixelStep = 3;
 
 - (NSDictionary *)dictionary
 {
-//    CGFloat r,g,b,a;
-//    [_color getRed:&r green:&g blue:&b alpha:&a];
-//    NSArray *colorArray = @[[NSNumber numberWithFloat:r],[NSNumber numberWithFloat:g],[NSNumber numberWithFloat:b],[NSNumber numberWithFloat:a]];
     NSDictionary *dict = [NSDictionary dictionaryWithObjects:@[[NSNumber numberWithUnsignedInteger:_brushType], [_color number], [NSNumber numberWithDouble:_width]] forKeys:@[@"type", @"color", @"width"] ];
     
     return dict;
@@ -130,8 +127,10 @@ int const kBrushPixelStep = 3;
     CGPoint curPoint;
     for(int i = 0; i<points.count; i++){
         [points[i] getValue:&curPoint];
-        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
-        [image drawInRect:rect];
+//        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
+//        [image drawInRect:rect];
+        CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y);
+        [image drawAtPoint:point];
     }
 }
 
@@ -318,30 +317,32 @@ int const kBrushPixelStep = 3;
 {
     CGFloat deltax = toPoint.x-fromPoint.x;
     CGFloat deltay = toPoint.y-fromPoint.y;
-    CGFloat angle = 0;
+    _angle = 0;
     if(deltax != 0 ){
-        angle = atan(deltay/deltax) - M_PI_2;
+        _angle = atan(deltay/deltax) - M_PI_2;
     }
-    [self.color set];
-    CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
-    CGAffineTransform transform = CGAffineTransformRotate(translationTransform, angle);
-    CGRect rect = CGRectMake(- self.width/2, self.width/4, self.width, self.width/2);
-    UIBezierPath* bpath = [UIBezierPath bezierPathWithOvalInRect:rect];
-    [bpath applyTransform:transform];
-    int len = MAX(1, [self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
-    
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
-    
-    translationTransform = CGAffineTransformMakeTranslation(deltax/len, deltay/len);
-    
-    CGPoint curPoint;
-    for(int i = 0; i<points.count; i++){
-        [bpath fill];
-        [points[i] getValue:&curPoint];
-        [bpath applyTransform:translationTransform];
-    }
+    [super drawFromPoint:fromPoint toPoint:toPoint];
 }
 
+-(UIImage* )imageForDraw{
+
+    UIImage* image;
+    
+    CGRect rect = CGRectMake(-self.width/2, -self.width/4, self.width, self.width/2);
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(self.width, self.width), NO, 0.0);
+    UIBezierPath* bpath = [UIBezierPath bezierPathWithOvalInRect:rect];
+    [self.color set];
+    [bpath applyTransform:CGAffineTransformMakeRotation(_angle)];
+    [bpath applyTransform:CGAffineTransformMakeTranslation(self.width/2, self.width/2)];
+    
+    [bpath fill];
+    
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
 //-(instancetype) copyWithZone:(NSZone *)zone
 //{
 //    OvalBrush* copy = [[OvalBrush alloc] init];
@@ -429,7 +430,7 @@ int const kBrushPixelStep = 3;
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIImage *image = [self imageForDraw];
-     CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
+
     CGFloat width = self.width;
     int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
     NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
@@ -440,6 +441,27 @@ int const kBrushPixelStep = 3;
         [image drawInRect:rect blendMode:kCGBlendModeDestinationOut alpha:1];
     }
 }
+//- (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+//{
+//    UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointZero radius:self.width/2     startAngle:0 endAngle:M_PI*2 clockwise:YES];
+//    CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(fromPoint.x ,fromPoint.y);
+//    [bpath applyTransform:translationTransform];
+//
+//    CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
+//    UIColor *color = [UIColor colorWithWhite:1 alpha:1-alpha];
+//    [color set];
+//    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
+//
+//    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
+//    CGPoint curPoint;
+//    translationTransform = CGAffineTransformMakeTranslation((toPoint.x-fromPoint.x)/len, (toPoint.y-fromPoint.y)/len);
+//    for(int i = 0; i<points.count; i++){
+//        [bpath fillWithBlendMode:kCGBlendModeDestinationIn alpha:1-alpha ];
+//        //[bpath fill];
+//        [points[i] getValue:&curPoint];
+//        [bpath applyTransform:translationTransform];
+//    }
+//}
 //- (instancetype)copyWithZone:(NSZone *)zone
 //{
 //    ClearBrush* copy = [[ClearBrush alloc] init];
