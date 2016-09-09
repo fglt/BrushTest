@@ -206,6 +206,58 @@
     [self configLayerEditView];
 }
 
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    _paletteViewBoard.hidden =YES;
+    _blendModeBoard.hidden = YES;
+    _brushAlphaAndWidthView.hidden = YES;
+    _layerEditView.hidden = YES;
+    _backColorViewBoard.hidden = YES;
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible){
+        [self presentVisibleAlert];
+        return;
+    }
+    
+    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    
+    [_canvas newStroke];
+    [_canvas addPoint:point];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    
+    [_canvas newStrokeIfNull];
+    [_canvas addPointAndDraw:point];
+    
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    BOOL inside = [_canvasView pointInside:point withEvent:event];
+    if(inside){
+        [_canvas addPointAndDraw:point];
+        [_canvas addStroke];
+        [_canvasDao modify:_canvas];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_currentControl updateContents];
+        });
+    }
+    
+}
+
 #pragma mark - toolbarView events
 
 - (IBAction)clickMenu:(UIButton *)sender
@@ -234,9 +286,9 @@
 - (IBAction)clickFullScreen:(UIView *)sender
 {
     if(_toolbarView.hidden){
-         _toolbarView.hidden = false;
-        _layerBoard.hidden = false;
-        _brushViewBoard.hidden = false;
+         _toolbarView.hidden = NO;
+        _layerBoard.hidden = NO;
+        _brushViewBoard.hidden = NO;
         [UIView animateWithDuration:0.3
                          animations:^{
                              _toolbarView.center = CGPointMake(_toolbarView.center.x, _toolbarView.frame.size.height/2);
@@ -246,10 +298,11 @@
                          completion:nil
          ];
     }else{
-        _paletteViewBoard.hidden = true;
-        _brushAlphaAndWidthView.hidden = true;
-        _layerEditView.hidden = true;
+        _paletteViewBoard.hidden = YES;
+        _brushAlphaAndWidthView.hidden = YES;
+        _layerEditView.hidden = YES;
         _blendModeBoard.hidden = YES;
+        _backColorViewBoard.hidden = YES;
         [UIView animateWithDuration:0.3
                          animations:^{
                             _toolbarView.center = CGPointMake(_toolbarView.center.x, -_toolbarView.frame.size.height/2);
@@ -257,9 +310,9 @@
                              _brushViewBoard.center = CGPointMake(- _brushViewBoard.frame.size.width/2, _brushViewBoard.center.y);
                          }
                          completion:^(BOOL finished){
-                             _toolbarView.hidden = true;
-                             _layerBoard.hidden = true;
-                             _brushViewBoard.hidden = true;
+                             _toolbarView.hidden = YES;
+                             _layerBoard.hidden = YES;
+                             _brushViewBoard.hidden = YES;
                          }
          ];
     }
@@ -272,6 +325,7 @@
     self.brushAlphaAndWidthView.hidden = YES;
     self.layerEditView.hidden = YES;
     _blendModeBoard.hidden = YES;
+    _backColorViewBoard.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(!self.paletteViewBoard.hidden){
         self.paletteViewBoard.hidden = YES;
@@ -372,55 +426,7 @@
      ];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    _paletteViewBoard.hidden =true;
-     _blendModeBoard.hidden = YES;
-    _brushAlphaAndWidthView.hidden = true;
-    _layerEditView.hidden = true;
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible){
-        [self presentVisibleAlert];
-        return;
-    }
 
-    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
-    UITouch* touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_canvasView];
-
-    [_canvas newStroke];
-    [_canvas addPoint:point];
-}
-
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible) return;
-    UITouch* touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_canvasView];
-
-    [_canvas newStrokeIfNull];
-    [_canvas addPointAndDraw:point];
-    
-}
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible) return;
-    UITouch* touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_canvasView];
-    BOOL inside = [_canvasView pointInside:point withEvent:event];
-    if(inside){
-        [_canvas addPointAndDraw:point];
-        [_canvas addStroke];
-        [_canvasDao modify:_canvas];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_currentControl updateContents];
-        });
-    }
-
-}
 
 - (void)presentVisibleAlert
 {
@@ -534,6 +540,7 @@
     _blendModeBoard.hidden = YES;
     _paletteViewBoard.hidden = YES;
     _brushAlphaAndWidthView.hidden = YES;
+    _backColorViewBoard.hidden = YES;
     if(sender == _currentControl){
         _layerEditView.hidden = !_layerEditView.hidden;
     }
