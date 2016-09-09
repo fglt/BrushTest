@@ -254,6 +254,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [_currentControl updateContents];
         });
+        [[self.undoManager prepareWithInvocationTarget:self]undo];
     }
     
 }
@@ -273,14 +274,24 @@
 
 - (IBAction)clickUndo:(UIButton *)sender
 {
-    [_canvas undo];
-     [_currentControl updateContents];
+    [self.undoManager undo];
 }
 
-- (IBAction)clickRedo:(UIButton *)sender
+- (void)undo
+{
+    [_canvas undo];
+    [_currentControl updateContents];
+    [[self.undoManager prepareWithInvocationTarget:self]redo];
+}
+- (void)redo
 {
     [_canvas redo];
     [_currentControl updateContents];
+    [[self.undoManager prepareWithInvocationTarget:self]undo];
+}
+- (IBAction)clickRedo:(UIButton *)sender
+{
+    [self.undoManager redo];
 }
 
 - (IBAction)clickFullScreen:(UIView *)sender
