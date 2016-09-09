@@ -242,7 +242,7 @@
                                             <constraint firstAttribute="height" constant="90" id="KUS-3K-Isy"/>
                                         </constraints>
                                         <connections>
-                                            <action selector="changeBackgroundColor:" destination="BYZ-38-t0r" eventType="valueChanged" id="3ZE-86-HYb"/>
+                                            <action selector="clickBackColorControl:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CER-fy-MpK"/>
                                         </connections>
                                     </view>
                                 </subviews>
@@ -507,6 +507,14 @@
                                     <constraint firstAttribute="width" constant="200" id="zyR-UG-hCQ"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yr9-hG-7EG" userLabel="backColorPaletteView">
+                                <rect key="frame" x="200" y="75" width="300" height="500"/>
+                                <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="5kN-dw-fYu"/>
+                                    <constraint firstAttribute="height" constant="500" id="AIf-Bj-SGz"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -515,6 +523,7 @@
                             <constraint firstItem="mUt-IZ-IwU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="396-iY-5SN"/>
                             <constraint firstItem="Zcc-tw-YUl" firstAttribute="leading" secondItem="l2n-lb-wWc" secondAttribute="trailing" id="3a4-mL-n5x"/>
                             <constraint firstItem="dTt-1f-MAe" firstAttribute="top" secondItem="Zzt-bb-c73" secondAttribute="top" id="7P2-Cs-ob1"/>
+                            <constraint firstItem="ns0-JD-8xa" firstAttribute="bottom" secondItem="Yr9-hG-7EG" secondAttribute="bottom" id="FVq-7Q-CfV"/>
                             <constraint firstItem="l2n-lb-wWc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Ibu-gz-Q3S"/>
                             <constraint firstItem="mUt-IZ-IwU" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="LNi-j4-9Am"/>
                             <constraint firstItem="ns0-JD-8xa" firstAttribute="leading" secondItem="np9-tH-bLZ" secondAttribute="trailing" constant="10" id="T8z-LW-raG"/>
@@ -526,14 +535,16 @@
                             <constraint firstItem="xGC-2f-Lf5" firstAttribute="centerY" secondItem="np9-tH-bLZ" secondAttribute="centerY" id="tCj-7b-m77"/>
                             <constraint firstItem="xGC-2f-Lf5" firstAttribute="trailing" secondItem="np9-tH-bLZ" secondAttribute="leading" id="xGM-Qq-8gR"/>
                             <constraint firstItem="np9-tH-bLZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="zDe-c9-cIa"/>
+                            <constraint firstItem="Yr9-hG-7EG" firstAttribute="trailing" secondItem="ns0-JD-8xa" secondAttribute="leading" constant="-10" id="zbD-xb-WkI"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="ColorView" destination="4Sk-pH-eKZ" id="Ed3-3Y-jW9"/>
+                        <outlet property="backColorViewBoard" destination="Yr9-hG-7EG" id="h0y-Ht-O8x"/>
                         <outlet property="backgroundColorControl" destination="3PZ-27-5Pv" id="5uZ-d0-ddc"/>
                         <outlet property="blendModeBoard" destination="xGC-2f-Lf5" id="jMl-xh-zff"/>
                         <outlet property="brushAlphaAndWidthView" destination="Zcc-tw-YUl" id="ev3-6B-rRU"/>
                         <outlet property="brushViewBoard" destination="l2n-lb-wWc" id="5Nu-SP-3wS"/>
+                        <outlet property="colorView" destination="4Sk-pH-eKZ" id="5LO-NT-SHy"/>
                         <outlet property="layerBoard" destination="ns0-JD-8xa" id="cB7-hd-YLf"/>
                         <outlet property="layerEditView" destination="np9-tH-bLZ" id="5iA-Ct-czJ"/>
                         <outlet property="paletteViewBoard" destination="jZq-zM-k8W" id="XUi-LC-qad"/>
@@ -580,7 +591,6 @@
                                         <connections>
                                             <action selector="touchColorPicker:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="Wch-rm-LtE"/>
                                             <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpInside" id="7d3-uQ-t8B"/>
-                                            <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="valueChanged" id="k35-wJ-gar"/>
                                             <action selector="touchUp:" destination="Dx0-kZ-Suw" eventType="touchUpOutside" id="qkQ-pJ-EYS"/>
                                         </connections>
                                     </view>

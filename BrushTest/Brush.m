@@ -427,6 +427,30 @@ int const kBrushPixelStep = 3;
 
 }
 
+//- (UIImage *)imageForDraw
+//{
+//    UIImage *image;
+//    CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
+//    CGRect rect = CGRectMake(0, 0, self.width, self.width);
+//    
+//    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
+//    UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(rect.size.width/2, rect.size.width/2) radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextAddPath(context, bpath.CGPath);
+//    CGContextClip(context);
+//
+//    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+//    effectView.layer.backgroundColor = self.color.CGColor;
+//    effectView.alpha = alpha;
+//    effectView.frame = rect;
+// 
+//    [effectView.layer renderInContext:context];
+//    image = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    return image;
+//}
+
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIImage *image = [self imageForDraw];
@@ -472,3 +496,4 @@ int const kBrushPixelStep = 3;
 //}
 
 @end
+

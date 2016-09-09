@@ -23,22 +23,24 @@
 #import "BlendModeTableViewController.h"
 
 
-@interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate>
+@interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate,CanvasBackgroundControlDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet BrushAlphaAndWidthView *brushAlphaAndWidthView;
 @property (weak, nonatomic) IBOutlet UIView *layerBoard;
 @property (weak, nonatomic) IBOutlet LayerEditView *layerEditView;
-@property (weak, nonatomic) IBOutlet UIButton *ColorView;
+@property (weak, nonatomic) IBOutlet UIButton *colorView;
 @property (weak, nonatomic) IBOutlet CanvasBackgroundControl *backgroundColorControl;
 @property (weak, nonatomic) IBOutlet UIView *blendModeBoard;
+@property (weak, nonatomic) IBOutlet UIView *backColorViewBoard;
 @end
 
 @interface MainViewController ()<LayerControlDelegate>
 @property (strong, nonatomic) UIView *canvasView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BlendModeTableViewController *blendModeController;
+@property (nonatomic, strong) PaletteViewController *backGroundColorSetController;
 @property (nonatomic, strong) LayerControl *currentControl;
 @end
 
@@ -65,7 +67,7 @@
     CALayer *layer = [CALayer layer];
     layer.frame = CGRectMake(0, 0, 44, 44);
     layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
-    _ColorView.layer.mask = layer;
+    _colorView.layer.mask = layer;
     self.brushAlphaAndWidthView.hidden = YES;
     _canvasDao = [CanvasDao sharedManager];
 }
@@ -119,9 +121,22 @@
     _brush = _canvas.currentBrush;
     _width = _brush.width;
     _color = _brush.color;
+    _colorView.layer.backgroundColor = _color.CGColor;
     _type = _brush.brushType;
     _brushAlphaAndWidthView.radiusSlider.value = (_width-1)/30;
     _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
+}
+- (void)addBackGroundColorView
+{
+    UIStoryboard *storyboard = [ UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    _backGroundColorSetController = [storyboard instantiateViewControllerWithIdentifier:@"PaletteViewController"];
+    [self addChildViewController:_backGroundColorSetController];
+    _backGroundColorSetController.delegate = self;
+    
+    _backGroundColorSetController.view.frame = self.backColorViewBoard.bounds;
+    [self.backColorViewBoard addSubview:_backGroundColorSetController.view];
+    [_backGroundColorSetController didMoveToParentViewController:self];
+
 }
 
 - (void) updateLayers
@@ -132,7 +147,7 @@
         LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
         [_layerControlArray addObject:control];
         control.drawingLayer = dlayer;
-        control.LayerControlDelegate =self;
+        control.layerControlDelegate =self;
         control.layer.contents = control.drawingLayer.layer.contents;
         [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
         [_layerBoard addSubview:control];
@@ -168,6 +183,8 @@
     [self addCanvasView];
     [self addPaletteView];
     [self addBlendModeView];
+    [self addBackGroundColorView];
+    _backgroundColorControl.controlDelegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -255,6 +272,7 @@
     self.brushAlphaAndWidthView.hidden = YES;
     self.layerEditView.hidden = YES;
     _blendModeBoard.hidden = YES;
+    _backColorViewBoard.hidden = YES;
     if(!self.paletteViewBoard.hidden){
         self.paletteViewBoard.hidden = YES;
     }else{
@@ -301,19 +319,29 @@
 }
 
 #pragma mark - PaletteViewControllerDelegate
-- (void)colorChanged:(UIColor*)color
+- (void)colorChanged:(PaletteViewController *)paletteController :(UIColor*)color
 {
+    if(paletteController == _paletteViewController){
     //self.color = [color copy];错误，alpha总是1
     self.color = [color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
-    _ColorView.layer.backgroundColor = color.CGColor;
+    _colorView.layer.backgroundColor = color.CGColor;
     self.brush.color = self.color;
     _brush = [Brush BrushWithColor:_color width:_width type:_type];
     _canvas.currentBrush = _brush;
+    }else{
+        _canvas.backgroundColor = [color copy];
+        _backgroundColorControl.colorView.backgroundColor = color;
+        [_canvas updateLayer];
+    }
 }
 
-- (UIColor *)currentColor
+- (UIColor *)currentColor:(PaletteViewController *)paletteController
 {
-    return _color;
+    if(paletteController == _paletteViewController){
+        return _color;
+    }else{
+        return _canvas.backgroundColor;
+    }
 }
 
 - (void)displayBrushAlphaAndWidthView
@@ -534,7 +562,7 @@
     LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
     [_layerControlArray insertObject:control atIndex:[_canvas indexOfDrawingLayer:_canvas.currentDrawingLayer]];
     control.drawingLayer = _canvas.currentDrawingLayer;
-    control.LayerControlDelegate = self;
+    control.layerControlDelegate = self;
     [control updateContents];
     [control addTarget:self action:@selector(clickLayerControl:) forControlEvents:UIControlEventTouchUpInside];
     self.currentControl = control;
@@ -569,6 +597,11 @@
     [_blendModeController.tableView reloadData];
 }
 
+- (IBAction)clickBackColorControl:(id)sender {
+    _backColorViewBoard.hidden = !_backColorViewBoard.hidden;
+    [_backGroundColorSetController setLastColor:_canvas.backgroundColor];
+}
+
 
 #pragma mark - BlendModeTableViewControllerDelegate
 - (CGBlendMode)curBlendMode
@@ -596,11 +629,19 @@
     return nil;
 }
 
+
 #pragma mark - LayerControlDelegate
 
 - (void)visableChanged
 {
     [_canvas updateLayer];
 }
+
+#pragma mark - CanvasBackgroundControlDelegate
+- (UIColor *)backgroundColor
+{
+    return _canvas.backgroundColor;
+}
 @end
+
 

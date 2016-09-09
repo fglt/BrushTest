@@ -222,7 +222,7 @@
 - (void)updateLayer{
     
     UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
-    [[UIColor whiteColor] set];
+    [self.backgroundColor set];
     UIRectFill(CGRectMake(0, 0, _canvasSize.width, _canvasSize.height));
     CGContextRef context = UIGraphicsGetCurrentContext();
 

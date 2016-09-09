@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class PaletteViewController;
 typedef enum {
     ColorModeRGB = 0,
     ColorModeHSV
@@ -15,8 +15,8 @@ typedef enum {
 
 @protocol PaletteViewControllerDelegate <NSObject>
 
-- (void)colorChanged:(UIColor*) color;
-- (UIColor *)currentColor;
+- (void)colorChanged:(PaletteViewController *)paletteController :(UIColor*) color;
+- (UIColor *)currentColor:(PaletteViewController *)paletteController;
 
 @end
 

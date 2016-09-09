@@ -31,11 +31,11 @@
 		176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 176D112D1D60CDB500A0DD31 /* FGTHSBSupport.m */; };
 		1775FBEF1D7AB6A20096FF50 /* CanvasDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FBEE1D7AB6A20096FF50 /* CanvasDao.m */; };
 		1775FBF81D7B156F0096FF50 /* BlendModeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */; };
-		1775FC041D7BBDCA0096FF50 /* BlendModeTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FC031D7BBDCA0096FF50 /* BlendModeTableDataSource.m */; };
 		1775FC091D7BD8E20096FF50 /* BlendMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1775FC061D7BD8E20096FF50 /* BlendMode.m */; };
 		17C7CD041D6CA4CC00E5D47B /* Canvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD031D6CA4CC00E5D47B /* Canvas.m */; };
 		17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD181D6FEA3100E5D47B /* LayerEditView.m */; };
 		17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */; };
+		17DDF6821D81AE5B007F2C11 /* UIImage+FGTDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DDF6811D81AE5B007F2C11 /* UIImage+FGTDrawing.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,8 +85,6 @@
 		1775FBEE1D7AB6A20096FF50 /* CanvasDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CanvasDao.m; path = BrushTest/CanvasDao.m; sourceTree = "<group>"; };
 		1775FBF61D7B156F0096FF50 /* BlendModeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlendModeTableViewController.h; sourceTree = "<group>"; };
 		1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlendModeTableViewController.m; sourceTree = "<group>"; };
-		1775FC021D7BBDCA0096FF50 /* BlendModeTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlendModeTableDataSource.h; sourceTree = "<group>"; };
-		1775FC031D7BBDCA0096FF50 /* BlendModeTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlendModeTableDataSource.m; sourceTree = "<group>"; };
 		1775FC051D7BD8E20096FF50 /* BlendMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlendMode.h; path = BrushTest/BlendMode.h; sourceTree = "<group>"; };
 		1775FC061D7BD8E20096FF50 /* BlendMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlendMode.m; path = BrushTest/BlendMode.m; sourceTree = "<group>"; };
 		17C7CD021D6CA4CC00E5D47B /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Canvas.h; path = BrushTest/Canvas.h; sourceTree = "<group>"; };
@@ -95,6 +93,8 @@
 		17C7CD181D6FEA3100E5D47B /* LayerEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerEditView.m; sourceTree = "<group>"; };
 		17C7CD1A1D70876A00E5D47B /* UIView+FGTDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FGTDrawing.h"; sourceTree = "<group>"; };
 		17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FGTDrawing.m"; sourceTree = "<group>"; };
+		17DDF6801D81AE5B007F2C11 /* UIImage+FGTDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FGTDrawing.h"; sourceTree = "<group>"; };
+		17DDF6811D81AE5B007F2C11 /* UIImage+FGTDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FGTDrawing.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,10 +111,6 @@
 		1754A2E71D649FFC00C18717 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1775FC021D7BBDCA0096FF50 /* BlendModeTableDataSource.h */,
-				1775FC031D7BBDCA0096FF50 /* BlendModeTableDataSource.m */,
-				176D11171D5CE02400A0DD31 /* UIColor+BFPaperColors.h */,
-				176D11181D5CE02400A0DD31 /* UIColor+BFPaperColors.m */,
 				176D11191D5CE02400A0DD31 /* UIImage+FEBoxBlur.h */,
 				176D111A1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m */,
 				176C314A1D67FFF700B9A1D6 /* BrushAlphaAndWidthView.h */,
@@ -133,8 +129,6 @@
 				17C7CD181D6FEA3100E5D47B /* LayerEditView.m */,
 				17C7CD1A1D70876A00E5D47B /* UIView+FGTDrawing.h */,
 				17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */,
-				175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */,
-				175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -191,6 +185,12 @@
 				176C31301D65EEB000B9A1D6 /* PaletteViewController.m */,
 				1775FBF61D7B156F0096FF50 /* BlendModeTableViewController.h */,
 				1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */,
+				175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */,
+				175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */,
+				176D11171D5CE02400A0DD31 /* UIColor+BFPaperColors.h */,
+				176D11181D5CE02400A0DD31 /* UIColor+BFPaperColors.m */,
+				17DDF6801D81AE5B007F2C11 /* UIImage+FGTDrawing.h */,
+				17DDF6811D81AE5B007F2C11 /* UIImage+FGTDrawing.m */,
 				176D10EC1D5CDF3B00A0DD31 /* Supporting Files */,
 				1754A2E71D649FFC00C18717 /* View */,
 			);
@@ -283,11 +283,11 @@
 			files = (
 				176D111C1D5CE02400A0DD31 /* UIColor+BFPaperColors.m in Sources */,
 				1754A2E11D649FE500C18717 /* CircleColcorPicker.m in Sources */,
-				1775FC041D7BBDCA0096FF50 /* BlendModeTableDataSource.m in Sources */,
 				176D10F41D5CDF3B00A0DD31 /* MainViewController.m in Sources */,
 				176D111B1D5CE02400A0DD31 /* Stroke.m in Sources */,
 				176C31311D65EEB000B9A1D6 /* PaletteViewController.m in Sources */,
 				176D112F1D60CDB500A0DD31 /* FGTHSBSupport.m in Sources */,
+				17DDF6821D81AE5B007F2C11 /* UIImage+FGTDrawing.m in Sources */,
 				1775FC091D7BD8E20096FF50 /* BlendMode.m in Sources */,
 				175BE8341D7420FE0033EDCE /* UIColor+FGTColor.m in Sources */,
 				1775FBF81D7B156F0096FF50 /* BlendModeTableViewController.m in Sources */,

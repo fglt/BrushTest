@@ -343,15 +343,6 @@ UIImage *hsvSliderImage(const CGFloat *hsv,FGTColorHSVIndex index, int h)
     return image;
 }
 
-UIImage * imageFromImage(UIImage *image, CGRect rect)
-{
-    CGImageRef imageRef = image.CGImage;
-    CGImageRef imagePartRef = CGImageCreateWithImageInRect(imageRef,rect);
-    UIImage* cropImage = [UIImage imageWithCGImage:imagePartRef];
-    CGImageRelease(imagePartRef);
-    return cropImage;
-}
-
 void HSVFromUIColor(UIColor* color, CGFloat hsv[3])
 {
     CGColorRef colorRef = [color CGColor];
@@ -373,3 +364,4 @@ void HSVFromUIColor(UIColor* color, CGFloat hsv[3])
     RGBToHSV(bgr, hsv, YES);
     //NSLog(@"%f: %f: %f",*h, *s,*v);
 }
+

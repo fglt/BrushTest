@@ -11,6 +11,7 @@
 #import "SquareColorPicker.h"
 #import "FGTHSBSupport.h"
 #import "UIColor+BFPaperColors.h"
+#import "UIImage+FGTDrawing.h"
 
 
 @interface PaletteViewController()
@@ -37,7 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _currentColorView.backgroundColor = [ _delegate currentColor];
+    _currentColorView.backgroundColor = [ _delegate currentColor:self];
     CGFloat hsv[3];
     HSVFromUIColor(_currentColorView.backgroundColor, hsv);
     _circleColorPicker.hue = hsv[0];
@@ -123,21 +124,20 @@
 - (void)setRGBSliderImage:(CGFloat *)bgr :(UISlider *)slider :(int) index
 {
     UIImage *image = sliderImage(bgr, index, 6);
-    UIImage *lImg = imageFromImage(image, CGRectMake(0, 0, bgr[index]*255, image.size.height));
-    UIImage *rImg = imageFromImage(image, CGRectMake(bgr[index]*255, 0, 256 - bgr[index]*255, image.size.height));
+    UIImage *limg = [image imageWithRect:CGRectMake(0, 0, bgr[index]*255, image.size.height)];
+    UIImage *rimg = [image imageWithRect:CGRectMake(bgr[index]*255, 0, 256 - bgr[index]*255, image.size.height)];
     
-    [slider setMinimumTrackImage:lImg forState:UIControlStateNormal ];
-    [slider setMaximumTrackImage:rImg forState:UIControlStateNormal ];
+    [slider setMinimumTrackImage:limg forState:UIControlStateNormal ];
+    [slider setMaximumTrackImage:rimg forState:UIControlStateNormal ];
 }
 
 - (void)setHSVSliderImage:(CGFloat *)hsv :(UISlider *)slider :(int) index
 {
     UIImage *image = hsvSliderImage(hsv, index, 6);
-    UIImage *lImg = imageFromImage(image, CGRectMake(0, 0, hsv[index]*255, image.size.height));
-    UIImage *rImg = imageFromImage(image, CGRectMake(hsv[index]*255, 0, 256 - hsv[index]*255, image.size.height));
-    
-    [slider setMinimumTrackImage:lImg forState:UIControlStateNormal ];
-    [slider setMaximumTrackImage:rImg forState:UIControlStateNormal ];
+    UIImage *limg = [image imageWithRect:CGRectMake(0, 0, hsv[index]*255, image.size.height)];
+    UIImage *rimg = [image imageWithRect:CGRectMake(hsv[index]*255, 0, 256 - hsv[index]*255, image.size.height)];
+    [slider setMinimumTrackImage:limg forState:UIControlStateNormal ];
+    [slider setMaximumTrackImage:rimg forState:UIControlStateNormal ];
 }
 
 - (void)configureLabel
@@ -154,7 +154,7 @@
 }
 
 - (IBAction)touchUp:(id)sender {
-    [_delegate colorChanged:_currentColorView.backgroundColor];
+    [_delegate colorChanged:self :_currentColorView.backgroundColor];
 }
 
 - (IBAction)changeColorMode:(UIButton *)sender {
