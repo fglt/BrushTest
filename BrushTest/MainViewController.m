@@ -21,6 +21,7 @@
 #import "UIView+FGTDrawing.h"
 #import "CanvasDao.h"
 #import "BlendModeTableViewController.h"
+#import "UIKit/UIGestureRecognizerSubclass.h"
 
 
 @interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate,CanvasBackgroundControlDelegate>
@@ -185,6 +186,13 @@
     [self addBlendModeView];
     [self addBackGroundColorView];
     _backgroundColorControl.controlDelegate = self;
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc]
+                                                    initWithTarget:self
+                                                    action:@selector(handlePan:)];
+    panGestureRecognizer.maximumNumberOfTouches =1;
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    UITapGestureRecognizer *tapGestureRecongnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.view addGestureRecognizer:tapGestureRecongnizer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -207,7 +215,9 @@
 }
 
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+#pragma mark - Gesture handle
+
+- (void)handlePan:(UIPanGestureRecognizer*) recognizer
 {
     _paletteViewBoard.hidden =YES;
     _blendModeBoard.hidden = YES;
@@ -215,49 +225,106 @@
     _layerEditView.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible){
-        [self presentVisibleAlert];
-        return;
+    CGPoint point = [recognizer locationInView:self.view];
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            [_canvas newStroke];
+            [_canvas addPoint:point];
+            if(!_canvas.currentDrawingLayer.visible){
+                [self presentVisibleAlert];
+                [recognizer setState:UIGestureRecognizerStateCancelled];
+                return;
+            }
+            break;
+        case UIGestureRecognizerStateChanged:
+            [_canvas addPointAndDraw:point];
+            break;
+        case UIGestureRecognizerStateEnded:{
+            [_canvas addPointAndDraw:point];
+            [_canvas addStroke];
+            [_canvasDao modify:_canvas];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_currentControl updateContents];
+            });
+            [[self.undoManager prepareWithInvocationTarget:self]undo];
+            break;
+        }
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+        default:
+            break;
     }
-    
-    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
-    UITouch* touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_canvasView];
-    
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)recognizer
+{
+    _paletteViewBoard.hidden =YES;
+    _blendModeBoard.hidden = YES;
+    _brushAlphaAndWidthView.hidden = YES;
+    _layerEditView.hidden = YES;
+    _backColorViewBoard.hidden = YES;
+    if(_canvas.currentDrawingLayer.locked) return;
+     CGPoint point = [recognizer locationInView:self.view];
     [_canvas newStroke];
-    [_canvas addPoint:point];
-}
-
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible) return;
-    UITouch* touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_canvasView];
-    
-    [_canvas newStrokeIfNull];
     [_canvas addPointAndDraw:point];
-    
+    [_canvas addStroke];
+    [_canvasDao modify:_canvas];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_currentControl updateContents];
+    });
+    [[self.undoManager prepareWithInvocationTarget:self]undo];
 }
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    if(_canvas.currentDrawingLayer.locked) return;
-    if(!_canvas.currentDrawingLayer.visible) return;
-    UITouch* touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_canvasView];
-    BOOL inside = [_canvasView pointInside:point withEvent:event];
-    if(inside){
-        [_canvas addPointAndDraw:point];
-        [_canvas addStroke];
-        [_canvasDao modify:_canvas];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_currentControl updateContents];
-        });
-        [[self.undoManager prepareWithInvocationTarget:self]undo];
-    }
-    
-}
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//    _paletteViewBoard.hidden =YES;
+//    _blendModeBoard.hidden = YES;
+//    _brushAlphaAndWidthView.hidden = YES;
+//    _layerEditView.hidden = YES;
+//    _backColorViewBoard.hidden = YES;
+//    if(_canvas.currentDrawingLayer.locked) return;
+//    if(!_canvas.currentDrawingLayer.visible){
+//        [self presentVisibleAlert];
+//        return;
+//    }
+//    
+//    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+//    UITouch* touch = [touches anyObject];
+//    CGPoint point = [touch locationInView:_canvasView];
+//    
+//    [_canvas newStroke];
+//    [_canvas addPoint:point];
+//}
+//
+//- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//    if(_canvas.currentDrawingLayer.locked) return;
+//    if(!_canvas.currentDrawingLayer.visible) return;
+//    UITouch* touch = [touches anyObject];
+//    CGPoint point = [touch locationInView:_canvasView];
+//    
+//    [_canvas newStrokeIfNull];
+//    [_canvas addPointAndDraw:point];
+//    
+//}
+//
+//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//    if(_canvas.currentDrawingLayer.locked) return;
+//    if(!_canvas.currentDrawingLayer.visible) return;
+//    UITouch* touch = [touches anyObject];
+//    CGPoint point = [touch locationInView:_canvasView];
+//    BOOL inside = [_canvasView pointInside:point withEvent:event];
+//    if(inside){
+//        [_canvas addPointAndDraw:point];
+//        [_canvas addStroke];
+//        [_canvasDao modify:_canvas];
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [_currentControl updateContents];
+//        });
+//        [[self.undoManager prepareWithInvocationTarget:self]undo];
+//    }
+//    
+//}
 
 #pragma mark - toolbarView events
 
@@ -660,6 +727,8 @@
 {
     return _canvas.backgroundColor;
 }
+
+
 @end
 
 

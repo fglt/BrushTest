@@ -43,6 +43,7 @@
 {
     CGPoint toPoint;
     CGPoint fromPoint;
+    if(_points.count<1) return;
     [_points[0] getValue:&fromPoint];
     [_brush clear];
     for(int i=1; i<_points.count; i++){
@@ -64,18 +65,22 @@
     CGPoint fromPoint;
     if(_points.count ==0){
         fromPoint = point;
+        [_brush drawFromPoint:fromPoint toPoint:point];
+        [_points addObject:pointValue];
     }
-    else [[_points lastObject] getValue:&fromPoint];
+    else {
+        [[_points lastObject] getValue:&fromPoint];
     
-    if(ccpFuzzyEqual(fromPoint, point, kBrushPixelStep)){
-        if(_points.count ==1){
-            fromPoint = point;
-            [_brush drawFromPoint:fromPoint toPoint:point];
+        if(ccpFuzzyEqual(fromPoint, point, kBrushPixelStep)){
+            if(_points.count==1){
+                [_brush drawFromPoint:fromPoint toPoint:point];
+            }
+            return;
         }
-        return;
+        [_brush drawFromPoint:fromPoint toPoint:point];
+        [_points addObject:pointValue];
     }
-    [_brush drawFromPoint:fromPoint toPoint:point];
-    [_points addObject:pointValue];
+
 }
 
 BOOL ccpFuzzyEqual(CGPoint a, CGPoint b, float var)

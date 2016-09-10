@@ -29,4 +29,19 @@
     }
     return [NSNumber numberWithUnsignedInt:c];
 }
+
++ (UIColor *)colorWithHexString:(NSString*)string
+{
+    NSScanner *scanner = [NSScanner scannerWithString:string];
+    unsigned i;
+    [scanner scanHexInt:&i];
+    return [UIColor colorWithUint32:i];
+}
+
+- (NSString *)hexString
+{
+    CGFloat r,g,b,a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    return [NSString stringWithFormat:@"%02X%02X%02X%02X",(short)(r*255),(short)(g*255),(short)(b*255),(short)(a*255)];
+}
 @end

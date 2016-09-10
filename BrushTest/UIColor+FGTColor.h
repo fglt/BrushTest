@@ -10,6 +10,8 @@
 
 @interface UIColor (FGTColor)
 
-+ (UIColor *) colorWithUint32:(uint32_t)rgbaValue;
++ (UIColor *)colorWithUint32:(uint32_t)rgbaValue;
 - (NSNumber *)number;
++ (UIColor *)colorWithHexString:(NSString*)string;
+- (NSString *)hexString;
 @end
