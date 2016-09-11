@@ -92,7 +92,10 @@ static UIImage *unlockImage;
     }
     self.drawingLayer.locked = _locked;
 }
-
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return NO;
+}
 @end
 
 IB_DESIGNABLE
@@ -136,5 +139,10 @@ IB_DESIGNABLE
             [_visibleButton setImage:showOffImage forState:UIControlStateNormal];
         }
     }
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return NO;
 }
 @end

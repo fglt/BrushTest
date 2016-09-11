@@ -6,10 +6,10 @@
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import "BrushAlphaAndWidthView.h"
+#import "BrushSlider.h"
 
 IB_DESIGNABLE
-@implementation BrushAlphaAndWidthView
+@implementation BrushSlider
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

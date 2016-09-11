@@ -104,13 +104,13 @@
 - (u_long)layerCount{
     return _drawingLayers.count;
 }
-- (void) newStrokeIfNull
+- (void) newStrokeIfNullWithFigureType:(FigureType)type;
 {
-    [_currentDrawingLayer newStrokeWithBrushIfNull:_currentBrush];
+    [_currentDrawingLayer newStrokeWithBrushIfNull:_currentBrush WithFigureType:type];
 }
-- (void) newStroke
+- (void) newStrokeWithFigureType:(FigureType)type;
 {
-    [_currentDrawingLayer newStrokeWithBrush:_currentBrush];
+    [_currentDrawingLayer newStrokeWithBrush:_currentBrush WithFigureType:type];
    
     //UIGraphicsBeginImageContextWithOptions(_canvasSize, NO, 0.0);
     //[_image drawAtPoint:CGPointZero];

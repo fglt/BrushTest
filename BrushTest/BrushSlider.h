@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BrushAlphaAndWidthView : UIView
+@interface BrushSlider : UIView
 @property (weak, nonatomic) IBOutlet UISlider *alphaSlider;
 @property (weak, nonatomic) IBOutlet UISlider *radiusSlider;
 @end

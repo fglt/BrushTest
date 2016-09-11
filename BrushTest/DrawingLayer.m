@@ -99,13 +99,14 @@
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
 
-- (void)newStrokeWithBrushIfNull:(Brush *)brush
+- (void)newStrokeWithBrushIfNull:(Brush *)brush WithFigureType:(FigureType)type;
 {
-    if(!_currentStroke) _currentStroke = [[Stroke alloc]initWithBrush:brush];
+    if(!_currentStroke)_currentStroke = [[Stroke alloc]initWithBrush:brush figureType:type];;
 }
-- (void)newStrokeWithBrush:(Brush*)brush
+- (void)newStrokeWithBrush:(Brush*)brush WithFigureType:(FigureType)type;
 {
-    _currentStroke = [[Stroke alloc]initWithBrush:brush];
+    //_currentStroke = [[Stroke alloc]initWithBrush:brush];
+    _currentStroke = [[Stroke alloc]initWithBrush:brush figureType:type];
 }
 
 - (void)addStroke

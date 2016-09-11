@@ -13,7 +13,7 @@
 #import "SquareColorPicker.h"
 #import "PaletteViewController.h"
 #import "Brush.h"
-#import "BrushAlphaAndWidthView.h"
+#import "BrushSlider.h"
 #import "DrawingLayer.h"
 #import "LayerControl.h"
 #import "Canvas.h"
@@ -22,23 +22,27 @@
 #import "CanvasDao.h"
 #import "BlendModeTableViewController.h"
 #import "UIKit/UIGestureRecognizerSubclass.h"
+#import "FigureGestureRecognizer.h"
+#import "FigureView.h"
 
 
 @interface MainViewController ()<PaletteViewControllerDelegate,BlendModeTableViewControllerDelegate,CanvasBackgroundControlDelegate>
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet BrushAlphaAndWidthView *brushAlphaAndWidthView;
+@property (weak, nonatomic) IBOutlet BrushSlider *brushAlphaAndWidthView;
 @property (weak, nonatomic) IBOutlet UIView *layerBoard;
 @property (weak, nonatomic) IBOutlet LayerEditView *layerEditView;
 @property (weak, nonatomic) IBOutlet UIButton *colorView;
 @property (weak, nonatomic) IBOutlet CanvasBackgroundControl *backgroundColorControl;
 @property (weak, nonatomic) IBOutlet UIView *blendModeBoard;
 @property (weak, nonatomic) IBOutlet UIView *backColorViewBoard;
+@property (weak, nonatomic) IBOutlet UIView *figureToolsBar;
 @end
 
 @interface MainViewController ()<LayerControlDelegate>
-@property (strong, nonatomic) UIView *canvasView;
+@property (strong, nonatomic) CanvasView *canvasView;
+@property (nonatomic, strong) FigureView *figureView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
 @property (nonatomic, strong) BlendModeTableViewController *blendModeController;
 @property (nonatomic, strong) PaletteViewController *backGroundColorSetController;
@@ -55,6 +59,8 @@
 @property (nonatomic, strong) CanvasDao *canvasDao;
 @property (nonatomic, strong) DrawingLayer *drawingLayerForPaste;
 @property (nonatomic, strong) BlendMode * blendMode;
+@property (nonatomic) FigureType figureType;
+@property (nonatomic) CGPoint startPoint;
 @end
 
 @implementation MainViewController
@@ -107,18 +113,20 @@
         [_canvasDao create:_canvas];
     }
     CGSize screenSize = self.view.bounds.size;
-    _canvasView = [[UIView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    _canvasView = [[CanvasView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    _figureView = [[FigureView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    _figureView.backgroundColor =[UIColor clearColor];
     //_canvasView.delegate = self;
     _canvasView.backgroundColor = _canvas.backgroundColor;
     _canvas.view = _canvasView;
-    [_canvasView.layer addSublayer:_canvas.layer];
-
+    [_canvasView.layer insertSublayer:_canvas.layer atIndex:0];
+    
     [_canvas updateLayer];
 
-    [self updateLayers];
+    [self configureLayerBorad];
     
     [self.view insertSubview:_canvasView atIndex:0];
-    
+    [self.view insertSubview:_figureView atIndex:1];
     _brush = _canvas.currentBrush;
     _width = _brush.width;
     _color = _brush.color;
@@ -140,7 +148,7 @@
 
 }
 
-- (void) updateLayers
+- (void) configureLayerBorad
 {
     for (DrawingLayer *dlayer in _canvas.drawingLayers) {
         //[_canvasView.layer addSublayer:dlayer.layer];
@@ -186,13 +194,8 @@
     [self addBlendModeView];
     [self addBackGroundColorView];
     _backgroundColorControl.controlDelegate = self;
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc]
-                                                    initWithTarget:self
-                                                    action:@selector(handlePan:)];
-    panGestureRecognizer.maximumNumberOfTouches =1;
-    [self.view addGestureRecognizer:panGestureRecognizer];
-    UITapGestureRecognizer *tapGestureRecongnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [self.view addGestureRecognizer:tapGestureRecongnizer];
+   // [self addGestureRecognizer];
+   
 }
 
 - (void)didReceiveMemoryWarning {
@@ -214,6 +217,21 @@
     [self configLayerEditView];
 }
 
+- (void)addGestureRecognizer
+{
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc]
+                                                    initWithTarget:self
+                                                    action:@selector(handlePan:)];
+    panGestureRecognizer.maximumNumberOfTouches =1;
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    UITapGestureRecognizer *tapGestureRecongnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.view addGestureRecognizer:tapGestureRecongnizer];
+    FigureGestureRecognizer *figureGestureRecognizer = [[FigureGestureRecognizer alloc] initWithTarget:self action:@selector(handleFigure:)];
+    figureGestureRecognizer.beginFigureGestureRecognizer = TRUE;
+    figureGestureRecognizer.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:figureGestureRecognizer];
+    
+}
 
 #pragma mark - Gesture handle
 
@@ -228,7 +246,7 @@
     CGPoint point = [recognizer locationInView:self.view];
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
-            [_canvas newStroke];
+            [_canvas newStrokeWithFigureType:_figureType];
             [_canvas addPoint:point];
             if(!_canvas.currentDrawingLayer.visible){
                 [self presentVisibleAlert];
@@ -265,7 +283,7 @@
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
      CGPoint point = [recognizer locationInView:self.view];
-    [_canvas newStroke];
+    [_canvas newStrokeWithFigureType:_figureType];
     [_canvas addPointAndDraw:point];
     [_canvas addStroke];
     [_canvasDao modify:_canvas];
@@ -274,63 +292,139 @@
     });
     [[self.undoManager prepareWithInvocationTarget:self]undo];
 }
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    _paletteViewBoard.hidden =YES;
-//    _blendModeBoard.hidden = YES;
-//    _brushAlphaAndWidthView.hidden = YES;
-//    _layerEditView.hidden = YES;
-//    _backColorViewBoard.hidden = YES;
-//    if(_canvas.currentDrawingLayer.locked) return;
-//    if(!_canvas.currentDrawingLayer.visible){
-//        [self presentVisibleAlert];
-//        return;
-//    }
-//    
-//    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
-//    UITouch* touch = [touches anyObject];
-//    CGPoint point = [touch locationInView:_canvasView];
-//    
-//    [_canvas newStroke];
-//    [_canvas addPoint:point];
-//}
-//
-//- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    if(_canvas.currentDrawingLayer.locked) return;
-//    if(!_canvas.currentDrawingLayer.visible) return;
-//    UITouch* touch = [touches anyObject];
-//    CGPoint point = [touch locationInView:_canvasView];
-//    
-//    [_canvas newStrokeIfNull];
-//    [_canvas addPointAndDraw:point];
-//    
-//}
-//
-//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    if(_canvas.currentDrawingLayer.locked) return;
-//    if(!_canvas.currentDrawingLayer.visible) return;
-//    UITouch* touch = [touches anyObject];
-//    CGPoint point = [touch locationInView:_canvasView];
-//    BOOL inside = [_canvasView pointInside:point withEvent:event];
-//    if(inside){
-//        [_canvas addPointAndDraw:point];
-//        [_canvas addStroke];
-//        [_canvasDao modify:_canvas];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [_currentControl updateContents];
-//        });
-//        [[self.undoManager prepareWithInvocationTarget:self]undo];
-//    }
-//    
-//}
+
+- (void)handleFigure:(FigureGestureRecognizer *)recognizer
+{
+    _paletteViewBoard.hidden =YES;
+    _blendModeBoard.hidden = YES;
+    _brushAlphaAndWidthView.hidden = YES;
+    _layerEditView.hidden = YES;
+    _backColorViewBoard.hidden = YES;
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible){
+        [self presentVisibleAlert];
+        [recognizer setState:UIGestureRecognizerStateCancelled];
+        return;
+    }
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateChanged:{
+            CGRect rect = CGRectMake(MIN(recognizer.firstPoint.x, recognizer.secondPoint.x), MIN(recognizer.firstPoint.y, recognizer.secondPoint.y), ABS(recognizer.firstPoint.x-recognizer.secondPoint.x), ABS(recognizer.firstPoint.y-recognizer.secondPoint.y));
+            //UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRect:rect];
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:rect];
+            _figureView.bezierPath = bezierPath;
+            [_figureView setNeedsDisplay];
+            break;
+        }
+        case UIGestureRecognizerStateEnded:{
+            _figureView.bezierPath = nil;
+            [_figureView setNeedsDisplay];
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    _paletteViewBoard.hidden =YES;
+    _blendModeBoard.hidden = YES;
+    _brushAlphaAndWidthView.hidden = YES;
+    _layerEditView.hidden = YES;
+    _backColorViewBoard.hidden = YES;
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible){
+        [self presentVisibleAlert];
+        return;
+    }
+    
+    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    _startPoint = point;
+    [_canvas newStrokeWithFigureType:_figureType];
+    [_canvas addPoint:point];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    if(_figureType==FigureTypeNone){
+    [_canvas newStrokeIfNullWithFigureType:_figureType];
+    [_canvas addPointAndDraw:point];
+    }else{
+        UIBezierPath *bezierPath;
+        switch (_figureType) {
+            case FigureTypeLine:
+                bezierPath = [UIBezierPath bezierPath];
+                [bezierPath moveToPoint:_startPoint];
+                [bezierPath addLineToPoint:point];
+                break;
+            case FigureTypeOval:{
+                CGFloat w = ABS(point.x-_startPoint.x);
+                CGFloat h = ABS(point.y-_startPoint.y);
+                CGRect rect = CGRectMake(_startPoint.x -w, _startPoint.y-h, w*2, h*2);
+                bezierPath = [UIBezierPath bezierPathWithOvalInRect:rect];
+                break;
+            }
+            case FigureTypeRectangle:{
+                CGFloat w = ABS(point.x-_startPoint.x);
+                CGFloat h = ABS(point.y-_startPoint.y);
+                CGRect rect = CGRectMake(MIN(_startPoint.x, point.x), MIN(_startPoint.y, point.y), w, h);
+                bezierPath = [UIBezierPath bezierPathWithRect:rect];
+            }
+            default:
+                break;
+        }
+        _figureView.bezierPath = bezierPath;
+        [_figureView setNeedsDisplay];
+    }
+    
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    if(_canvas.currentDrawingLayer.locked) return;
+    if(!_canvas.currentDrawingLayer.visible) return;
+    UITouch* touch = [touches anyObject];
+    CGPoint point = [touch locationInView:_canvasView];
+    BOOL inside = [_canvasView pointInside:point withEvent:event];
+    if(inside){
+        if(_figureType == FigureTypeNone){
+        [_canvas addPointAndDraw:point];
+        [_canvas addStroke];
+        [_canvasDao modify:_canvas];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_currentControl updateContents];
+        });
+        [[self.undoManager prepareWithInvocationTarget:self]undo];
+        }else{
+            [_canvas addPointAndDraw:point];
+            [_canvas addStroke];
+            [_canvasDao modify:_canvas];
+            _figureView.bezierPath = nil;
+            [_figureView setNeedsDisplay];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_currentControl updateContents];
+            });
+            
+            [[self.undoManager prepareWithInvocationTarget:self]undo];
+
+        }
+    }
+    
+}
 
 #pragma mark - toolbarView events
 
 - (IBAction)clickMenu:(UIButton *)sender
 {
     [_canvasDao saveToFile:_canvas];
+}
+- (IBAction)clickFigure:(UIButton *)sender {
+    _figureToolsBar.hidden = !_figureToolsBar.hidden;
 }
 
 - (IBAction)clickClear:(UIButton *)sender
@@ -395,6 +489,29 @@
          ];
     }
 
+}
+
+- (IBAction)clickFigureToolsButton:(UIButton *)sender {
+    switch (sender.tag) {
+        case 40:
+            _figureType = FigureTypeNone;
+            _figureToolsBar.hidden = YES;
+            break;
+        case 41:
+            _figureType = FigureTypeLine;
+            break;
+        case 42:
+            _figureType = FigureTypeOval;
+            break;
+        case 43:
+            _figureType = FigureTypeRectangle;
+            break;
+        case 44:
+            _figureToolsBar.hidden = YES;
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -583,7 +700,7 @@
                 [control removeFromSuperview];
             }
             [_layerControlArray removeAllObjects];
-            [self updateLayers];
+            [self configureLayerBorad];
             break;
         case 37:{
             if(_layerControlArray.count ==  1)break;

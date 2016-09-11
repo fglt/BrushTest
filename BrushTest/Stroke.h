@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-@class Brush;
+#import "Brush.h"
 
 @interface Stroke : NSObject
 @property (nonatomic, strong) Brush* brush;
 @property (nonatomic, strong) NSMutableArray* points;
+@property (nonatomic) FigureType figureType;
 
-- (instancetype)initWithBrush:(Brush*)brush;
+- (instancetype)initWithBrush:(Brush *)brush;
+- (instancetype)initWithBrush:(Brush *)brush figureType:(FigureType)figureType;
 - (void)addPoint:(CGPoint)point;
 - (void)drawInContext;
 - (NSDictionary *)dictionary;

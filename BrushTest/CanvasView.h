@@ -10,15 +10,6 @@
 @class Canvas;
 @class DrawingLayer;
 
-@protocol CanvasViewDelegate <NSObject>
-
-- (void)touchBegan:(CGPoint)point;
-- (void)touchMoved:(CGPoint)point;
-- (void)touchEnded:(CGPoint)point;
-
-@end
 @interface CanvasView : UIView
-@property (nonatomic, weak) id<CanvasViewDelegate> delegate;
-
 - (void)displayContent;
 @end

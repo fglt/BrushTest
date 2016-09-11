@@ -30,7 +30,7 @@ int const kBrushPixelStep = 3;
 {
     self = [super init];
     _width = width;
-    _color = color;
+    _color = [color copy];
     return self;
 }
 
@@ -122,14 +122,29 @@ int const kBrushPixelStep = 3;
 {
     UIImage *image = [self imageForDraw];
     CGFloat width = self.width;
-    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
+    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint];
     CGPoint curPoint;
     for(int i = 0; i<points.count; i++){
         [points[i] getValue:&curPoint];
 //        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
 //        [image drawInRect:rect];
         CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y);
+        [image drawAtPoint:point];
+    }
+}
+
+
+- (void)drawWithFirstPoint:(CGPoint)point1 secondPoint:(CGPoint)point2 withFigureType:(FigureType)figureType
+{
+    UIImage *image = [self imageForDraw];
+    CGFloat width = self.width;
+    NSArray* points = [self arrayFromPoint:point1 toPoint:point2 withFigureType:figureType];
+    CGPoint curPoint;
+    for(int i = 0; i<points.count; i++){
+        [points[i] getValue:&curPoint];
+//                CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
+//                [image drawInRect:rect];
+        CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y- width/2);
         [image drawAtPoint:point];
     }
 }
@@ -157,8 +172,9 @@ int const kBrushPixelStep = 3;
     return ceilf(sqrt( deltax *deltax + deltay * deltay) );
 }
 
-- (NSMutableArray*)arrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint WithCount:(int)count
+- (NSMutableArray*)arrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
+    int count  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
     NSMutableArray *array = [NSMutableArray array];
     CGFloat delx = (toPoint.x -fromPoint.x)/count;
     CGFloat dely = (toPoint.y -fromPoint.y)/count;
@@ -169,6 +185,48 @@ int const kBrushPixelStep = 3;
         [array addObject:[NSValue valueWithCGPoint:prePoint]];
     }
     
+    return array;
+}
+
+- (NSMutableArray*)arrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint withFigureType:(FigureType)figureType
+{
+    NSMutableArray *array = [NSMutableArray array];
+    switch (figureType) {
+        
+        case FigureTypeNone:
+        case FigureTypeLine:{
+            array = [self arrayFromPoint:fromPoint toPoint:toPoint];
+            break;
+        }
+        case FigureTypeOval:{
+            CGFloat a = fabs(fromPoint.x - toPoint.x);
+            CGFloat b = fabs(fromPoint.y - toPoint.y);
+            //椭圆周长公式 L=2πb+4(a-b) (a>b)
+            //x=acosθ ， y=bsinθ。
+            int count = (2*M_PI* MIN(a, b) + 4*(fabs(a-b)))/kBrushPixelStep;
+            CGFloat unit = 2*M_PI * kBrushPixelStep/(2*M_PI* MIN(a, b) + 4*(fabs(a-b)));
+            for(int i=0; i< count; i++){
+                CGFloat arc = unit * i;
+                CGFloat x = a *cos(arc);
+                CGFloat y = b *sin(arc);
+                CGPoint point = CGPointMake(fromPoint.x + x, fromPoint.y +y);
+                [array addObject:[NSValue valueWithCGPoint:point]];
+            }
+            break;
+        }
+        case FigureTypeRectangle:{
+            CGRect rect = CGRectMake(MIN(fromPoint.x, toPoint.x), MIN(fromPoint.y, toPoint.y), ABS(fromPoint.x-toPoint.x), ABS(fromPoint.y-toPoint.y));
+            CGPoint p1 = CGPointMake(rect.origin.x+rect.size.width, rect.origin.y);
+            CGPoint p2 = CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height);
+            CGPoint p3 = CGPointMake(rect.origin.x, rect.origin.y+rect.size.height);
+            [array addObjectsFromArray:[self arrayFromPoint:rect.origin toPoint:p1]];
+            [array addObjectsFromArray:[self arrayFromPoint:p1 toPoint:p2]];
+            [array addObjectsFromArray:[self arrayFromPoint:p2 toPoint:p3]];
+            [array addObjectsFromArray:[self arrayFromPoint:p3 toPoint:rect.origin]];
+            break;
+        }
+
+    }
     return array;
 }
 
@@ -242,7 +300,7 @@ int const kBrushPixelStep = 3;
     }
     
     CGFloat aimWidth = MinLength * MaxWidth/len ;
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
+    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint];
     CGPoint lastPoint =fromPoint;
     CGPoint curPoint;
     for(int i = 1; i<points.count; i++){
@@ -416,16 +474,19 @@ int const kBrushPixelStep = 3;
     UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(rect.size.width/2, rect.size.width/2) radius:self.width/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
     
+    CGFloat dash[]= {8,8};
+    [bpath setLineDash:dash count:2 phase:0];
     CGFloat alpha = CGColorGetAlpha(self.color.CGColor);
     UIColor *color = [UIColor colorWithWhite:0 alpha:alpha];
     [color set];
     [bpath fill];
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
     return image;
-
 }
+
+
+
 
 //- (UIImage *)imageForDraw
 //{
@@ -451,13 +512,25 @@ int const kBrushPixelStep = 3;
 //    return image;
 //}
 
+- (void)drawWithFirstPoint:(CGPoint)point1 secondPoint:(CGPoint)point2 withFigureType:(FigureType)figureType
+{
+    UIImage *image = [self imageForDraw];
+    CGFloat width = self.width;
+    NSArray* points = [self arrayFromPoint:point1 toPoint:point2 withFigureType:figureType];
+    CGPoint curPoint;
+    for(int i = 0; i<points.count; i++){
+        [points[i] getValue:&curPoint];
+        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
+        [image drawInRect:rect blendMode:kCGBlendModeDestinationOut alpha:1];
+    }
+}
+
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     UIImage *image = [self imageForDraw];
 
     CGFloat width = self.width;
-    int len  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]/kBrushPixelStep);
-    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint WithCount:len];
+    NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint];
     CGPoint curPoint;
     for(int i = 0; i<points.count; i++){
         [points[i] getValue:&curPoint];
@@ -494,6 +567,8 @@ int const kBrushPixelStep = 3;
 //    copy.color = [self.color copy];
 //    return copy;
 //}
+
+
 
 @end
 

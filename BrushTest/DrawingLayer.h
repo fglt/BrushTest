@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class Brush;
+#import "Brush.h"
 
 @interface DrawingLayer : NSObject<NSCopying>
 @property (nonatomic) CGBlendMode blendMode;
@@ -18,8 +18,9 @@
 @property (nonatomic, strong) CALayer *layer;
 @property (nonatomic, strong, readonly) NSMutableArray *strokes;
 
-- (void)newStrokeWithBrushIfNull:(Brush *)brush;
-- (void)newStrokeWithBrush:(Brush*)brush;
+- (void)newStrokeWithBrushIfNull:(Brush *)brush WithFigureType:(FigureType)type;
+- (void)newStrokeWithBrush:(Brush*)brush WithFigureType:(FigureType)type;
+
 - (void)addStroke;
 - (void)addStrokes:(NSArray *)strokes;
 - (instancetype)initWithSize:(CGSize)size;

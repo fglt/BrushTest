@@ -23,6 +23,12 @@ typedef enum {
     BrushTypeClear,
 } BrushType;
 
+typedef NS_ENUM(NSInteger, FigureType) {
+    FigureTypeNone,
+    FigureTypeLine,
+    FigureTypeOval,
+    FigureTypeRectangle
+};
 
 @interface Brush : NSObject<NSCopying>
 @property (nonatomic) CGFloat width;
@@ -38,6 +44,7 @@ typedef enum {
 - (void)drawWithPoints:(NSMutableArray *)points;
 - (void)clear;
 - (NSDictionary *)dictionary;
+- (void)drawWithFirstPoint:(CGPoint)point1 secondPoint:(CGPoint)point2 withFigureType:(FigureType)figureType;
 
 @end
 
@@ -60,3 +67,6 @@ typedef enum {
 
 @end
 
+@interface FigureBrush : Brush
+
+@end

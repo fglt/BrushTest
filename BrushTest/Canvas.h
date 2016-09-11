@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Brush.h"
 @class  Brush;
 @class DrawingLayer;
 
@@ -29,8 +29,8 @@
 - (void)addLayerAboveCurrentDrawingLayer;
 - (instancetype)initWithSize:(CGSize)size;
 - (instancetype)initWithSize:(CGSize)size backgroundColor:(UIColor *)color;
-- (void) newStroke;
-- (void) newStrokeIfNull;
+- (void) newStrokeWithFigureType:(FigureType)type;
+- (void) newStrokeIfNullWithFigureType:(FigureType)type;
 - (void) addPoint:(CGPoint)point;
 - (void) addPointAndDraw:(CGPoint)point;
 - (void) addStroke;
