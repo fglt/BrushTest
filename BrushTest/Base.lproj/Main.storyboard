@@ -607,7 +607,7 @@
                         <outlet property="backColorViewBoard" destination="Yr9-hG-7EG" id="h0y-Ht-O8x"/>
                         <outlet property="backgroundColorControl" destination="3PZ-27-5Pv" id="5uZ-d0-ddc"/>
                         <outlet property="blendModeBoard" destination="xGC-2f-Lf5" id="jMl-xh-zff"/>
-                        <outlet property="brushAlphaAndWidthView" destination="Zcc-tw-YUl" id="ev3-6B-rRU"/>
+                        <outlet property="brushSlider" destination="Zcc-tw-YUl" id="nkG-2E-iD3"/>
                         <outlet property="brushViewBoard" destination="l2n-lb-wWc" id="5Nu-SP-3wS"/>
                         <outlet property="colorView" destination="4Sk-pH-eKZ" id="5LO-NT-SHy"/>
                         <outlet property="figureToolsBar" destination="r78-8N-6k5" id="zAD-GF-h2U"/>

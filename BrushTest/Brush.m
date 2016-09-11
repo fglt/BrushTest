@@ -128,7 +128,7 @@ int const kBrushPixelStep = 3;
         [points[i] getValue:&curPoint];
 //        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
 //        [image drawInRect:rect];
-        CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y);
+        CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y- width/2);
         [image drawAtPoint:point];
     }
 }

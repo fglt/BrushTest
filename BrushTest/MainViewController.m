@@ -30,7 +30,7 @@
 @property (weak, nonatomic) IBOutlet UIView *brushViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *paletteViewBoard;
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet BrushSlider *brushAlphaAndWidthView;
+@property (weak, nonatomic) IBOutlet BrushSlider *brushSlider;
 @property (weak, nonatomic) IBOutlet UIView *layerBoard;
 @property (weak, nonatomic) IBOutlet LayerEditView *layerEditView;
 @property (weak, nonatomic) IBOutlet UIButton *colorView;
@@ -75,7 +75,7 @@
     layer.frame = CGRectMake(0, 0, 44, 44);
     layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
     _colorView.layer.mask = layer;
-    self.brushAlphaAndWidthView.hidden = YES;
+    self.brushSlider.hidden = YES;
     _canvasDao = [CanvasDao sharedManager];
 }
 
@@ -132,8 +132,8 @@
     _color = _brush.color;
     _colorView.layer.backgroundColor = _color.CGColor;
     _type = _brush.brushType;
-    _brushAlphaAndWidthView.radiusSlider.value = (_width-1)/30;
-    _brushAlphaAndWidthView.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
+    _brushSlider.radiusSlider.value = (_width-1)/30;
+    _brushSlider.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
 }
 - (void)addBackGroundColorView
 {
@@ -239,7 +239,7 @@
 {
     _paletteViewBoard.hidden =YES;
     _blendModeBoard.hidden = YES;
-    _brushAlphaAndWidthView.hidden = YES;
+    _brushSlider.hidden = YES;
     _layerEditView.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
@@ -278,7 +278,7 @@
 {
     _paletteViewBoard.hidden =YES;
     _blendModeBoard.hidden = YES;
-    _brushAlphaAndWidthView.hidden = YES;
+    _brushSlider.hidden = YES;
     _layerEditView.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
@@ -297,7 +297,7 @@
 {
     _paletteViewBoard.hidden =YES;
     _blendModeBoard.hidden = YES;
-    _brushAlphaAndWidthView.hidden = YES;
+    _brushSlider.hidden = YES;
     _layerEditView.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
@@ -328,7 +328,7 @@
 {
     _paletteViewBoard.hidden =YES;
     _blendModeBoard.hidden = YES;
-    _brushAlphaAndWidthView.hidden = YES;
+    _brushSlider.hidden = YES;
     _layerEditView.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
@@ -471,7 +471,7 @@
          ];
     }else{
         _paletteViewBoard.hidden = YES;
-        _brushAlphaAndWidthView.hidden = YES;
+        _brushSlider.hidden = YES;
         _layerEditView.hidden = YES;
         _blendModeBoard.hidden = YES;
         _backColorViewBoard.hidden = YES;
@@ -517,7 +517,7 @@
 
 #pragma mark - brushBoardEvents
 - (IBAction)clickColor:(UIButton *)sender {
-    self.brushAlphaAndWidthView.hidden = YES;
+    self.brushSlider.hidden = YES;
     self.layerEditView.hidden = YES;
     _blendModeBoard.hidden = YES;
     _backColorViewBoard.hidden = YES;
@@ -530,9 +530,9 @@
     }
 }
 - (IBAction)brushSlider:(UISlider *)sender {
-    //_width = _brushAlphaAndWidthView.radiusSlider.value * 30 +1;
-    _brush.width = _brushAlphaAndWidthView.radiusSlider.value * 30 +1;
-    _color = [_color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
+    _width = _brushSlider.radiusSlider.value * 30 +1;
+    _brush.width = _brushSlider.radiusSlider.value * 30 +1;
+    _color = [_color colorWithAlphaComponent:_brushSlider.alphaSlider.value];
     _brush.color = _color;
 }
 
@@ -558,13 +558,16 @@
             break;
     }
     
-    if(self.brushAlphaAndWidthView.hidden){
-        [self displayBrushAlphaAndWidthView];
+    if(self.brushSlider.hidden){
+        [self displaybrushSlider];
     }
     _blendModeBoard.hidden = YES;
     self.paletteViewBoard.hidden = YES;
-    _brush = [Brush BrushWithColor:_color width:_width type:_type];
-    _canvas.currentBrush = _brush;
+    if(_type != _brush.brushType){
+        _brush = [Brush BrushWithColor:_color width:_width type:_type];
+        _brushSlider.radiusSlider.value = (_brush.width-1)/30;
+        _canvas.currentBrush = _brush;
+    }
 }
 
 #pragma mark - PaletteViewControllerDelegate
@@ -572,7 +575,7 @@
 {
     if(paletteController == _paletteViewController){
     //self.color = [color copy];错误，alpha总是1
-    self.color = [color colorWithAlphaComponent:_brushAlphaAndWidthView.alphaSlider.value];
+    self.color = [color colorWithAlphaComponent:_brushSlider.alphaSlider.value];
     _colorView.layer.backgroundColor = color.CGColor;
     self.brush.color = self.color;
     _brush = [Brush BrushWithColor:_color width:_width type:_type];
@@ -593,15 +596,15 @@
     }
 }
 
-- (void)displayBrushAlphaAndWidthView
+- (void)displaybrushSlider
 {
 
-    CGRect frame = self.brushAlphaAndWidthView.frame;
-    self.brushAlphaAndWidthView.center = CGPointMake(-frame.size.width/2,  self.brushAlphaAndWidthView.center.y) ;
-    self.brushAlphaAndWidthView.hidden = NO;
+    CGRect frame = self.brushSlider.frame;
+    self.brushSlider.center = CGPointMake(-frame.size.width/2,  self.brushSlider.center.y) ;
+    self.brushSlider.hidden = NO;
     [UIView animateWithDuration:0.5
                      animations:^{
-                         self.brushAlphaAndWidthView.center = CGPointMake(frame.size.width/2 + _brushViewBoard.frame.size.width,  self.brushAlphaAndWidthView.center.y) ;
+                         self.brushSlider.center = CGPointMake(frame.size.width/2 + _brushViewBoard.frame.size.width,  self.brushSlider.center.y) ;
                      }
                      completion:^(BOOL finished){}
      ];
@@ -734,7 +737,7 @@
 {
     _blendModeBoard.hidden = YES;
     _paletteViewBoard.hidden = YES;
-    _brushAlphaAndWidthView.hidden = YES;
+    _brushSlider.hidden = YES;
     _backColorViewBoard.hidden = YES;
     if(sender == _currentControl){
         _layerEditView.hidden = !_layerEditView.hidden;
@@ -747,7 +750,7 @@
 - (IBAction)addLayer:(UIButton *)sender
 {
     _layerEditView.hidden = YES;
-    _brushAlphaAndWidthView.hidden = YES;
+    _brushSlider.hidden = YES;
     _paletteViewBoard.hidden = YES;
     _blendModeBoard.hidden = YES;
     if(_layerControlArray.count<3){
