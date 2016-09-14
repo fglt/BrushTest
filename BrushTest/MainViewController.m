@@ -64,6 +64,7 @@
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) BOOL figuring;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic)  CGFloat rotationAngleInRadians;
 @end
 
 @implementation MainViewController
@@ -232,6 +233,9 @@
     [_gestureView addGestureRecognizer:_panGestureRecognizer];
     UITapGestureRecognizer *tapGestureRecongnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [_gestureView addGestureRecognizer:tapGestureRecongnizer];
+    
+    UIRotationGestureRecognizer *rotationGesture = [[ UIRotationGestureRecognizer alloc]initWithTarget:self action:@selector(handleRotation:)];
+    [_gestureView addGestureRecognizer:rotationGesture];
 }
 
 #pragma mark - Gesture handle
@@ -345,91 +349,25 @@
     [[self.undoManager prepareWithInvocationTarget:self]undo];
 }
 
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    _paletteViewBoard.hidden =YES;
-//    _blendModeBoard.hidden = YES;
-//    _brushSlider.hidden = YES;
-//    _layerEditView.hidden = YES;
-//    _backColorViewBoard.hidden = YES;
-//    if(_canvas.currentDrawingLayer.locked) return;
-//    if(!_canvas.currentDrawingLayer.visible){
-//        [self presentVisibleAlert];
-//        return;
-//    }
-//    
-//    //[_canvas.foreLayer newStrokeWithBrush:_canvas.currentBrush];
-//    UITouch* touch = [touches anyObject];
-//    CGPoint point = [touch locationInView:_canvasView];
-//    _startPoint = point;
-//    [_canvas newStrokeWithFigureType:_figureType];
-//    [_canvas addPoint:point];
-//}
-//
-//- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    if(_canvas.currentDrawingLayer.locked) return;
-//    if(!_canvas.currentDrawingLayer.visible) return;
-//    UITouch* touch = [touches anyObject];
-//    CGPoint point = [touch locationInView:_canvasView];
-//    if(_figureType==FigureTypeNone){
-//    [_canvas newStrokeIfNullWithFigureType:_figureType];
-//    [_canvas addPointAndDraw:point];
-//    }else{
-//        UIBezierPath *bezierPath;
-//        switch (_figureType) {
-//            case FigureTypeLine:
-//                bezierPath = [UIBezierPath bezierPath];
-//                [bezierPath moveToPoint:_startPoint];
-//                [bezierPath addLineToPoint:point];
-//                break;
-//            case FigureTypeOval:{
-//                CGFloat w = ABS(point.x-_startPoint.x);
-//                CGFloat h = ABS(point.y-_startPoint.y);
-//                CGRect rect = CGRectMake(_startPoint.x -w, _startPoint.y-h, w*2, h*2);
-//                bezierPath = [UIBezierPath bezierPathWithOvalInRect:rect];
-//                break;
-//            }
-//            case FigureTypeRectangle:{
-//                CGFloat w = ABS(point.x-_startPoint.x);
-//                CGFloat h = ABS(point.y-_startPoint.y);
-//                CGRect rect = CGRectMake(MIN(_startPoint.x, point.x), MIN(_startPoint.y, point.y), w, h);
-//                bezierPath = [UIBezierPath bezierPathWithRect:rect];
-//            }
-//            default:
-//                break;
-//        }
-//        _figureView.bezierPath = bezierPath;
-//        [_figureView setNeedsDisplay];
-//    }
-//    
-//}
-//
-//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    if(_canvas.currentDrawingLayer.locked) return;
-//    if(!_canvas.currentDrawingLayer.visible) return;
-//    UITouch* touch = [touches anyObject];
-//    CGPoint point = [touch locationInView:_canvasView];
-//    BOOL inside = [_canvasView pointInside:point withEvent:event];
-//    if(inside){
-//        [_canvas addPointAndDraw:point];
-//        [_canvas addStroke];
-//        [_canvasDao modify:_canvas];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [_currentControl updateContents];
-//        });
-//        [[self.undoManager prepareWithInvocationTarget:self]undo];
-//
-//        if(_figureType != FigureTypeNone){
-//            
-//            _figureView.bezierPath = nil;
-//            [_figureView setNeedsDisplay];
-//        
-//        }
-//    }
-//    
-//}
+- (void)handleRotation:(UIRotationGestureRecognizer *)recognizer
+{
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateChanged:{
+//        CGAffineTransform rotationTransform = CGAffineTransformRotate(self.canvasView.transform, recognizer.rotation +  self.rotationAngleInRadians);
+           CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(recognizer.rotation +self.rotationAngleInRadians);
+            [self.canvasView setTransform:rotationTransform];
+            
+            break;
+
+        }
+        case UIGestureRecognizerStateEnded:{
+            self.rotationAngleInRadians += recognizer.rotation;
+            break;
+        }
+        default:
+            break;
+    }
+}
 
 - (UIBezierPath *)bezierPathWithPoint:(CGPoint)p1 secondPoint:(CGPoint)point withFigureType:(FigureType)type
 {
@@ -500,6 +438,9 @@
 - (IBAction)clickRedo:(UIButton *)sender
 {
     [self.undoManager redo];
+}
+- (IBAction)clickRestButton:(UIButton *)sender {
+    _canvasView.transform = CGAffineTransformIdentity;
 }
 
 - (IBAction)clickFullScreen:(UIView *)sender

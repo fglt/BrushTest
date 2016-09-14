@@ -183,6 +183,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNa-RX-3Mr" userLabel="tg_pucks">
                                                 <rect key="frame" x="260" y="0.0" width="44" height="44"/>
                                                 <state key="normal" image="toolbar_tg_pucks"/>
+                                                <connections>
+                                                    <action selector="clickRestButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VEh-Pv-M7m"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTt-1f-MAe" userLabel="tg_ui">
                                                 <rect key="frame" x="312" y="0.0" width="44" height="44"/>
