@@ -222,7 +222,7 @@ int const kBrushPixelStep = 3;
             CGFloat b = fabs(fromPoint.y - toPoint.y);
             //椭圆周长公式 L=2πb+4(a-b) (a>b)
             //x=acosθ ， y=bsinθ。
-            CGPoint prePoint = fromPoint;
+            //CGPoint prePoint = fromPoint;
             int count = (2*M_PI* MIN(a, b) + 4*(fabs(a-b)))/kBrushPixelStep;
             CGFloat unit = 2*M_PI * kBrushPixelStep/(2*M_PI* MIN(a, b) + 4*(fabs(a-b)));
             for(int i=0; i< count; i++){
@@ -231,7 +231,7 @@ int const kBrushPixelStep = 3;
                 CGFloat y = b *sin(arc);
                 CGPoint point = CGPointMake(fromPoint.x + x, fromPoint.y +y);
                 
-                prePoint = point;
+                //prePoint = point;
                 
                 
                 
