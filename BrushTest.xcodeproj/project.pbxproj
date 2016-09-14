@@ -36,8 +36,9 @@
 		17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD181D6FEA3100E5D47B /* LayerEditView.m */; };
 		17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */; };
 		17DDF6821D81AE5B007F2C11 /* UIImage+FGTDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DDF6811D81AE5B007F2C11 /* UIImage+FGTDrawing.m */; };
-		17DDF6871D844DC9007F2C11 /* FigureGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DDF6861D844DC9007F2C11 /* FigureGestureRecognizer.m */; };
 		17DDF68A1D84608F007F2C11 /* FigureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DDF6891D84608F007F2C11 /* FigureView.m */; };
+		17DDF6901D85A2C2007F2C11 /* FigureGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DDF68F1D85A2C2007F2C11 /* FigureGestureRecognizer.m */; };
+		17DDF6961D8706CD007F2C11 /* Oval.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DDF6951D8706CD007F2C11 /* Oval.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,10 +98,12 @@
 		17C7CD1B1D70876A00E5D47B /* UIView+FGTDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FGTDrawing.m"; sourceTree = "<group>"; };
 		17DDF6801D81AE5B007F2C11 /* UIImage+FGTDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FGTDrawing.h"; sourceTree = "<group>"; };
 		17DDF6811D81AE5B007F2C11 /* UIImage+FGTDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FGTDrawing.m"; sourceTree = "<group>"; };
-		17DDF6851D844DC9007F2C11 /* FigureGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FigureGestureRecognizer.h; sourceTree = "<group>"; };
-		17DDF6861D844DC9007F2C11 /* FigureGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FigureGestureRecognizer.m; sourceTree = "<group>"; };
 		17DDF6881D84608F007F2C11 /* FigureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FigureView.h; sourceTree = "<group>"; };
 		17DDF6891D84608F007F2C11 /* FigureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FigureView.m; sourceTree = "<group>"; };
+		17DDF68E1D85A2C2007F2C11 /* FigureGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FigureGestureRecognizer.h; sourceTree = "<group>"; };
+		17DDF68F1D85A2C2007F2C11 /* FigureGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FigureGestureRecognizer.m; sourceTree = "<group>"; };
+		17DDF6941D8706CD007F2C11 /* Oval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Oval.h; sourceTree = "<group>"; };
+		17DDF6951D8706CD007F2C11 /* Oval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Oval.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,8 +158,8 @@
 				17C7CD031D6CA4CC00E5D47B /* Canvas.m */,
 				1775FBED1D7AB6A20096FF50 /* CanvasDao.h */,
 				1775FBEE1D7AB6A20096FF50 /* CanvasDao.m */,
-				17DDF6851D844DC9007F2C11 /* FigureGestureRecognizer.h */,
-				17DDF6861D844DC9007F2C11 /* FigureGestureRecognizer.m */,
+				17DDF6941D8706CD007F2C11 /* Oval.h */,
+				17DDF6951D8706CD007F2C11 /* Oval.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -181,6 +184,9 @@
 		176D10EB1D5CDF3B00A0DD31 /* BrushTest */ = {
 			isa = PBXGroup;
 			children = (
+				1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */,
+				17DDF68E1D85A2C2007F2C11 /* FigureGestureRecognizer.h */,
+				17DDF68F1D85A2C2007F2C11 /* FigureGestureRecognizer.m */,
 				176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */,
 				176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */,
 				1754A2D61D649FE500C18717 /* constants.h */,
@@ -193,7 +199,6 @@
 				176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */,
 				176C31301D65EEB000B9A1D6 /* PaletteViewController.m */,
 				1775FBF61D7B156F0096FF50 /* BlendModeTableViewController.h */,
-				1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */,
 				175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */,
 				175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */,
 				1754A2D81D649FE500C18717 /* InfColorIndicatorView.h */,
@@ -302,19 +307,20 @@
 				175BE8341D7420FE0033EDCE /* UIColor+FGTColor.m in Sources */,
 				1775FBF81D7B156F0096FF50 /* BlendModeTableViewController.m in Sources */,
 				17C7CD1C1D70876A00E5D47B /* UIView+FGTDrawing.m in Sources */,
-				17DDF6871D844DC9007F2C11 /* FigureGestureRecognizer.m in Sources */,
 				176C314F1D69AB5600B9A1D6 /* LayerControl.m in Sources */,
 				1754A2E31D649FE500C18717 /* InfColorIndicatorView.m in Sources */,
 				176D10F11D5CDF3B00A0DD31 /* AppDelegate.m in Sources */,
 				17C7CD041D6CA4CC00E5D47B /* Canvas.m in Sources */,
 				17DDF68A1D84608F007F2C11 /* FigureView.m in Sources */,
 				1754A2E51D649FE500C18717 /* SquareColorPicker.m in Sources */,
+				17DDF6901D85A2C2007F2C11 /* FigureGestureRecognizer.m in Sources */,
 				176D110F1D5CDFFB00A0DD31 /* Brush.m in Sources */,
 				176D10EE1D5CDF3B00A0DD31 /* main.m in Sources */,
 				1775FBEF1D7AB6A20096FF50 /* CanvasDao.m in Sources */,
 				176D11101D5CDFFB00A0DD31 /* CanvasView.m in Sources */,
 				176D11121D5CDFFB00A0DD31 /* DrawingLayer.m in Sources */,
 				176D111D1D5CE02400A0DD31 /* UIImage+FEBoxBlur.m in Sources */,
+				17DDF6961D8706CD007F2C11 /* Oval.m in Sources */,
 				176C314C1D67FFF700B9A1D6 /* BrushSlider.m in Sources */,
 				17C7CD191D6FEA3100E5D47B /* LayerEditView.m in Sources */,
 				1754A2E21D649FE500C18717 /* constants.m in Sources */,

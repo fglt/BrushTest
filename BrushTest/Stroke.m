@@ -52,31 +52,20 @@
 
 - (void)drawInContext
 {
-    if(_figureType==FigureTypeNone){
+
     CGPoint toPoint;
     CGPoint fromPoint;
     if(_points.count<1) return;
     [_points[0] getValue:&fromPoint];
     [_brush clear];
+    if(_points.count==1){
+        toPoint = fromPoint;
+        [_brush drawWithFirstPoint:(fromPoint) secondPoint:toPoint withFigureType:_figureType];
+    }
     for(int i=1; i<_points.count; i++){
         [_points[i] getValue:&toPoint];
-        [_brush drawFromPoint:fromPoint toPoint:toPoint];
+        [_brush drawWithFirstPoint:(fromPoint) secondPoint:toPoint withFigureType:_figureType];
         fromPoint = toPoint;
-    }
-    }else{
-        CGPoint toPoint;
-        CGPoint fromPoint;
-        if(_points.count<1) return;
-        [_points[0] getValue:&fromPoint];
-        [_brush clear];
-        for(int i=1; i<_points.count; i++){
-            [_points[i] getValue:&toPoint];
-            [_brush drawWithFirstPoint:(fromPoint) secondPoint:toPoint withFigureType:_figureType
-             
-             ];
-            fromPoint = toPoint;
-        }
-
     }
 }
 

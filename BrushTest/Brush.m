@@ -10,6 +10,7 @@
 #import "UIColor+FGTColor.h"
 #import "FGTHSBSupport.h"
 #import "UIbezierPath+brush.h"
+#import "Oval.h"
 
 const double M_PI2 = M_PI *2;
 CGFloat const  MinWidth = 5;
@@ -136,6 +137,12 @@ int const kBrushPixelStep = 3;
 
 - (void)drawWithFirstPoint:(CGPoint)point1 secondPoint:(CGPoint)point2 withFigureType:(FigureType)figureType
 {
+    
+    if(figureType == FigureTypeNone)
+    {
+        [self drawFromPoint:point1 toPoint:point2];
+        return;
+    }
     UIImage *image = [self imageForDraw];
     CGFloat width = self.width;
     NSArray* points = [self arrayFromPoint:point1 toPoint:point2 withFigureType:figureType];
@@ -147,6 +154,18 @@ int const kBrushPixelStep = 3;
         CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y- width/2);
         [image drawAtPoint:point];
     }
+//    CGFloat a = fabs(point1.x - point2.x);
+//    CGFloat b = fabs(point1.y - point2.y);
+//
+//    CGRect rect = CGRectMake(point1.x -a, point1.y-b, a*2, b*2);
+//    //UIBezierPath *bpath = [UIBezierPath bezierPathWithOvalInRect:rect];
+//    UIBezierPath *bpath = [UIBezierPath bezierPath];
+//    [bpath moveToPoint:CGPointMake(point1.x, point1.y- ABS(point1.y -point2.y))];
+//    [bpath addQuadCurveToPoint:CGPointMake(point2.x, point1.y) controlPoint:CGPointMake(point2.x, point1.y- ABS(point1.y -point2.y))];
+//    bpath.lineWidth = 1;
+//    [[UIColor whiteColor]set];
+//    [bpath stroke];
+
 }
 
 - (UIImage *)imageForDraw
@@ -203,6 +222,7 @@ int const kBrushPixelStep = 3;
             CGFloat b = fabs(fromPoint.y - toPoint.y);
             //椭圆周长公式 L=2πb+4(a-b) (a>b)
             //x=acosθ ， y=bsinθ。
+            CGPoint prePoint = fromPoint;
             int count = (2*M_PI* MIN(a, b) + 4*(fabs(a-b)))/kBrushPixelStep;
             CGFloat unit = 2*M_PI * kBrushPixelStep/(2*M_PI* MIN(a, b) + 4*(fabs(a-b)));
             for(int i=0; i< count; i++){
@@ -210,8 +230,27 @@ int const kBrushPixelStep = 3;
                 CGFloat x = a *cos(arc);
                 CGFloat y = b *sin(arc);
                 CGPoint point = CGPointMake(fromPoint.x + x, fromPoint.y +y);
+                
+                prePoint = point;
+                
+                
+                
                 [array addObject:[NSValue valueWithCGPoint:point]];
+                
             }
+//            Oval *oval = [[Oval alloc]initWithCenter:fromPoint axis:CGPointMake(a,b)];
+//            CGFloat circumference = [oval arcStartAngle:0 endAngle:2*M_PI];
+//            int count = ceilf(circumference/kBrushPixelStep);
+//            CGFloat angleUnit = 2*M_PI/count;
+//            for(int i=1; i< count; i++){
+//                CGFloat arc = angleUnit * i;
+//                arc = [oval angle:arc];
+//                CGFloat x = a *cos(arc);
+//                CGFloat y = b *sin(arc);
+//                CGPoint point = CGPointMake(fromPoint.x + x, fromPoint.y +y);
+//                [array addObject:[NSValue valueWithCGPoint:point]];
+//            }
+
             break;
         }
         case FigureTypeRectangle:{
@@ -230,6 +269,42 @@ int const kBrushPixelStep = 3;
     return array;
 }
 
+
+- (NSArray*) arc_to_bezier:(CGPoint)center  :(CGPoint)rotation :(CGFloat) start_angle :(CGFloat) sweep_angle
+{
+    NSMutableArray *array = [NSMutableArray array];
+    double x0 = cos(sweep_angle / 2.0);
+    double y0 = sin(sweep_angle / 2.0);
+    double tx = (1.0 - x0) * 4.0 / 3.0;
+    double ty = y0 - tx * x0 / y0;
+    double px[4];
+    double py[4];
+    px[0] =  x0;
+    py[0] = -y0;
+    px[1] =  x0 + tx;
+    py[1] = -ty;
+    px[2] =  x0 + tx;
+    py[2] =  ty;
+    px[3] =  x0;
+    py[3] =  y0;
+    
+    double sn = sin(start_angle + sweep_angle / 2.0);
+    double cs = cos(start_angle + sweep_angle / 2.0);
+    
+    unsigned i;
+    for(i = 0; i < 4; i++)
+    {
+        CGPoint p = CGPointMake(center.x + rotation.x * ( cs -  sn), center.y + rotation.y * ( sn + cs));
+        [array addObject:[NSValue valueWithCGPoint:p]];
+    }
+    return array;
+}
+- (CGFloat)distancefromPoint:(CGPoint)p1 toPoint:(CGPoint)p2
+{
+    CGFloat deltax = p1.x-p2.x;
+    CGFloat deltay = p1.y-p2.y;
+    return sqrt( deltax *deltax + deltay * deltay) ;
+}
 //- (NSArray *)pointsWithPoints:(NSArray *)sourcePoints
 //{
 //    NSMutableArray *outPoints = [NSMutableArray array];
@@ -286,11 +361,26 @@ int const kBrushPixelStep = 3;
     [bpath stroke];
 }
 
+- (NSMutableArray*)arrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+{
+    int count  = MAX(1,[self lengthFromPoint:fromPoint toPoint:toPoint]);
+    NSMutableArray *array = [NSMutableArray array];
+    CGFloat delx = (toPoint.x -fromPoint.x)/count;
+    CGFloat dely = (toPoint.y -fromPoint.y)/count;
+    CGPoint  prePoint = fromPoint;
+    for(int i= 0; i< count; i++){
+        prePoint.x += delx;
+        prePoint.y += dely;
+        [array addObject:[NSValue valueWithCGPoint:prePoint]];
+    }
+    
+    return array;
+}
+
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
 {
     int len  = [self lengthFromPoint:fromPoint toPoint:toPoint];
-    CGFloat const  MaxLength = MinLength *MaxWidth/MinWidth + MinLength;
-    len = MIN(len, MaxLength);
+
     self.curWidth = MAX(MIN(self.curWidth, MaxWidth), MinWidth);
     if(len == 0){
         UIBezierPath* bpath = [UIBezierPath bezierPathWithArcCenter:fromPoint radius:self.curWidth/2 startAngle:0 endAngle:M_PI*2 clockwise:YES];
@@ -303,7 +393,7 @@ int const kBrushPixelStep = 3;
     NSArray* points = [self arrayFromPoint:fromPoint toPoint:toPoint];
     CGPoint lastPoint =fromPoint;
     CGPoint curPoint;
-    for(int i = 1; i<points.count; i++){
+    for(int i = 0; i<points.count; i++){
         [points[i] getValue:&curPoint];
         UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:lastPoint endPoint:curPoint width:self.curWidth];
         [[self curColor] set];

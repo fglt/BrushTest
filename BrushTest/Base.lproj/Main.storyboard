@@ -336,11 +336,11 @@
                                             <constraint firstAttribute="height" constant="1" id="NvJ-nA-NeH"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="hx9-je-Wzp" userLabel="s0">
-                                        <rect key="frame" x="22" y="82" width="255" height="148"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="equalSpacing" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="hx9-je-Wzp" userLabel="s0">
+                                        <rect key="frame" x="22" y="82" width="255" height="147"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="XgM-75-e8z" userLabel="s1">
-                                                <rect key="frame" x="0.0" y="0.0" width="44" height="148"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="XgM-75-e8z" userLabel="s1">
+                                                <rect key="frame" x="0.0" y="0.0" width="44" height="147"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="30" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1gg-Xc-qQS">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -370,8 +370,8 @@
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vcq-G9-KOn" userLabel="s2">
-                                                <rect key="frame" x="69" y="0.0" width="44" height="148"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vcq-G9-KOn" userLabel="s2">
+                                                <rect key="frame" x="69" y="0.0" width="44" height="147"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="31" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJF-ew-ogz">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -401,8 +401,8 @@
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tiL-ki-MxH" userLabel="s3">
-                                                <rect key="frame" x="138" y="0.0" width="48" height="148"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tiL-ki-MxH" userLabel="s3">
+                                                <rect key="frame" x="138" y="0.0" width="48" height="147"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="32" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFa-S2-JGY">
                                                         <rect key="frame" x="2" y="0.0" width="44" height="44"/>
@@ -432,8 +432,8 @@
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BDa-GQ-keX" userLabel="s4">
-                                                <rect key="frame" x="211" y="0.0" width="44" height="148"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="BDa-GQ-keX" userLabel="s4">
+                                                <rect key="frame" x="211" y="0.0" width="44" height="147"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="33" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hMa-ct-0nV">
                                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
