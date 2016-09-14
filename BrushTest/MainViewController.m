@@ -50,7 +50,7 @@
 @property (nonatomic, strong) LayerControl *currentControl;
 @end
 
-@interface MainViewController ()
+@interface MainViewController ()<UIGestureRecognizerDelegate>
 @property (nonatomic, copy) UIColor *color;
 @property (nonatomic, strong) Brush *brush;
 @property (nonatomic) BrushType type;
@@ -64,7 +64,10 @@
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) BOOL figuring;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-@property (nonatomic)  CGFloat rotationAngleInRadians;
+@property (nonatomic) CGFloat rotation;
+@property (nonatomic) CGFloat scale;
+@property (nonatomic) CGPoint translation;
+
 @end
 
 @implementation MainViewController
@@ -72,6 +75,9 @@
 
 - (void)start
 {
+    _scale = 1;
+    _rotation = 0;
+    _translation = CGPointZero;
     self.view.backgroundColor = [UIColor clearColor];
 
     _layerControlArray = [NSMutableArray array];
@@ -231,13 +237,28 @@
                                                     action:@selector(handlePan:)];
     _panGestureRecognizer.maximumNumberOfTouches =1;
     [_gestureView addGestureRecognizer:_panGestureRecognizer];
-    UITapGestureRecognizer *tapGestureRecongnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [_gestureView addGestureRecognizer:tapGestureRecongnizer];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [_gestureView addGestureRecognizer:tapGestureRecognizer];
     
-    UIRotationGestureRecognizer *rotationGesture = [[ UIRotationGestureRecognizer alloc]initWithTarget:self action:@selector(handleRotation:)];
-    [_gestureView addGestureRecognizer:rotationGesture];
+    UIRotationGestureRecognizer *rotationGestureRecognizer = [[ UIRotationGestureRecognizer alloc]initWithTarget:self action:@selector(handleRotation:)];
+    rotationGestureRecognizer.delegate  = self;
+    [_gestureView addGestureRecognizer:rotationGestureRecognizer];
+    
+    UIPinchGestureRecognizer *pinGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
+    pinGestureRecognizer.delegate = self;
+    [_gestureView addGestureRecognizer:pinGestureRecognizer];
+    
+    UIPanGestureRecognizer *dragGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleDragRecognizer:)];
+    dragGestureRecognizer.minimumNumberOfTouches = 2;
+    dragGestureRecognizer.maximumNumberOfTouches = 2;
+    dragGestureRecognizer.delegate = self;
+    [_gestureView addGestureRecognizer:dragGestureRecognizer];
+    
 }
-
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
 #pragma mark - Gesture handle
 
 - (void)handlePan:(UIPanGestureRecognizer*) recognizer
@@ -257,7 +278,7 @@
 
 - (void)handleNoFigure:(UIPanGestureRecognizer*) recognizer
 {
-     CGPoint point = [recognizer locationInView:self.view];
+     CGPoint point = [recognizer locationInView:_canvasView];
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
             [_canvas newStrokeWithFigureType:_figureType];
@@ -291,7 +312,7 @@
 
 - (void)handleFigureGesture:(UIPanGestureRecognizer*) recognizer
 {
-    CGPoint point = [recognizer locationInView:_figureView];
+    CGPoint point = [recognizer locationInView:_canvasView];
        switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
             _startPoint = point;
@@ -338,7 +359,7 @@
     _backColorViewBoard.hidden = YES;
     if(_canvas.currentDrawingLayer.locked) return;
     if(_figuring) return;
-     CGPoint point = [recognizer locationInView:self.view];
+     CGPoint point = [recognizer locationInView:_canvasView];
     [_canvas newStrokeWithFigureType:_figureType];
     [_canvas addPointAndDraw:point];
     [_canvas addStroke];
@@ -354,19 +375,61 @@
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:{
 //        CGAffineTransform rotationTransform = CGAffineTransformRotate(self.canvasView.transform, recognizer.rotation +  self.rotationAngleInRadians);
-           CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(recognizer.rotation +self.rotationAngleInRadians);
-            [self.canvasView setTransform:rotationTransform];
             
+           CGAffineTransform rotationTransform = CGAffineTransformMakeRotation((recognizer.rotation - _rotation));
+          
+            _canvasView.transform =CGAffineTransformConcat(_canvasView.transform, rotationTransform);
+            _rotation = recognizer.rotation;
             break;
 
         }
         case UIGestureRecognizerStateEnded:{
-            self.rotationAngleInRadians += recognizer.rotation;
+            _rotation = 0;
             break;
         }
         default:
             break;
     }
+}
+
+- (void)handlePinch:(UIPinchGestureRecognizer *)recognizer
+{
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateChanged:{
+            CGAffineTransform transofrom = CGAffineTransformMakeScale(recognizer.scale/_scale, recognizer.scale/_scale);
+            _canvasView.transform = CGAffineTransformConcat(_canvasView.transform, transofrom);
+            _scale = recognizer.scale;
+            break;
+        }
+        case UIGestureRecognizerStateEnded:{
+            _scale = 1;
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)handleDragRecognizer:(UIPanGestureRecognizer *)recognizer
+{
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateChanged:{
+            CGPoint tran = [recognizer translationInView:_gestureView];
+            CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(tran.x - _translation.x, tran.y -_translation.y);
+            
+            _canvasView.transform =CGAffineTransformConcat(_canvasView.transform, translationTransform);
+            _translation = tran;
+            break;
+            
+        }
+        case UIGestureRecognizerStateEnded:{
+             _translation = CGPointZero;
+            break;
+        }
+        default:
+            break;
+    }
+
 }
 
 - (UIBezierPath *)bezierPathWithPoint:(CGPoint)p1 secondPoint:(CGPoint)point withFigureType:(FigureType)type
