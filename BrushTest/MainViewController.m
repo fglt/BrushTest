@@ -41,7 +41,6 @@
 @end
 
 @interface MainViewController ()<LayerControlDelegate>
-@property (nonatomic, strong) UIView *gestureView;
 @property (strong, nonatomic) CanvasView *canvasView;
 @property (nonatomic, strong) FigureView *figureView;
 @property (nonatomic, strong) PaletteViewController *paletteViewController;
@@ -125,7 +124,7 @@
     }
     CGSize screenSize = self.view.bounds.size;
     _canvasView = [[CanvasView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
-    _figureView = [[FigureView alloc] initWithFrame:CGRectMake((screenSize.width-_canvas.canvasSize.width)/2, (screenSize.height - _canvas.canvasSize.height)/2, _canvas.canvasSize.width, _canvas.canvasSize.height)];
+    _figureView = [[FigureView alloc] initWithFrame:self.view.frame];
     _figureView.backgroundColor =[UIColor clearColor];
     _canvasView.backgroundColor = _canvas.backgroundColor;
     _canvas.view = _canvasView;
@@ -134,12 +133,9 @@
     [_canvas updateLayer];
 
     [self configureLayerBorad];
-    
-    _gestureView = [[UIView alloc]initWithFrame:self.view.frame];
-    _gestureView.backgroundColor = [UIColor clearColor];
-    [self.view insertSubview:_gestureView atIndex:0];
-    [_gestureView insertSubview:_canvasView atIndex:0];
-    [_gestureView insertSubview:_figureView atIndex:1];
+
+    [self.view insertSubview:_canvasView atIndex:0];
+    [self.view insertSubview:_figureView atIndex:1];
     _brush = _canvas.currentBrush;
     _width = _brush.width;
     _color = _brush.color;
@@ -236,23 +232,23 @@
                                                     initWithTarget:self
                                                     action:@selector(handlePan:)];
     _panGestureRecognizer.maximumNumberOfTouches =1;
-    [_gestureView addGestureRecognizer:_panGestureRecognizer];
+    [_figureView addGestureRecognizer:_panGestureRecognizer];
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [_gestureView addGestureRecognizer:tapGestureRecognizer];
+    [_figureView addGestureRecognizer:tapGestureRecognizer];
     
     UIRotationGestureRecognizer *rotationGestureRecognizer = [[ UIRotationGestureRecognizer alloc]initWithTarget:self action:@selector(handleRotation:)];
     rotationGestureRecognizer.delegate  = self;
-    [_gestureView addGestureRecognizer:rotationGestureRecognizer];
+    [_figureView addGestureRecognizer:rotationGestureRecognizer];
     
     UIPinchGestureRecognizer *pinGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     pinGestureRecognizer.delegate = self;
-    [_gestureView addGestureRecognizer:pinGestureRecognizer];
+    [_figureView addGestureRecognizer:pinGestureRecognizer];
     
     UIPanGestureRecognizer *dragGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleDragRecognizer:)];
     dragGestureRecognizer.minimumNumberOfTouches = 2;
     dragGestureRecognizer.maximumNumberOfTouches = 2;
     dragGestureRecognizer.delegate = self;
-    [_gestureView addGestureRecognizer:dragGestureRecognizer];
+    [_figureView addGestureRecognizer:dragGestureRecognizer];
     
 }
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -313,9 +309,10 @@
 - (void)handleFigureGesture:(UIPanGestureRecognizer*) recognizer
 {
     CGPoint point = [recognizer locationInView:_canvasView];
+    CGPoint locationInFigureView = [recognizer locationInView:_figureView];
        switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
-            _startPoint = point;
+            _startPoint = locationInFigureView;
             [_canvas newStrokeWithFigureType:_figureType];
             [_canvas addPoint:point];
             break;
@@ -324,7 +321,7 @@
                 [_canvas newStrokeIfNullWithFigureType:_figureType];
                 [_canvas addPointAndDraw:point];
             }else{
-                _figureView.bezierPath = [self bezierPathWithPoint:_startPoint secondPoint:point withFigureType:_figureType];;
+                _figureView.bezierPath = [self bezierPathWithPoint:_startPoint secondPoint:locationInFigureView withFigureType:_figureType];;
                 [_figureView setNeedsDisplay];
             }
             break;
@@ -374,8 +371,7 @@
 {
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:{
-//        CGAffineTransform rotationTransform = CGAffineTransformRotate(self.canvasView.transform, recognizer.rotation +  self.rotationAngleInRadians);
-            
+
            CGAffineTransform rotationTransform = CGAffineTransformMakeRotation((recognizer.rotation - _rotation));
           
             _canvasView.transform =CGAffineTransformConcat(_canvasView.transform, rotationTransform);
@@ -414,7 +410,7 @@
 {
     switch (recognizer.state) {
         case UIGestureRecognizerStateChanged:{
-            CGPoint tran = [recognizer translationInView:_gestureView];
+            CGPoint tran = [recognizer translationInView:_figureView];
             CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(tran.x - _translation.x, tran.y -_translation.y);
             
             _canvasView.transform =CGAffineTransformConcat(_canvasView.transform, translationTransform);
