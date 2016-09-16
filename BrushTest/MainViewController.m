@@ -71,7 +71,6 @@
 
 @implementation MainViewController
 
-
 - (void)start
 {
     _scale = 1;
@@ -161,7 +160,9 @@
 {
     for (DrawingLayer *dlayer in _canvas.drawingLayers) {
         //[_canvasView.layer addSublayer:dlayer.layer];
-        CGRect rect = CGRectMake(1, _layerBoard.frame.size.height - _layerControlArray.count * 90-180 , 88, 88);
+
+        CGRect rect = CGRectMake(1, 1 , 88, 88);
+        
         LayerControl *control = [[LayerControl alloc] initWithFrame:rect];
         [_layerControlArray addObject:control];
         control.drawingLayer = dlayer;
@@ -204,9 +205,14 @@
     [self addBackGroundColorView];
     _backgroundColorControl.controlDelegate = self;
     [self addGestureRecognizer];
-   
+  
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self reloadLayerBoard];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -310,6 +316,9 @@
 {
     CGPoint point = [recognizer locationInView:_canvasView];
     CGPoint locationInFigureView = [recognizer locationInView:_figureView];
+    CGRect rect = _canvasView.bounds;
+    rect = CGRectApplyAffineTransform(rect, _canvasView.transform);
+    NSLog(@"%@", NSStringFromCGRect( rect));
        switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
             _startPoint = locationInFigureView;
@@ -369,40 +378,33 @@
 
 - (void)handleRotation:(UIRotationGestureRecognizer *)recognizer
 {
-    switch (recognizer.state) {
-        case UIGestureRecognizerStateChanged:{
-
-           CGAffineTransform rotationTransform = CGAffineTransformMakeRotation((recognizer.rotation - _rotation));
-          
-            _canvasView.transform =CGAffineTransformConcat(_canvasView.transform, rotationTransform);
-            _rotation = recognizer.rotation;
-            break;
-
-        }
-        case UIGestureRecognizerStateEnded:{
-            _rotation = 0;
-            break;
-        }
-        default:
-            break;
+    CGPoint location = [recognizer locationInView:self.view];
+    
+    CGFloat rotation = recognizer.rotation - _rotation;
+    CGPoint translation = CGPointMake(location.x-_canvasView.center.x, location.y - _canvasView.center.y);
+    CGAffineTransform  trans = CGAffineTransformMakeTranslation(translation.x, translation.y);
+    trans = CGAffineTransformRotate(trans,rotation);
+    trans = CGAffineTransformTranslate(trans,-translation.x, -translation.y);
+    _canvasView.transform =CGAffineTransformConcat(_canvasView.transform, trans);
+    _rotation = recognizer.rotation;
+    if(recognizer.state == UIGestureRecognizerStateEnded){
+        _rotation = 0;
     }
+    
 }
 
 - (void)handlePinch:(UIPinchGestureRecognizer *)recognizer
 {
-    switch (recognizer.state) {
-        case UIGestureRecognizerStateChanged:{
-            CGAffineTransform transofrom = CGAffineTransformMakeScale(recognizer.scale/_scale, recognizer.scale/_scale);
-            _canvasView.transform = CGAffineTransformConcat(_canvasView.transform, transofrom);
-            _scale = recognizer.scale;
-            break;
-        }
-        case UIGestureRecognizerStateEnded:{
-            _scale = 1;
-            break;
-        }
-        default:
-            break;
+    CGPoint location = [recognizer locationInView:self.view];
+    CGFloat scaling = recognizer.scale/_scale;
+    CGPoint translation = CGPointMake(location.x-_canvasView.center.x, location.y - _canvasView.center.y);
+    CGAffineTransform  trans = CGAffineTransformMakeTranslation(translation.x, translation.y);
+    trans = CGAffineTransformScale(trans, scaling, scaling);
+    trans = CGAffineTransformTranslate(trans,-translation.x, -translation.y);
+     _canvasView.transform = CGAffineTransformConcat(_canvasView.transform, trans);
+    _scale = recognizer.scale;
+    if(recognizer.state == UIGestureRecognizerStateEnded){
+         _scale = 1;
     }
 }
 

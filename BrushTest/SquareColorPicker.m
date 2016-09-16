@@ -67,14 +67,19 @@ IB_DESIGNABLE
 
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
     if (imgView == nil)
     {
-        CGRect rect = CGRectMake(self.bounds.origin.x+kContentInset, self.bounds.origin.y+kContentInset, self.bounds.size.width-kIndicatorSize, self.bounds.size.height-kIndicatorSize);
-        imgView = [[UIImageView alloc] initWithFrame: rect];
+        imgView = [[UIImageView alloc] init];
+
+        imgView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview: imgView];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:imgView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-kIndicatorSize]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:imgView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-kIndicatorSize]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:imgView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:imgView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
         UIImage *img = createSaturationBrightnessSquareContentImageWithHue(self.hue);
         imgView.layer.contents = (id)img.CGImage;
-
-        [self addSubview: imgView];
     }
 
     if (indicator == nil) {
