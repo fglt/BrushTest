@@ -22,7 +22,6 @@
 #import "CanvasDao.h"
 #import "BlendModeTableViewController.h"
 #import "UIKit/UIGestureRecognizerSubclass.h"
-#import "FigureGestureRecognizer.h"
 #import "FigureView.h"
 
 
