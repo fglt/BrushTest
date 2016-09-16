@@ -89,8 +89,7 @@
 
 - (void)addBlendModeView
 {
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    _blendModeController = [storyBoard instantiateViewControllerWithIdentifier:@"blendModeController"];
+    _blendModeController = [self.storyboard instantiateViewControllerWithIdentifier:@"blendModeController"];
     [self addChildViewController:_blendModeController];
     _blendModeController.controllerDelegate = self;
     
@@ -101,9 +100,7 @@
 
 - (void)addPaletteView
 {
-
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    _paletteViewController = [storyBoard instantiateViewControllerWithIdentifier:@"PaletteViewController"];
+    _paletteViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PaletteViewController"];
     [self addChildViewController:_paletteViewController];
     _paletteViewController.delegate = self;
     
@@ -317,7 +314,6 @@
     CGPoint locationInFigureView = [recognizer locationInView:_figureView];
     CGRect rect = _canvasView.bounds;
     rect = CGRectApplyAffineTransform(rect, _canvasView.transform);
-    NSLog(@"%@", NSStringFromCGRect( rect));
        switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
             _startPoint = locationInFigureView;
@@ -330,7 +326,6 @@
                 [_canvas addPointAndDraw:point];
             }else{
                 _figureView.bezierPath = [self bezierPathWithPoint:_startPoint secondPoint:locationInFigureView withFigureType:_figureType];;
-                [_figureView setNeedsDisplay];
             }
             break;
         }
@@ -346,8 +341,6 @@
             if(_figureType != FigureTypeNone){
                 
                 _figureView.bezierPath = nil;
-                [_figureView setNeedsDisplay];
-                
             }
         }
         default:
