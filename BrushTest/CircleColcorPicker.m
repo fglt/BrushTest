@@ -80,11 +80,8 @@ IB_DESIGNABLE
         circleImage = [self hueCircleImage];
         self.layer.contents = (id)circleImage.CGImage;
     }
-    if (indicator == nil) {
-        if(CGPointEqualToPoint(_value, CGPointZero))
-            _value = CGPointMake(self.bounds.size.width - 16, CGRectGetMidY(self.bounds));
-        
-        indicator = [[InfColorIndicatorView alloc] initWithFrame: CGRectMake(_value.x, _value.y, kIndicatorSize, kIndicatorSize)];
+    if (indicator == nil) {        
+        indicator = [[InfColorIndicatorView alloc] initWithFrame: CGRectMake(0, 0, kIndicatorSize, kIndicatorSize)];
         [self addSubview: indicator];
     }
     

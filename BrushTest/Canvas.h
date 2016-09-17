@@ -41,4 +41,7 @@
 - (void)mergeCurrentToDownLayerWithIndex:(NSUInteger)index;
 - (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer;
 - (void)updateLayer;
+- (void)removeDrawingLayer:(DrawingLayer *)drawingLayer;
+- (void)changeBlendModeOfCurrentDrawingLayer:(CGBlendMode)blendMode;
+- (void)changeAlphaOfCurrentDrawingLayer:(CGFloat)alpha;
 @end

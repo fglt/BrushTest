@@ -65,6 +65,7 @@
 {
     [_drawingLayers addObject:layer];
     self.currentDrawingLayer = layer;
+    [self updateLayer];
 }
 
 - (void)addLayer
@@ -213,13 +214,17 @@
     _currentDrawingLayer.layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
     [self updateLayer];
 }
-
-- (NSUInteger) indexOfDrawingLayer:(DrawingLayer *)dlayer
+- (void)removeDrawingLayer:(DrawingLayer *)drawingLayer
+{
+    [_drawingLayers removeObject:drawingLayer];
+    [self updateLayer];
+}
+- (NSUInteger)indexOfDrawingLayer:(DrawingLayer *)dlayer
 {
     return [_drawingLayers indexOfObject:dlayer];
 }
 
--(void)dealloc
+- (void)dealloc
 {
     UIGraphicsEndImageContext();
 }
@@ -239,5 +244,21 @@
     _layer.contents = (id) UIGraphicsGetImageFromCurrentImageContext().CGImage;
     UIGraphicsEndImageContext();
 }
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    _backgroundColor = backgroundColor;
+    [self updateLayer];
+}
 
+- (void)changeBlendModeOfCurrentDrawingLayer:(CGBlendMode)blendMode
+{
+    _currentDrawingLayer.blendMode = blendMode;
+    [self updateLayer];
+}
+
+- (void)changeAlphaOfCurrentDrawingLayer:(CGFloat)alpha
+{
+    _currentDrawingLayer.alpha = alpha;
+    [self updateLayer];
+}
 @end

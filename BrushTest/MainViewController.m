@@ -683,7 +683,7 @@
     _canvas.currentBrush = _brush;
     }else{
         _backgroundColorControl.colorView.backgroundColor = color;
-        [_canvas updateLayer];
+        _canvas.backgroundColor = [color copy];
     }
 }
 
@@ -766,7 +766,6 @@
             _drawingLayerForPaste = [_canvas.currentDrawingLayer copy];
             [_canvas clear];
             [_currentControl updateContents];
-            [_canvas updateLayer];
             break;
         case 32:
             [_canvas.currentDrawingLayer addStrokes:_drawingLayerForPaste.strokes];
@@ -778,13 +777,11 @@
                 DrawingLayer *layer = [_canvas.currentDrawingLayer copy];
                 [self addDrawingLayer:layer];
             }
-             [_canvas updateLayer];
 //            _canvas.currentDrawingLayer.
             break;
         case 34:
             [_canvas clear];
             [_currentControl updateContents];
-             [_canvas updateLayer];
             break;
         case 35:{
             self.currentControl = _layerControlArray[index-1];
@@ -794,7 +791,6 @@
             [_layerControlArray removeObjectAtIndex:index];
             [self reloadLayerBoard];
             [_currentControl updateContents];
-             [_canvas updateLayer];
             break;
         }
         case 36:
@@ -808,14 +804,12 @@
         case 37:{
             if(_layerControlArray.count ==  1)break;
             [_currentControl removeFromSuperview];
-            [_currentControl.drawingLayer.layer removeFromSuperlayer];
-            [_canvas.drawingLayers removeObject:_currentControl.drawingLayer];
+            [_canvas removeDrawingLayer:_currentControl.drawingLayer];
 
             [_layerControlArray removeObjectAtIndex:index];
             [self reloadLayerBoard];
             if(index>0) index--;
             self.currentControl = [_layerControlArray objectAtIndex:index];
-             [_canvas updateLayer];
             
             break;
         }
@@ -889,13 +883,9 @@
     [_layerBoard addSubview:control];
 }
 
-- (IBAction)changeBackgroundColor:(CanvasBackgroundControl *)sender {
-    
-}
 - (IBAction)changeLayerAlpha:(UISlider *)sender {
-    _currentControl.drawingLayer.alpha = sender.value;
+    [_canvas changeAlphaOfCurrentDrawingLayer:sender.value];
     _layerEditView.alphaLabel.text = [NSString stringWithFormat:@"%d %%",(int)(sender.value * 100)];
-    [_canvas updateLayer];
 }
 - (IBAction)changeBlendMode:(UIButton *)sender {
     _blendModeBoard.hidden = !_blendModeBoard.hidden;
@@ -916,9 +906,8 @@
 
 - (void)blendModeChanged:(BlendMode *)blendMode
 {
-    _currentControl.drawingLayer.blendMode = blendMode.blendMode;
+    [_canvas changeBlendModeOfCurrentDrawingLayer:blendMode.blendMode];
     [_layerEditView.blendModeButton setTitle:blendMode.blendModeName forState:UIControlStateNormal];
-    [_canvas updateLayer];
 }
 
 - (NSString *)blendModeNameForBlendMode:(CGBlendMode)blendMode
