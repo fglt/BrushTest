@@ -52,7 +52,7 @@
 
 - (void)drawInContext
 {
-
+    if(_figureType == FigureTypeNone || _figureType == FigureTypeLine || _figureType == FigureTypeRectangle){
     CGPoint toPoint;
     CGPoint fromPoint;
     if(_points.count<1) return;
@@ -60,12 +60,15 @@
     [_brush clear];
     if(_points.count==1){
         toPoint = fromPoint;
-        [_brush drawWithFirstPoint:(fromPoint) secondPoint:toPoint withFigureType:_figureType];
+        [_brush drawFromPoint:fromPoint toPoint:toPoint];
     }
     for(int i=1; i<_points.count; i++){
         [_points[i] getValue:&toPoint];
-        [_brush drawWithFirstPoint:(fromPoint) secondPoint:toPoint withFigureType:_figureType];
+        [_brush drawFromPoint:fromPoint toPoint:toPoint];
         fromPoint = toPoint;
+    }
+    }else{
+        [_brush drawWithPoints:_points];
     }
 }
 
@@ -73,6 +76,12 @@
 {
     NSValue* pointValue = [NSValue valueWithCGPoint:point];
     [_points addObject:pointValue];
+}
+
+- (void)addPointsAndDraw:(NSArray *)points
+{
+    [_points addObjectsFromArray:points];
+    [self drawInContext];
 }
 
 - (void)addPointAndDraw:(CGPoint)point
@@ -93,7 +102,7 @@
             }
             return;
         }
-        [_brush drawWithFirstPoint:fromPoint secondPoint:point withFigureType:_figureType];
+        [_brush drawFromPoint:fromPoint toPoint:point];
         [_points addObject:pointValue];
     }
 

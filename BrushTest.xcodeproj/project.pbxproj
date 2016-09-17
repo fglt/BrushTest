@@ -181,7 +181,6 @@
 		176D10EB1D5CDF3B00A0DD31 /* BrushTest */ = {
 			isa = PBXGroup;
 			children = (
-				1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */,
 				176C31441D67002600B9A1D6 /* UIBezierPath+Brush.h */,
 				176C31451D67002600B9A1D6 /* UIBezierPath+Brush.m */,
 				1754A2D61D649FE500C18717 /* constants.h */,
@@ -193,6 +192,7 @@
 				176D10F31D5CDF3B00A0DD31 /* MainViewController.m */,
 				176C312F1D65EEB000B9A1D6 /* PaletteViewController.h */,
 				176C31301D65EEB000B9A1D6 /* PaletteViewController.m */,
+				1775FBF71D7B156F0096FF50 /* BlendModeTableViewController.m */,
 				1775FBF61D7B156F0096FF50 /* BlendModeTableViewController.h */,
 				175BE8321D7420FE0033EDCE /* UIColor+FGTColor.h */,
 				175BE8331D7420FE0033EDCE /* UIColor+FGTColor.m */,

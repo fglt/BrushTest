@@ -122,6 +122,11 @@
     //[_currentStroke drawInContext];
     _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
 }
+- (void)addPointsAndDraw:(NSArray *)points
+{
+    [_currentStroke addPointsAndDraw:points];
+    _layer.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+}
 
 - (void)addPoint:(CGPoint)toPoint
 {

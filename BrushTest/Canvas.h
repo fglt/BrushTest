@@ -33,6 +33,7 @@
 - (void) newStrokeIfNullWithFigureType:(FigureType)type;
 - (void) addPoint:(CGPoint)point;
 - (void) addPointAndDraw:(CGPoint)point;
+- (void)addPointsAndDraw:(NSArray *)points;
 - (void) addStroke;
 - (NSDictionary *)dictionary;
 + (instancetype) canvasWithDictionary:(NSDictionary *)dict;

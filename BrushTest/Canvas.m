@@ -129,6 +129,11 @@
     [_currentDrawingLayer addPointAndDraw:point];
     [self updateLayer];
 }
+- (void)addPointsAndDraw:(NSArray *)points
+{
+    [_currentDrawingLayer addPointsAndDraw:points];
+    [self updateLayer];
+}
 - (void) setCurrentDrawingLayer:(DrawingLayer *)layer
 {
     if(_currentDrawingLayer != layer){

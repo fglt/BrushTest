@@ -103,20 +103,17 @@ int const kBrushPixelStep = 3;
     return copy;
 }
 
-- (void)drawWithPoints:(NSMutableArray *)points
+- (void)drawWithPoints:(NSArray *)points
 {
-    CGPoint point;
-    [points[0] getValue:&point];
-    UIBezierPath* bpath = [UIBezierPath roundBezierPathWithStartPoint:point width:self.width];
-    
-    for(NSValue * value in points){
-        CGPoint tmpPoint;
-        [value getValue:&tmpPoint];
-        [bpath addLineToPoint:tmpPoint];
+    UIImage *image = [self imageForDraw];
+    CGFloat width = self.width;
+    CGPoint curPoint;
+    for(int i = 0; i<points.count; i++){
+        [points[i] getValue:&curPoint];
+        CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y- width/2);
+        [image drawAtPoint:point];
     }
-    
-    [_color set];
-    [bpath stroke];
+
 }
 
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
@@ -127,13 +124,10 @@ int const kBrushPixelStep = 3;
     CGPoint curPoint;
     for(int i = 0; i<points.count; i++){
         [points[i] getValue:&curPoint];
-//        CGRect rect = CGRectMake(curPoint.x- width/2, curPoint.y - width/2, width,  width);
-//        [image drawInRect:rect];
         CGPoint point = CGPointMake(curPoint.x- width/2, curPoint.y- width/2);
         [image drawAtPoint:point];
     }
 }
-
 
 - (void)drawWithFirstPoint:(CGPoint)point1 secondPoint:(CGPoint)point2 withFigureType:(FigureType)figureType
 {
@@ -526,7 +520,6 @@ int const kBrushPixelStep = 3;
     
     [bpath fill];
     
-    [image drawInRect:rect blendMode:kCGBlendModeOverlay alpha:1];
     [image drawInRect:rect blendMode:kCGBlendModeDestinationIn alpha:1];
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, FigureType) {
 + (instancetype)BrushWithColor:(UIColor*)color width:(CGFloat)width type:(BrushType)type;
 + (instancetype)BrushWithDictionary:(NSDictionary *)dict;
 - (void)drawFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
-- (void)drawWithPoints:(NSMutableArray *)points;
+- (void)drawWithPoints:(NSArray *)points;
 - (void)clear;
 - (NSDictionary *)dictionary;
 - (void)drawWithFirstPoint:(CGPoint)point1 secondPoint:(CGPoint)point2 withFigureType:(FigureType)figureType;

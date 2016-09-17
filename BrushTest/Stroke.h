@@ -17,6 +17,7 @@
 - (instancetype)initWithBrush:(Brush *)brush;
 - (instancetype)initWithBrush:(Brush *)brush figureType:(FigureType)figureType;
 - (void)addPoint:(CGPoint)point;
+- (void)addPointsAndDraw:(NSArray *)points;
 - (void)drawInContext;
 - (NSDictionary *)dictionary;
 + (instancetype)strokeWithDictionary:(NSDictionary *)dict;

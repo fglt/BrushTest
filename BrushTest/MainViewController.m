@@ -135,6 +135,7 @@
     _width = _brush.width;
     _color = _brush.color;
     _colorView.backgroundColor = [_color colorWithAlphaComponent:1];
+    _backgroundColorControl.colorView.backgroundColor = _canvas.backgroundColor;
     _type = _brush.brushType;
     _brushSlider.radiusSlider.value = (_width-1)/30;
     _brushSlider.alphaSlider.value =  CGColorGetAlpha(_color.CGColor);
@@ -193,7 +194,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [self start];
     [self addCanvasView];
     [self addPaletteView];
@@ -201,12 +206,6 @@
     [self addBackGroundColorView];
     _backgroundColorControl.controlDelegate = self;
     [self addGestureRecognizer];
-  
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     [self reloadLayerBoard];
 }
 - (void)didReceiveMemoryWarning {
@@ -311,37 +310,41 @@
 - (void)handleFigureGesture:(UIPanGestureRecognizer*) recognizer
 {
     CGPoint point = [recognizer locationInView:_canvasView];
-    CGPoint locationInFigureView = [recognizer locationInView:_figureView];
+    CGPoint locationInSuperView = [recognizer locationInView:self.view];
     CGRect rect = _canvasView.bounds;
     rect = CGRectApplyAffineTransform(rect, _canvasView.transform);
        switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
-            _startPoint = locationInFigureView;
+            _startPoint = locationInSuperView;
             [_canvas newStrokeWithFigureType:_figureType];
-            [_canvas addPoint:point];
+            if(_figureType==FigureTypeNone){
+                [_canvas addPoint:point];
+            }
             break;
         case UIGestureRecognizerStateChanged:{
             if(_figureType==FigureTypeNone){
                 [_canvas newStrokeIfNullWithFigureType:_figureType];
                 [_canvas addPointAndDraw:point];
             }else{
-                _figureView.bezierPath = [self bezierPathWithPoint:_startPoint secondPoint:locationInFigureView withFigureType:_figureType];;
+                _figureView.bezierPath = [self bezierPathWithPoint:_startPoint secondPoint:locationInSuperView withFigureType:_figureType];;
             }
             break;
         }
         case UIGestureRecognizerStateEnded:{
-            [_canvas addPointAndDraw:point];
+            if(_figureType==FigureTypeNone){
+                [_canvas addPointAndDraw:point];
+            }else{
+                _figureView.bezierPath = nil;
+                [_canvas addPointsAndDraw:[self arrayFromPoint:_startPoint toPoint:locationInSuperView]];
+            }
             [_canvas addStroke];
             [_canvasDao modify:_canvas];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [_currentControl updateContents];
             });
+
             [[self.undoManager prepareWithInvocationTarget:self]undo];
-            
-            if(_figureType != FigureTypeNone){
-                
-                _figureView.bezierPath = nil;
-            }
+
         }
         default:
             break;
@@ -371,7 +374,15 @@
 - (void)handleRotation:(UIRotationGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
+    CGPoint lo = CGPointMake(location.x, location.y);
+    lo = CGPointApplyAffineTransform(location, _canvasView.transform);
+    CGPoint locationa = [_canvasView convertPoint:location fromView:self.view];
     
+    CGPoint locationInCanvasView = [recognizer locationInView:_canvasView];
+    NSLog(@"%@", NSStringFromCGPoint(lo));
+
+    NSLog(@"%@", NSStringFromCGPoint(locationa));
+    NSLog(@"%@", NSStringFromCGPoint(locationInCanvasView));
     CGFloat rotation = recognizer.rotation - _rotation;
     CGPoint translation = CGPointMake(location.x-_canvasView.center.x, location.y - _canvasView.center.y);
     CGAffineTransform  trans = CGAffineTransformMakeTranslation(translation.x, translation.y);
@@ -449,6 +460,54 @@
     }
     return bezierPath;
 }
+
+- (NSArray*)arrayFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint
+{
+    NSMutableArray *array = [NSMutableArray array];
+    if (_figureType == FigureTypeOval) {
+
+            CGFloat a = fabs(fromPoint.x - toPoint.x);
+            CGFloat b = fabs(fromPoint.y - toPoint.y);
+            //椭圆周长公式 L=2πb+4(a-b) (a>b)
+            //x=acosθ ， y=bsinθ。
+            //CGPoint prePoint = fromPoint;
+            int count = (2*M_PI* MIN(a, b) + 4*(fabs(a-b)))/kBrushPixelStep;
+            CGFloat unit = 2*M_PI * kBrushPixelStep/(2*M_PI* MIN(a, b) + 4*(fabs(a-b)));
+            for(int i=0; i< count; i++){
+                CGFloat arc = unit * i;
+                CGFloat x = a *cos(arc);
+                CGFloat y = b *sin(arc);
+                CGPoint point = CGPointMake(fromPoint.x + x, fromPoint.y +y);
+                point = [_canvasView convertPoint:point fromView:self.view];
+                [array addObject:[NSValue valueWithCGPoint:point]];
+                
+            }
+    }else if (_figureType == FigureTypeRectangle){
+        CGRect rect = CGRectMake(MIN(fromPoint.x, toPoint.x), MIN(fromPoint.y, toPoint.y), ABS(fromPoint.x-toPoint.x), ABS(fromPoint.y-toPoint.y));
+        CGPoint p0 = rect.origin;
+        CGPoint p1 = CGPointMake(rect.origin.x+rect.size.width, rect.origin.y);
+        CGPoint p2 = CGPointMake(rect.origin.x+rect.size.width, rect.origin.y+rect.size.height);
+        CGPoint p3 = CGPointMake(rect.origin.x, rect.origin.y+rect.size.height);
+        p0 = [_canvasView convertPoint:p0 fromView:self.view];
+        p1 = [_canvasView convertPoint:p1 fromView:self.view];
+        p2 = [_canvasView convertPoint:p2 fromView:self.view];
+        p3 = [_canvasView convertPoint:p3 fromView:self.view];
+        [array addObject:[NSValue valueWithCGPoint:p0]];
+        [array addObject:[NSValue valueWithCGPoint:p1]];
+        [array addObject:[NSValue valueWithCGPoint:p2]];
+        [array addObject:[NSValue valueWithCGPoint:p3]];
+        [array addObject:[NSValue valueWithCGPoint:p0]];
+    }else if(_figureType == FigureTypeLine){
+        fromPoint = [_canvasView convertPoint:fromPoint fromView:self.view];
+        toPoint = [_canvasView convertPoint:toPoint fromView:self.view];
+        [array addObject:[NSValue valueWithCGPoint:fromPoint]];
+        [array addObject:[NSValue valueWithCGPoint:toPoint]];
+
+    }
+
+    return array;
+}
+
 #pragma mark - toolbarView events
 
 - (IBAction)clickMenu:(UIButton *)sender
