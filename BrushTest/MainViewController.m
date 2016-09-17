@@ -79,14 +79,18 @@
 
     _layerControlArray = [NSMutableArray array];
     
-    CALayer *layer = [CALayer layer];
-    layer.frame = CGRectMake(0, 0, 44, 44);
-    layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
-    _colorView.layer.mask = layer;
+
     self.brushSlider.hidden = YES;
     _canvasDao = [CanvasDao sharedManager];
 }
 
+- (void)addMasktoColorView
+{
+    CALayer *layer = [CALayer layer];
+    layer.frame = CGRectMake(0, 0, 44, 44);
+    layer.contents = (id)[UIImage imageNamed:@"palette_indicator_mask"].CGImage;
+    _colorView.layer.mask = layer;
+}
 - (void)addBlendModeView
 {
     _blendModeController = [self.storyboard instantiateViewControllerWithIdentifier:@"blendModeController"];
@@ -193,20 +197,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     [self start];
+    [self addMasktoColorView];
     [self addCanvasView];
     [self addPaletteView];
     [self addBlendModeView];
     [self addBackGroundColorView];
     _backgroundColorControl.controlDelegate = self;
     [self addGestureRecognizer];
-    [self reloadLayerBoard];
+
+    // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+     [self reloadLayerBoard];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -374,15 +380,6 @@
 - (void)handleRotation:(UIRotationGestureRecognizer *)recognizer
 {
     CGPoint location = [recognizer locationInView:self.view];
-    CGPoint lo = CGPointMake(location.x, location.y);
-    lo = CGPointApplyAffineTransform(location, _canvasView.transform);
-    CGPoint locationa = [_canvasView convertPoint:location fromView:self.view];
-    
-    CGPoint locationInCanvasView = [recognizer locationInView:_canvasView];
-    NSLog(@"%@", NSStringFromCGPoint(lo));
-
-    NSLog(@"%@", NSStringFromCGPoint(locationa));
-    NSLog(@"%@", NSStringFromCGPoint(locationInCanvasView));
     CGFloat rotation = recognizer.rotation - _rotation;
     CGPoint translation = CGPointMake(location.x-_canvasView.center.x, location.y - _canvasView.center.y);
     CGAffineTransform  trans = CGAffineTransformMakeTranslation(translation.x, translation.y);
@@ -685,7 +682,6 @@
     _brush = [Brush BrushWithColor:_color width:_width type:_type];
     _canvas.currentBrush = _brush;
     }else{
-        _canvas.backgroundColor = [color copy];
         _backgroundColorControl.colorView.backgroundColor = color;
         [_canvas updateLayer];
     }

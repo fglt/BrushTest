@@ -38,15 +38,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+   _colorMode = ColorModeRGB;
     _currentColorView.backgroundColor = [ _delegate currentColor:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     CGFloat hsv[3];
     HSVFromUIColor(_currentColorView.backgroundColor, hsv);
     _circleColorPicker.hue = hsv[0];
     _squareColorPicker.hue = hsv[0];
     _squareColorPicker.point = CGPointMake(hsv[1], hsv[2]);
-    _colorMode = ColorModeRGB;
 }
-
 - (IBAction)touchColorPicker:(id)sender {
     _squareColorPicker.hue = _circleColorPicker.hue;
     _currentColorView.backgroundColor =  [UIColor colorWithHue:_squareColorPicker.hue saturation:_squareColorPicker.point.x brightness:_squareColorPicker.point.y alpha:1];
